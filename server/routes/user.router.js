@@ -51,24 +51,36 @@ router.post('/logout', (req, res, next) => {
   });
 });
 
+router.put('/newPassword/:password', (req, res) => {
+    const password = req.params.password;
+
+    const queryText = `UPDATE "user" SET "password"=$1 WHERE "username"=$2;`;
+
+    pool.query(queryText, [password, req.user.username])
+      .then(() => {
+        res.sendStatus(200);
+      }) .catch ((err) => {
+        console.error("Error changing password: ", err);
+        res.sendStatus(400);
+      })
+})
+
+router.put('/newEmail/:email', (req, res) => {
+  const email = req.params.email;
+
+  const queryText = `UPDATE "user" SET "email"=$1 WHERE "username"=$2;`;
+
+  pool.query(queryText, [email, req.user.username])
+    .then(() => {
+      res.sendStatus(200);
+    }) .catch ((err) => {
+      console.error("Error changing email: ", err);
+      res.sendStatus(400);
+    })
+})
+
+router.delete('/deleteUser')
+
+
 
 module.exports = router;
-
-
-
-
-
-
-/**
- * GET route template
- */
-router.get("/", (req, res) => {
-  // GET route code here
-});
-
-/**
- * POST route template
- */
-router.post("/", (req, res) => {
-  // POST route code here
-});
