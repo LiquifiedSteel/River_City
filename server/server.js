@@ -8,9 +8,8 @@ const sessionMiddleware = require("./modules/session-middleware");
 const passport = require("./strategies/user.strategy");
 
 // Route Includes
-
 const applicationRouter = require("./routes/application.router");
-const adminRouter = require("./routes/admin.router");
+const userRouter = require("./routes/user.router");
 
 // Express Middleware
 app.use(express.json());
@@ -25,9 +24,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-
 app.use("/api/application", applicationRouter);
-app.use("/api/admin", adminRouter);
+app.use("/api/user", userRouter);
+
 // Listen Server & Port
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
