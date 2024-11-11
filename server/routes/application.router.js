@@ -99,7 +99,52 @@ router.post("/", rejectUnauthenticated, (req, res) => {
 	"renter_email",
 	"agreeToRespectfulUseOfSpace",
 	"agreeToInvoicePaymentProcess") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
-  $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34)`;
+  $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34) RETURNING id;`;
+  pool
+    .query(queryText, [
+      team_org_event,
+      title_w_team_org_event,
+      Coach_Contact_first_name,
+      Coach_Contact_last_name,
+      coach_contact_email,
+      coach_contact_phone,
+      website,
+      event_type,
+      rented_previously,
+      PreferredTime_start,
+      PreferredTime_end,
+      Preferred_Location_primary,
+      Preferred_Location_secondary,
+      preferred_space,
+      priority,
+      preferred_days,
+      start_date,
+      end_date,
+      additional_dates,
+      expected_attendance,
+      WF_students,
+      grade_level,
+      team_pdf,
+      read_Rental_Review,
+      renter_first_name,
+      renter_last_name,
+      renter_street_address,
+      renter_city,
+      renter_state,
+      renter_zip,
+      renter_phone,
+      renter_email,
+      agreeToRespectfulUseOfSpace,
+      agreeToInvoicePaymentProcess,
+    ])
+    .then((result) => {
+      console.log("created a new request");
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.error("Error creating request", err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;
