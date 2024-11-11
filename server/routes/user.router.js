@@ -79,8 +79,29 @@ router.put('/newEmail/:email', (req, res) => {
     })
 })
 
-router.delete('/deleteUser')
+router.delete('/deleteUser', (req, res) => {
+  const queryText = `DELETE FROM "user" WHERE "username"=$1;`;
 
+  pool.query(queryText, [req.user.username])
+    .then(() => {
+      res.sendStatus(200);
+    }) .catch ((err) => {
+      console.error("Error deleting account: ", err);
+      res.sendStatus(400);
+    })
+})
+
+router.put('/deleteUser', (req, res) => {
+  const queryText = `UPDATE "user" SET "deleted"=TRUE WHERE "username"=$1;`;
+
+  pool.query(queryText, [req.user.username])
+    .then(() => {
+      res.sendStatus(200);
+    }) .catch ((err) => {
+      console.error("Error deleting account: ", err);
+      res.sendStatus(400);
+    })
+})
 
 
 module.exports = router;
