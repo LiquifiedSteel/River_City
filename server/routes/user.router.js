@@ -79,6 +79,8 @@ router.put('/newEmail/:email', (req, res) => {
     })
 })
 
+router.delete('/deleteUser')
+
 
 
 module.exports = router;
