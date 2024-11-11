@@ -19,7 +19,8 @@ CREATE TABLE "user" (
 	"username" VARCHAR(40) UNIQUE,
 	"password" VARCHAR(300) NOT NULL,
 	"email" VARCHAR(100) NOT NULL,
-	"isAdmin" BOOLEAN DEFAULT FALSE 
+	"isAdmin" BOOLEAN DEFAULT FALSE,
+	"deleted" BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE "Requests" (
