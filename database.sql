@@ -2,15 +2,9 @@
 -- You must use double quotes in every query that user is in:
 -- ex. SELECT * FROM "user";
 -- Otherwise you will have errors!
-CREATE TABLE "user" (
-    "id" SERIAL PRIMARY KEY,
-    "username" VARCHAR (80) UNIQUE NOT NULL,
-    "password" VARCHAR (1000) NOT NULL
-);
 
 CREATE TABLE "Locations" (
 	"id" SERIAL PRIMARY KEY,
-	"available_times" VARCHAR(700) NOT NULL,
 	"name_of_Location" VARCHAR(60)
 );
 
@@ -20,9 +14,11 @@ CREATE TABLE "Spaces" (
 	"location_id" INTEGER REFERENCES "Locations"
 );
 
-CREATE TABLE "Account" (
+CREATE TABLE "user" (
+    "id" SERIAL PRIMARY KEY,
 	"username" VARCHAR(40) UNIQUE,
 	"password" VARCHAR(300) NOT NULL,
+	"email" VARCHAR(100) NOT NULL,
 	"isAdmin" BOOLEAN DEFAULT FALSE 
 );
 
@@ -61,7 +57,7 @@ CREATE TABLE "Requests" (
 	"renter_phone" VARCHAR(18) NOT NULL,
 	"renter_email" VARCHAR(40) NOT NULL,
 	"agreeToRespectfulUseOfSpace" BOOLEAN NOT NULL,
-	"agreeToInvoicePaymentProcess" INTEGER NOT NULL
+	"agreeToInvoicePaymentProcess" BOOLEAN NOT NULL
 );
 
 CREATE TABLE "Time_Blocks" (
