@@ -18,6 +18,7 @@ CREATE TABLE "user" (
     "id" SERIAL PRIMARY KEY,
 	"username" VARCHAR(40) UNIQUE,
 	"password" VARCHAR(300) NOT NULL,
+	"email" VARCHAR(100) NOT NULL,
 	"isAdmin" BOOLEAN DEFAULT FALSE 
 );
 
@@ -56,7 +57,7 @@ CREATE TABLE "Requests" (
 	"renter_phone" VARCHAR(18) NOT NULL,
 	"renter_email" VARCHAR(40) NOT NULL,
 	"agreeToRespectfulUseOfSpace" BOOLEAN NOT NULL,
-	"agreeToInvoicePaymentProcess" INTEGER NOT NULL
+	"agreeToInvoicePaymentProcess" BOOLEAN NOT NULL
 );
 
 CREATE TABLE "Time_Blocks" (
