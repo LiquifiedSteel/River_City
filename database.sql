@@ -5,7 +5,6 @@
 
 CREATE TABLE "Locations" (
 	"id" SERIAL PRIMARY KEY,
-	"available_times" VARCHAR(700) NOT NULL,
 	"name_of_Location" VARCHAR(60)
 );
 
