@@ -11,6 +11,7 @@ const passport = require("./strategies/user.strategy");
 const applicationRouter = require("./routes/application.router");
 const userRouter = require("./routes/user.router");
 
+
 // Express Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +27,7 @@ app.use(passport.session());
 // Routes
 app.use("/api/application", applicationRouter);
 app.use("/api/user", userRouter);
+
 // Listen Server & Port
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
