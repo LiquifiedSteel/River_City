@@ -34,8 +34,8 @@ CREATE TABLE "Requests" (
 	"website" VARCHAR(150),
 	"event_type" VARCHAR(50) NOT NULL,
 	"rented_previously" BOOLEAN NOT NULL,
-	"preferred_time_start" TIME NOT NULL,
-	"preferred_time_end" TIME NOT NULL,
+	"preferred_time_start" TIME NOT NULL DEFAULT NOW(),
+	"preferred_time_end" TIME NOT NULL DEFAULT NOW(),
 	"preferred_location_primary" INTEGER REFERENCES "Locations" NOT NULL,
 	"preferred_location_secondary" INTEGER REFERENCES "Locations" NOT NULL,
 	"preferred_space" INTEGER REFERENCES "Spaces" NOT NULL,
@@ -75,19 +75,18 @@ CREATE TABLE "location_spaces" (
 	"space_id" integer
 );
 
-
-INSERT INTO "Locations" ("id", "available_times", "name_of_Location")
+INSERT INTO "Locations" ("id", "name_of_Location")
 VALUES
-(1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Company A'),
-(2, 'Suspendisse potenti. Morbi sollicitudin.', 'Company B'),
-(3, 'Vivamus suscipit tortor eget felis porttitor volutpat.', 'Company C'),
-(4, 'Nullam id dolor id nibh ultricies vehicula ut id elit.', 'Company D'),
-(5, 'Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.', 'Company E'),
-(6, 'Donec sollicitudin molestie malesuada.', 'Company F'),
-(7, 'Pellentesque in ipsum id orci porta dapibus.', 'Company G'),
-(8, 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices.', 'Company H'),
-(9, 'Quisque velit nisi, pretium ut lacinia in, elementum id enim.', 'Company I'),
-(10, 'Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.', 'Company J');
+(1, 'Company A'),
+(2, 'Company B'),
+(3, 'Company C'),
+(4, 'Company D'),
+(5, 'Company E'),
+(6, 'Company F'),
+(7, 'Company G'),
+(8, 'Company H'),
+(9, 'Company I'),
+(10, 'Company J');
 
 
 INSERT INTO "Spaces" ("id", "type", "location_id")
@@ -95,18 +94,7 @@ VALUES
 (1, 'Meeting Room', 2),
 (2, 'Gym', 3),
 (3, 'Classroom', 4),
-(4, 'Auditorium', 5),
-(5, 'Classroom', 1),
-(6, 'Gym', 2),
-(7, 'Auditorium', 9),
-(8, 'Meeting Room', 6),
-(9, 'Classroom', 3),
-(10, 'Gym', 7),
-(11, 'Auditorium', 8),
-(12, 'Meeting Room', 5),
-(13, 'Classroom', 4),
-(14, 'Gym', 2),
-(15, 'Auditorium', 10);
+(4, 'Auditorium', 5);
 
 INSERT INTO "user" ("id", "username", "password", "isAdmin")
 VALUES
@@ -135,7 +123,7 @@ INSERT INTO "Requests" ("id", "team_org_event", "title_w_team_org_event", "Coach
 VALUES
 (1, 'Tech Enthusiasts', 'Coding Workshop', 'John', 'Doe', 'john.doe@example.com', '123-456-7890', 'http://techevent.com', 'Educational', TRUE, '10:00:00', '12:30:00', 1, 2, 'Auditorium', 'High', 'Weekends', '2024-11-15', '2024-11-16', 'None', '100', 'Yes', 'College', '/pdfs/event1.pdf', TRUE, 'Jane', 'Smith', '123 Elm St', 'Nis', 'TX', '75001', '123-456-7890', 'jane.smith@example.com', TRUE, 1),
 (2, 'Youth Basketball Club', 'Regional Basketball Finals', 'Michael', 'Jordan', 'michael.jordan@example.com', '234-567-8901', 'http://basketball.com', 'Sports', FALSE, '15:00:00', '18:00:00', 3, 4, 'Gym', 'Medium', 'Weekdays', '2024-11-20', '2024-11-22', 'Extra time slots requested on Nov 23', '300', 'No', 'High School', '/pdfs/event2.pdf', TRUE, 'Robert', 'James', '456 Maple Ave', 'Dallas', 'TX', '75201', '234-567-8901', 'robert.james@example.com', TRUE, 1),
-(3, 'Local Arts Group', 'Painting Exhibition', 'Emily', 'Brown', 'emily.brown@example.com', '345-678-9012', 'http://arts.org', 'Recreational', TRUE, '09:00:00', '14:00:00', 5, 6, 'Classroom', 'Low', 'Daily', '2024-11-25', '2024-11-30', 'Holiday closure adjustments needed', '50', 'Yes', 'Middle', '/pdfs/event3.pdf', FALSE, 'Anne', 'Lee', '789 Birch St', 'Austin', 'TX', '73301', '345-678-9012', 'anne.lee@example.com', TRUE, 0)
+(3, 'Local Arts Group', 'Painting Exhibition', 'Emily', 'Brown', 'emily.brown@example.com', '345-678-9012', 'http://arts.org', 'Recreational', TRUE, '09:00:00', '14:00:00', 5, 6, 'Classroom', 'Low', 'Daily', '2024-11-25', '2024-11-30', 'Holiday closure adjustments needed', '50', 'Yes', 'Middle', '/pdfs/event3.pdf', FALSE, 'Anne', 'Lee', '789 Birch St', 'Austin', 'TX', '73301', '345-678-9012', 'anne.lee@example.com', TRUE, 0);
 
 INSERT INTO "Time_Blocks" (
     "id", 
@@ -155,4 +143,4 @@ VALUES
 (7, 7, '10:00:00', '12:00:00', TRUE, TRUE),
 (8, 8, '12:30:00', '14:30:00', FALSE, TRUE),
 (9, 9, '15:00:00', '17:00:00', TRUE, FALSE),
-(10, 10, '17:30:00', '19:30:00', FALSE, FALSE)
+(10, 10, '17:30:00', '19:30:00', FALSE, FALSE);
