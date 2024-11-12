@@ -1,45 +1,52 @@
 // ====== Initial State ======
 const initialState = {
   FormPartOne: {
-    firstName: "",
-    lastName: "",
-    coachFirstName: "",
-    coachLastName: "",
-    organizationName: "",
-    title: "",
-    email: "",
-    phoneNumber: "",
-    mailingAddress: "",
+    team_org_event: "",
+    title_w_team_org_event: "",
+    coach_Contact_first_name: "",
+    coach_Contact_last_name: "",
+    coach_contact_email: "",
+    coach_contact_phone: "",
     website: "",
   },
   FormPartTwo: {
-    eventName: "",
-    eventDescription: "",
-    expectedAttendees: "",
-    ageGroup: "",
-    preferredBuildingOne: "",
-    preferredBuildingTwo: "",
-    preferredSpace: "",
-    preferredDay: "",
-    priority: "",
-    specificAreas: "",
-    alternativeChoices: "",
-    startDateTime: "",
-    endDateTime: "",
-    additionalDates: "",
-    frequency: "",
+    event_type: "",
+    PreferredTime_start: "",   // Will be a timestamp
+    PreferredTime_end: "",     // Will be a timestamp
+    Preferred_Location_primary: 0,
+    Preferred_Location_secondary: 0,
+    preferred_space: 0,
+    eventDescription: "", //
+    expected_attendance: "",
+    ageGroup: "", //
+    preferred_days: "",
+    priority: "",              // might change to an integer based on what functionality we choose to do  
+    specificAreas: "", //
+    alternativeChoices: "", //
+    start_date: "",            // Will be a date
+    end_date: "",              // Will be a date
+    additional_dates: "",
+    frequency: "", //
   },
   FormPartThree: {
-    percentOfStudents: false,
-    gradeLevel: "",
-    roster: "",
-    liabilityProof: "",
+    WF_students: false,
+    grade_level: "",
+    team_pdf: "",
+    liabilityProof: "", //
     districtAcknowledgment: false,
-    specialRequests: "",
-    previousUse: "",
-    renterCity: "",
-    renterState: "",
-    renterZip: "",
+    specialRequests: "", // 
+    rented_previously: false,
+    read_Rental_Review: false,
+    renter_first_name: "",
+    renter_last_name: "",
+    renter_street_address: "",
+    renter_city: "",
+    renter_state: "",
+    renter_zip: "",
+    renter_phone: "",
+    renter_email: "",
+    agreeToRespectfulUseOfSpace: false,
+    agreeToInvoicePaymentProcess: false,
   },
 };
 
