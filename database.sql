@@ -70,6 +70,11 @@ CREATE TABLE "Time_Blocks" (
 	"is_recurring" BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE "location_spaces" (
+	"location_id" integer,
+	"space_id" integer
+);
+
 
 INSERT INTO "Locations" ("id", "available_times", "name_of_Location")
 VALUES
