@@ -26,13 +26,41 @@ const FormPartOne = () => {
       <h2>Applicant Information</h2>
       <form>
         <div>
-          <label>Full Name</label>
+          <label>First Name</label>
           <input
             type="text"
-            name="fullName"
-            value={formValues.fullName}
+            name="firstName"
+            value={formValues.firstName}
             onChange={handleChange}
             required
+          />
+        </div>
+        <div>
+          <label>Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={formValues.lastName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Coach First Name</label>
+          <input
+            type="text"
+            name="coachFirstName"
+            value={formValues.coachFirstName}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Coach Last Name</label>
+          <input
+            type="text"
+            name="coachLastName"
+            value={formValues.coachLastName}
+            onChange={handleChange}
           />
         </div>
         <div>
@@ -82,6 +110,15 @@ const FormPartOne = () => {
             value={formValues.mailingAddress}
             onChange={handleChange}
             required
+          />
+        </div>
+        <div>
+          <label>Website</label>
+          <input
+            type="url"
+            name="website"
+            value={formValues.website}
+            onChange={handleChange}
           />
         </div>
         <button type="button" onClick={handleNext}>
