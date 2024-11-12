@@ -1,12 +1,16 @@
 // ====== Initial State ======
 const initialState = {
   FormPartOne: {
-    fullName: "",
+    firstName: "",
+    lastName: "",
+    coachFirstName: "",
+    coachLastName: "",
     organizationName: "",
     title: "",
     email: "",
     phoneNumber: "",
     mailingAddress: "",
+    website: "",
   },
   FormPartTwo: {
     eventName: "",
@@ -17,10 +21,12 @@ const initialState = {
     preferredBuildingTwo: "",
     preferredSpace: "",
     preferredDay: "",
+    priority: "",
     specificAreas: "",
     alternativeChoices: "",
     startDateTime: "",
     endDateTime: "",
+    additionalDates: "",
     frequency: "",
   },
   FormPartThree: {
@@ -31,6 +37,9 @@ const initialState = {
     districtAcknowledgment: false,
     specialRequests: "",
     previousUse: "",
+    renterCity: "",
+    renterState: "",
+    renterZip: "",
   },
 };
 
