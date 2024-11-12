@@ -19,6 +19,9 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import FormPartOne from "../Form/FormPartOne";
+// import FormPartTwo from "../Form/FormPartTwo";
+// import FormPartThree from "../Form/FormPartThree";
 
 import './App.css';
 
@@ -109,6 +112,16 @@ function App() {
               <LandingPage />
             }
           </Route>
+
+          <Route exact path="/form-part-one">
+            <FormPartOne />
+          </Route>
+          {/* <Route exact path="/form-part-two">
+            <FormPartTwo />
+          </Route>
+          <Route exact path="/form-part-three">
+            <FormPartThree />
+          </Route> */}
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
