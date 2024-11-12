@@ -87,7 +87,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "end_date",
       "additional_dates",
       "expected_attendance",
-      "WF_students",
+      "85%_WF_students",
       "grade_level",
       "team_pdf",
       "read_rental_review",
@@ -151,14 +151,14 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       console.error("Error creating request", err);
       res.status(500);
     });
-
+  });
   /**
    * PUT route template
    */
   router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
     //  PUT route code here
     console.log("new request sent", req.params);
-    let applicationId = req.params.applicationId;
+    const applicationId = req.params.applicationId;
     const {
       team_org_event,
       title_w_team_org_event,
@@ -201,7 +201,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "team_org_event"=$1, 
       "title_w_team_org_event"=$2,
       "coach_contact_first_name"=$3,
-      "coach_contact_last_name"$4,
+      "coach_contact_last_name"=$4,
       "coach_contact_email"=$5,
       "coach_contact_phone"=$6,
       "website"=$7,
@@ -218,7 +218,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "end_date"=$18,
       "additional_dates"=$19,
       "expected_attendance"=$20,
-      "WF_students"=$21,
+      "85%_WF_students"=$21,
       "grade_level"=$22,
       "team_pdf"=$23,
       "read_rental_review"=$24,
@@ -270,13 +270,14 @@ router.post("/", rejectUnauthenticated, (req, res) => {
         renter_email,
         agreeToRespectfulUseOfSpace,
         agreeToInvoicePaymentProcess,
+        applicationId,
       ])
       .then((result) => {
         console.log("Created a new request", result.rows[0]);
-        res.sendStatus(201);
+        res.sendStatus(200);
       })
       .catch((err) => {
-        console.error("Error creating request", err);
+        console.error("Error updating request: ", err);
         res.status(500);
       });
   });
@@ -286,14 +287,13 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     const queryText = `DELETE FROM "Requests" WHERE id=$1`;
     pool
       .query(queryText, [req.params.applicationId])
-      .then((result) => {
-        res.sendStatus(201);
+      .then(() => {
+        res.sendStatus(200);
       })
       .catch((err) => {
         console.error(err);
         res.sendStatus(500);
       });
   });
-});
 
 module.exports = router;

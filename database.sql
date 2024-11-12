@@ -45,7 +45,7 @@ CREATE TABLE "Requests" (
 	"end_date" DATE NOT NULL,
 	"additional_dates" VARCHAR(300),
 	"expected_attendance" VARCHAR(150),
-	"85%_WF_students" VARCHAR NOT NULL,
+	"85%_WF_students" BOOLEAN NOT NULL,
 	"grade_level" VARCHAR(30),
 	"team_pdf" VARCHAR,
 	"read_rental_review" BOOLEAN NOT NULL,
