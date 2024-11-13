@@ -175,46 +175,25 @@ const FormPartTwo = () => {
           />
         </div>
 
-        <div>
-          <label>Preferred Days</label>
-          <input
-            type="text"
+       <div>
+        <label>Preferred Days</label>
+        <select
             name="preferred_days"
             value={formValues.preferred_days}
             onChange={handleChange}
-          />
+            required
+        >
+            <option value="">Select Preferred Days</option>
+            <option value="Monday/Thursdays">Monday/Thursdays</option>
+            <option value="Tuesday/Fridays">Tuesday/Fridays</option>
+            <option value="Mondays">Mondays</option>
+            <option value="Tuesdays">Tuesdays</option>
+            <option value="Thursdays">Thursdays</option>
+            <option value="Fridays">Fridays</option>
+        </select>
         </div>
 
-        <div>
-          <label>Priority</label>
-          <input
-            type="text"
-            name="priority"
-            value={formValues.priority}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label>Specific Areas</label>
-          <input
-            type="text"
-            name="specificAreas"
-            value={formValues.specificAreas}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label>Alternative Choices</label>
-          <input
-            type="text"
-            name="alternativeChoices"
-            value={formValues.alternativeChoices}
-            onChange={handleChange}
-          />
-        </div>
-
+  
         <div>
           <label>Start Date</label>
           <input
@@ -243,16 +222,6 @@ const FormPartTwo = () => {
             type="text"
             name="additional_dates"
             value={formValues.additional_dates}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label>Frequency</label>
-          <input
-            type="text"
-            name="frequency"
-            value={formValues.frequency}
             onChange={handleChange}
           />
         </div>
