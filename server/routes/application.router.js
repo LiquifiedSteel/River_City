@@ -22,6 +22,20 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get("/:requestID", rejectUnauthenticated, (req, res) => {
+  // GET route code here
+  const queryText = 'SELECT * From "Requests" WHERE id=$1;';
+  pool
+    .query(queryText, [req.params.requestID])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.error("Error fetching requests:", err);
+      res.sendStatus(500);
+    });
+});
+
 /**
  * POST route template
  */
