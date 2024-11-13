@@ -34,6 +34,7 @@ function AdminDashboard() {
               <th>Phone</th>
               <th>Email</th>
               <th>Event Type</th>
+              <th>More Information</th>
             </tr>
           </thead>
           <tbody>

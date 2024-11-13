@@ -20,6 +20,7 @@ import LandingPage from "../LandingPage/LandingPage";
 import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
+import AdminDataView from "../Admin/AdminDataView/AdminDataView";
 import FormPartOne from "../Form/FormPartOne";
 import FormPartTwo from "../Form/FormPartTwo";
 // import FormPartThree from "../Form/FormPartThree";
@@ -117,6 +118,12 @@ function App() {
           <Route exact path="/form-part-two">
             <FormPartTwo />
           </Route>
+
+            <Route exact path="/admindataview">
+              <AdminDataView />
+            </Route>
+
+
           {/*
           <Route exact path="/form-part-three">
             <FormPartThree />
