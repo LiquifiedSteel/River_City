@@ -23,7 +23,7 @@ import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
 import AdminDataView from "../Admin/AdminDataView/AdminDataView";
 import FormPartOne from "../Form/FormPartOne";
 import FormPartTwo from "../Form/FormPartTwo";
-// import FormPartThree from "../Form/FormPartThree";
+import FormPartThree from "../Form/FormPartThree";
 
 import "./App.css";
 
@@ -118,16 +118,14 @@ function App() {
           <Route exact path="/form-part-two">
             <FormPartTwo />
           </Route>
-
-            <Route exact path="/admindataview">
-              <AdminDataView />
-            </Route>
-
-
-          {/*
+          
           <Route exact path="/form-part-three">
             <FormPartThree />
-          </Route> */}
+          </Route>
+
+          <Route exact path="/admindataview">
+            <AdminDataView />
+          </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
