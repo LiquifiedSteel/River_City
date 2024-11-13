@@ -48,6 +48,9 @@ function Nav() {
         <Link className="navFormPartTwo" to="/form-part-two">
          Form Part Two 
         </Link>
+        <Link className="navFormPartThree" to="/form-part-three">
+         Form Part Three
+        </Link>
       </div>
     </div>
   );
