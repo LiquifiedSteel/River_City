@@ -20,7 +20,7 @@ import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import FormPartOne from "../Form/FormPartOne";
-// import FormPartTwo from "../Form/FormPartTwo";
+import FormPartTwo from "../Form/FormPartTwo";
 // import FormPartThree from "../Form/FormPartThree";
 
 import './App.css';
@@ -116,9 +116,10 @@ function App() {
           <Route exact path="/form-part-one">
             <FormPartOne />
           </Route>
-          {/* <Route exact path="/form-part-two">
+          <Route exact path="/form-part-two">
             <FormPartTwo />
-          </Route>
+           </Route>
+           {/*
           <Route exact path="/form-part-three">
             <FormPartThree />
           </Route> */}
