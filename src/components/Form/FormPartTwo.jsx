@@ -51,7 +51,7 @@ const FormPartTwo = () => {
             <option value="Volleyball">Volleyball</option>
             <option value="Scouts">Scouts</option>
             <option value="Dance">Dance</option>
-            <option value="Other">Other</option>
+            <option value="Others">Other</option>
           </select>
         </div>
 
