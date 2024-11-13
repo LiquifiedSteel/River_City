@@ -11,8 +11,7 @@ const initialState = {
   },
   FormPartTwo: {
     event_type: "",
-    PreferredTime_start: "",   // Will be a timestamp
-    PreferredTime_end: "",     // Will be a timestamp
+    PreferredTime: "",   // Will be a timestamp
     Preferred_Location_primary: 0,
     Preferred_Location_secondary: 0,
     preferred_space: 0,
