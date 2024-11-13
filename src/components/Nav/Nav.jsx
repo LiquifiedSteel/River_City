@@ -42,6 +42,9 @@ function Nav() {
         <Link className="navFormPartOne" to="/form-part-one">
         Form Part One
         </Link>
+        <Link className="navAdminDash" to="/admin-dashboard">
+        Admin Dashboard
+        </Link>
         <Link className="navFormPartTwo" to="/form-part-two">
         Form Part Two
         </Link>

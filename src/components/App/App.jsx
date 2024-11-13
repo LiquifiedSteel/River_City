@@ -19,8 +19,9 @@ import InfoPage from "../InfoPage/InfoPage";
 import LandingPage from "../LandingPage/LandingPage";
 import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
+import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
 import FormPartOne from "../Form/FormPartOne";
-// import FormPartTwo from "../Form/FormPartTwo";
+import FormPartTwo from "../Form/FormPartTwo";
 // import FormPartThree from "../Form/FormPartThree";
 
 import "./App.css";
@@ -103,13 +104,13 @@ function App() {
               <LandingPage />
             )}
           </Route>
-          <ProtectedRoute
+          <Route
             // shows AdminDashboard
             exact
-            path="/admin"
+            path="/admin-dashboard"
           >
             <AdminDashboard />
-          </ProtectedRoute>
+          </Route>
           <Route exact path="/form-part-one">
             <FormPartOne />
           </Route>
