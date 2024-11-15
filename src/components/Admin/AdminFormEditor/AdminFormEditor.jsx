@@ -41,40 +41,40 @@ const AdminFormEditor = () => {
             <h2>Applicant Information</h2>
             <form>
                 <div>
-                    <label>First Name</label>
+                    <label>Coach's First Name</label>
                     <input
                         type="text"
-                        name="firstName"
+                        name="coachFirstName"
                         value={formValues.coach_contact_first_name}
                         onChange={handleChange}
                         required
                     />
                 </div>
                 <div>
-                    <label>Last Name</label>
+                    <label>Coach's Last Name</label>
                     <input
                         type="text"
-                        name="lastName"
-                        value={formValues.lastName}
+                        name="coachLastName"
+                        value={formValues.coach_contact_last_name}
                         onChange={handleChange}
                         required
                     />
                 </div>
                 <div>
-                    <label>Coach First Name</label>
+                    <label>Renter's First Name</label>
                     <input
                         type="text"
-                        name="coachFirstName"
-                        value={formValues.coachFirstName}
+                        name="renterFirstName"
+                        value={formValues.renter_first_name}
                         onChange={handleChange}
                     />
                 </div>
                 <div>
-                    <label>Coach Last Name</label>
+                    <label>Renter's Last Name</label>
                     <input
                         type="text"
-                        name="coachLastName"
-                        value={formValues.coachLastName}
+                        name="renterLastName"
+                        value={formValues.renter_last_name}
                         onChange={handleChange}
                     />
                 </div>
@@ -83,7 +83,7 @@ const AdminFormEditor = () => {
                     <input
                         type="text"
                         name="organizationName"
-                        value={formValues.organizationName}
+                        value={formValues.team_org_event}
                         onChange={handleChange}
                     />
                 </div>
@@ -149,9 +149,8 @@ export default AdminFormEditor;
 
 
 
-"team_org_event", 
+      "team_org_event", 
       "title_w_team_org_event",
-      "coach_contact_first_name",
       "coach_contact_last_name",
       "coach_contact_email",
       "coach_contact_phone",
@@ -172,8 +171,8 @@ export default AdminFormEditor;
       "grade_level",
       "team_pdf",
       "read_rental_review",
-      "renter_first_name",
-      "renter_last_name",
+      "",
+      "",
       "renter_street_address",
       "renter_city",
       "renter_state",
