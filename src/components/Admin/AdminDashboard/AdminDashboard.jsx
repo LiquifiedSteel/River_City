@@ -37,6 +37,7 @@ function AdminDashboard() {
               <th>Email</th>
               <th>Event Type</th>
               <th>More Information</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -50,7 +51,8 @@ function AdminDashboard() {
                 <td>{app.coach_contact_phone}</td>
                 <td>{app.coach_contact_email}</td>
                 <td>{app.event_type}</td>
-                <td><button onClick={() => history.push(`/admindataview?requestID=${app.id}`)}>...</button></td>
+                <td><button onClick={() => history.push(`/admin-data-view?requestID=${app.id}`)}>...</button></td>
+                <td><button onClick={() => history.push(`/admin-form-editor?requestID=${app.id}`)}>Edit</button></td>
               </tr>
             ))}
           </tbody>
