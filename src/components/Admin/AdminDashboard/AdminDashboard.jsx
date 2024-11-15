@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Container, Table } from "react-bootstrap";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function AdminDashboard() {
   const [applications, setApplications] = useState([]);
   const user = useSelector((store) => store.user);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -33,6 +35,7 @@ function AdminDashboard() {
               <th>Phone</th>
               <th>Email</th>
               <th>Event Type</th>
+              <th>More Information</th>
             </tr>
           </thead>
           <tbody>
@@ -46,6 +49,7 @@ function AdminDashboard() {
                 <td>{app.coach_contact_phone}</td>
                 <td>{app.coach_contact_email}</td>
                 <td>{app.event_type}</td>
+                <td><button onClick={() => history.push(`/admindataview?requestID=${app.id}`)}>...</button></td>
               </tr>
             ))}
           </tbody>

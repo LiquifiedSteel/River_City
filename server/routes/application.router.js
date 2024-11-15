@@ -22,6 +22,20 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get("/:requestID", rejectUnauthenticated, (req, res) => {
+  // GET route code here
+  const queryText = 'SELECT * From "Requests" WHERE id=$1;';
+  pool
+    .query(queryText, [req.params.requestID])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.error("Error fetching requests:", err);
+      res.sendStatus(500);
+    });
+});
+
 /**
  * POST route template
  */
@@ -30,38 +44,38 @@ router.post("/", rejectUnauthenticated, (req, res) => {
   console.log("new request sent", req.body);
   const {
     teamOrgEvent,
-      titleTeamOrgEvent,
-      coachContactFirstName,
-      coachContactLastName,
-      coachContactEmail,
-      coachContactPhone,
-      website,
-      eventType,
-      rentedPreviously,
-      preferredTime,
-      preferredLocationPrimary,
-      preferredLocationSecondary,
-      preferredSpace,
-      priority,
-      preferredDays,
-      startDate,
-      endDate,
-      additionalDates,
-      expectedAttendance,
-      WFStudents,
-      gradeLevel,
-      teamPdf,
-      readRentalReview,
-      renterFirstName,
-      renterLastName,
-      renterStreetAddress,
-      renterCity,
-      renterState,
-      renterZip,
-      renterPhone,
-      renterEmail,
-      agreeToRespectfulUseOfSpace,
-      agreeToInvoicePaymentProcess,
+    titleTeamOrgEvent,
+    coachContactFirstName,
+    coachContactLastName,
+    coachContactEmail,
+    coachContactPhone,
+    website,
+    eventType,
+    rentedPreviously,
+    preferredTime,
+    preferredLocationPrimary,
+    preferredLocationSecondary,
+    preferredSpace,
+    priority,
+    preferredDays,
+    startDate,
+    endDate,
+    additionalDates,
+    expectedAttendance,
+    WFStudents,
+    gradeLevel,
+    teamPdf,
+    readRentalReview,
+    renterFirstName,
+    renterLastName,
+    renterStreetAddress,
+    renterCity,
+    renterState,
+    renterZip,
+    renterPhone,
+    renterEmail,
+    agreeToRespectfulUseOfSpace,
+    agreeToInvoicePaymentProcess,
   } = req.body;
 
   const queryText = `
@@ -106,57 +120,6 @@ router.post("/", rejectUnauthenticated, (req, res) => {
   `;
   pool
     .query(queryText, [
-        teamOrgEvent,
-        titleTeamOrgEvent,
-        coachContactFirstName,
-        coachContactLastName,
-        coachContactEmail,
-        coachContactPhone,
-        website,
-        eventType,
-        rentedPreviously,
-        preferredTime,
-        preferredLocationPrimary,
-        preferredLocationSecondary,
-        preferredSpace,
-        priority,
-        preferredDays,
-        startDate,
-        endDate,
-        additionalDates,
-        expectedAttendance,
-        WFStudents,
-        gradeLevel,
-        teamPdf,
-        readRentalReview,
-        renterFirstName,
-        renterLastName,
-        renterStreetAddress,
-        renterCity,
-        renterState,
-        renterZip,
-        renterPhone,
-        renterEmail,
-        agreeToRespectfulUseOfSpace,
-        agreeToInvoicePaymentProcess,
-    ])
-    .then((result) => {
-      console.log("Created a new request", result.rows[0]);
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.error("Error creating request", err);
-      res.status(500);
-    });
-  });
-  /**
-   * PUT route template
-   */
-  router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
-    //  PUT route code here
-    console.log("new request sent", req.params);
-    const applicationId = req.params.applicationId;
-    const {
       teamOrgEvent,
       titleTeamOrgEvent,
       coachContactFirstName,
@@ -190,9 +153,60 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       renterEmail,
       agreeToRespectfulUseOfSpace,
       agreeToInvoicePaymentProcess,
-    } = req.body;
+    ])
+    .then((result) => {
+      console.log("Created a new request", result.rows[0]);
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.error("Error creating request", err);
+      res.status(500);
+    });
+});
+/**
+ * PUT route template
+ */
+router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
+  //  PUT route code here
+  console.log("new request sent", req.params);
+  const applicationId = req.params.applicationId;
+  const {
+    teamOrgEvent,
+    titleTeamOrgEvent,
+    coachContactFirstName,
+    coachContactLastName,
+    coachContactEmail,
+    coachContactPhone,
+    website,
+    eventType,
+    rentedPreviously,
+    preferredTime,
+    preferredLocationPrimary,
+    preferredLocationSecondary,
+    preferredSpace,
+    priority,
+    preferredDays,
+    startDate,
+    endDate,
+    additionalDates,
+    expectedAttendance,
+    WFStudents,
+    gradeLevel,
+    teamPdf,
+    readRentalReview,
+    renterFirstName,
+    renterLastName,
+    renterStreetAddress,
+    renterCity,
+    renterState,
+    renterZip,
+    renterPhone,
+    renterEmail,
+    agreeToRespectfulUseOfSpace,
+    agreeToInvoicePaymentProcess,
+  } = req.body;
 
-    const queryText = `
+  const queryText = `
      UPDATE "Requests" SET
       "team_org_event"=$1, 
       "title_w_team_org_event"=$2,
@@ -229,65 +243,65 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "agree_to_invoice_payment_process"=$33 WHERE "id"=$34;
   `;
 
-    pool
-      .query(queryText, [
-        teamOrgEvent,
-        titleTeamOrgEvent,
-        coachContactFirstName,
-        coachContactLastName,
-        coachContactEmail,
-        coachContactPhone,
-        website,
-        eventType,
-        rentedPreviously,
-        preferredTime,
-        preferredLocationPrimary,
-        preferredLocationSecondary,
-        preferredSpace,
-        priority,
-        preferredDays,
-        startDate,
-        endDate,
-        additionalDates,
-        expectedAttendance,
-        WFStudents,
-        gradeLevel,
-        teamPdf,
-        readRentalReview,
-        renterFirstName,
-        renterLastName,
-        renterStreetAddress,
-        renterCity,
-        renterState,
-        renterZip,
-        renterPhone,
-        renterEmail,
-        agreeToRespectfulUseOfSpace,
-        agreeToInvoicePaymentProcess,
-        applicationId,
-      ])
-      .then((result) => {
-        console.log("Created a new request", result.rows[0]);
-        res.sendStatus(200);
-      })
-      .catch((err) => {
-        console.error("Error updating request: ", err);
-        res.status(500);
-      });
-  });
-  //Delete Route Template
-  router.delete("/:applicationId", rejectUnauthenticated, (req, res) => {
-    console.log("req.params", req.params);
-    const queryText = `DELETE FROM "Requests" WHERE id=$1`;
-    pool
-      .query(queryText, [req.params.applicationId])
-      .then(() => {
-        res.sendStatus(200);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
-  });
+  pool
+    .query(queryText, [
+      teamOrgEvent,
+      titleTeamOrgEvent,
+      coachContactFirstName,
+      coachContactLastName,
+      coachContactEmail,
+      coachContactPhone,
+      website,
+      eventType,
+      rentedPreviously,
+      preferredTime,
+      preferredLocationPrimary,
+      preferredLocationSecondary,
+      preferredSpace,
+      priority,
+      preferredDays,
+      startDate,
+      endDate,
+      additionalDates,
+      expectedAttendance,
+      WFStudents,
+      gradeLevel,
+      teamPdf,
+      readRentalReview,
+      renterFirstName,
+      renterLastName,
+      renterStreetAddress,
+      renterCity,
+      renterState,
+      renterZip,
+      renterPhone,
+      renterEmail,
+      agreeToRespectfulUseOfSpace,
+      agreeToInvoicePaymentProcess,
+      applicationId,
+    ])
+    .then((result) => {
+      console.log("Created a new request", result.rows[0]);
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.error("Error updating request: ", err);
+      res.status(500);
+    });
+});
+//Delete Route Template
+router.delete("/:applicationId", rejectUnauthenticated, (req, res) => {
+  console.log("req.params", req.params);
+  const queryText = `DELETE FROM "Requests" WHERE id=$1`;
+  pool
+    .query(queryText, [req.params.applicationId])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;
