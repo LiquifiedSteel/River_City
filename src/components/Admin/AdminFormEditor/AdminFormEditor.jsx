@@ -92,7 +92,7 @@ const AdminFormEditor = () => {
                     <input
                         type="text"
                         name="title"
-                        value={formValues.title}
+                        value={formValues.title_w_team_org_event}
                         onChange={handleChange}
                         required
                     />
@@ -102,7 +102,7 @@ const AdminFormEditor = () => {
                     <input
                         type="email"
                         name="email"
-                        value={formValues.email}
+                        value={formValues.coach_contact_email}
                         onChange={handleChange}
                         required
                     />
@@ -112,7 +112,7 @@ const AdminFormEditor = () => {
                     <input
                         type="tel"
                         name="phoneNumber"
-                        value={formValues.phoneNumber}
+                        value={formValues.coach_contact_phone}
                         onChange={handleChange}
                         required
                     />
@@ -122,7 +122,7 @@ const AdminFormEditor = () => {
                     <input
                         type="text"
                         name="mailingAddress"
-                        value={formValues.mailingAddress}
+                        value={formValues.renter_street_address}
                         onChange={handleChange}
                         required
                     />
@@ -149,12 +149,7 @@ export default AdminFormEditor;
 
 
 
-      "team_org_event", 
-      "title_w_team_org_event",
-      "coach_contact_last_name",
-      "coach_contact_email",
-      "coach_contact_phone",
-      "website",
+
       "event_type",
       "rented_previously",
       "preferred_time",
@@ -171,8 +166,6 @@ export default AdminFormEditor;
       "grade_level",
       "team_pdf",
       "read_rental_review",
-      "",
-      "",
       "renter_street_address",
       "renter_city",
       "renter_state",
