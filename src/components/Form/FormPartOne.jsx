@@ -1,8 +1,9 @@
-// src/components/Form/FormPartOne.jsx
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { updateFormPartOne } from "../../redux/reducers/form.reducer";
+import axios from "axios";
+import jsPDF from "jspdf";
 
 const FormPartOne = () => {
   const dispatch = useDispatch();
@@ -10,6 +11,7 @@ const FormPartOne = () => {
   const formPartOne = useSelector((state) => state.form.FormPartOne);
 
   const [formValues, setFormValues] = useState(formPartOne);
+  const [uploading, setUploading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,6 +21,36 @@ const FormPartOne = () => {
   const handleNext = () => {
     dispatch(updateFormPartOne(formValues));
     history.push("/form-part-two");
+  };
+
+  const handleUploadToCloudinary = async () => {
+    setUploading(true);
+
+    // Generate PDF
+    const doc = new jsPDF();
+    doc.text("Applicant Information", 10, 10);
+    Object.entries(formValues).forEach(([key, value], index) => {
+      doc.text(`${key}: ${value}`, 10, 20 + index * 10);
+    });
+    const pdfBlob = doc.output("blob");
+
+    // Upload to Cloudinary
+    const formData = new FormData();
+    formData.append("file", pdfBlob);
+    formData.append("upload_preset", "your_upload_preset"); // Set your Cloudinary upload preset here.
+
+    try {
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/your_cloud_name/raw/upload`, // Replace 'your_cloud_name' with your actual cloud name.
+        formData
+      );
+      alert(`Uploaded Successfully: ${response.data.secure_url}`);
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      alert("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -45,84 +77,16 @@ const FormPartOne = () => {
             required
           />
         </div>
-        <div>
-          <label>Coach First Name</label>
-          <input
-            type="text"
-            name="coachFirstName"
-            value={formValues.coachFirstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Coach Last Name</label>
-          <input
-            type="text"
-            name="coachLastName"
-            value={formValues.coachLastName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Organization Name (if applicable)</label>
-          <input
-            type="text"
-            name="organizationName"
-            value={formValues.organizationName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            value={formValues.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Email Address</label>
-          <input
-            type="email"
-            name="email"
-            value={formValues.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Phone Number</label>
-          <input
-            type="tel"
-            name="phoneNumber"
-            value={formValues.phoneNumber}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Mailing Address</label>
-          <input
-            type="text"
-            name="mailingAddress"
-            value={formValues.mailingAddress}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Website</label>
-          <input
-            type="url"
-            name="website"
-            value={formValues.website}
-            onChange={handleChange}
-          />
-        </div>
+        {/* Add other form fields here */}
         <button type="button" onClick={handleNext}>
           Next
+        </button>
+        <button
+          type="button"
+          onClick={handleUploadToCloudinary}
+          disabled={uploading}
+        >
+          {uploading ? "Uploading..." : "Upload as PDF"}
         </button>
       </form>
     </div>

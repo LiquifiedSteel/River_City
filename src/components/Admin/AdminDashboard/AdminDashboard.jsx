@@ -30,7 +30,6 @@ function AdminDashboard() {
             <tr>
               <th>Organization</th>
               <th>Event Title</th>
-              <th>Contact</th>
               <th>Phone</th>
               <th>Email</th>
               <th>Event Type</th>
