@@ -44,7 +44,7 @@ const AdminFormEditor = () => {
     const handleSave = () => {
         const saveUpdate = async () => {
             try {
-                const response = await axios.put(`/api/application/${requestID}`);
+                await axios.put(`/api/application/${requestID}`, formValues);
             } catch (error) {
                 console.error("Error updating request:", error);
             }
