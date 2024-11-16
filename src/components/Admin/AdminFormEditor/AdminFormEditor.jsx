@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import moment from "moment";
 
 const AdminFormEditor = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
     const location = useLocation();
+    const history = useHistory();
     const requestID = new URLSearchParams(location.search).get('requestID');
-
     const [formValues, setFormValues] = useState({});
     console.log(formValues);
 
@@ -23,30 +19,39 @@ const AdminFormEditor = () => {
                 console.error("Error fetching request:", error);
             }
         };
-    
         fetchRequest();
     }, [])
 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormValues({ ...formValues, [name]: value });
+        if(name === "WF_students") {
+            if (formValues.WF_students) {
+                setFormValues({ ...formValues, [name]: false });
+            } else {
+                setFormValues({ ...formValues, [name]: true });
+            }
+        } else {
+            setFormValues({ ...formValues, [name]: value });
+        }
     };
 
-    const handleCheckboxChange = (e) => {
-        const { name, value, checked } = e.target;
-        setFormValues({
-          ...formValues,
-          [name]: checked
-            ? [...(formValues[name] || []), value]
-            : formValues[name].filter((v) => v !== value),
-        });
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        setTeamPdf(file); // ====== Save the file locally ======
       };
 
-    const handleNext = () => {
-        dispatch(updateFormPartOne(formValues));
-        history.push("/form-part-two");
-    };
+    const handleSave = () => {
+        const saveUpdate = async () => {
+            try {
+                const response = await axios.put(`/api/application/${requestID}`);
+            } catch (error) {
+                console.error("Error updating request:", error);
+            }
+        };
+        saveUpdate();
+        history.push("/admin-dashboard");
+    }
 
     return !formValues ? null : (
         <div>
@@ -56,27 +61,27 @@ const AdminFormEditor = () => {
                     <label>Coach's First Name</label>
                     <input
                         type="text"
-                        name="coachFirstName"
+                        name="coach_contact_first_name"
                         value={formValues.coach_contact_first_name}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div>
                 <div>
                     <label>Coach's Last Name</label>
                     <input
                         type="text"
-                        name="coachLastName"
+                        name="coach_contact_last_name"
                         value={formValues.coach_contact_last_name}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div>
                 <div>
                     <label>Renter's First Name</label>
                     <input
                         type="text"
-                        name="renterFirstName"
+                        name="renter_first_name"
                         value={formValues.renter_first_name}
                         onChange={handleChange}
                     />
@@ -85,7 +90,7 @@ const AdminFormEditor = () => {
                     <label>Renter's Last Name</label>
                     <input
                         type="text"
-                        name="renterLastName"
+                        name="renter_last_name"
                         value={formValues.renter_last_name}
                         onChange={handleChange}
                     />
@@ -94,7 +99,7 @@ const AdminFormEditor = () => {
                     <label>Organization Name (if applicable)</label>
                     <input
                         type="text"
-                        name="organizationName"
+                        name="team_org_event"
                         value={formValues.team_org_event}
                         onChange={handleChange}
                     />
@@ -103,40 +108,40 @@ const AdminFormEditor = () => {
                     <label>Title</label>
                     <input
                         type="text"
-                        name="title"
+                        name="title_w_team_org_event"
                         value={formValues.title_w_team_org_event}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div>
                 <div>
                     <label>Email Address</label>
                     <input
                         type="email"
-                        name="email"
+                        name="coach_contact_email"
                         value={formValues.coach_contact_email}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div>
                 <div>
                     <label>Phone Number</label>
                     <input
                         type="tel"
-                        name="phoneNumber"
+                        name="coach_contact_phone"
                         value={formValues.coach_contact_phone}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div>
                 <div>
                     <label>Mailing Address</label>
                     <input
                         type="text"
-                        name="mailingAddress"
+                        name="renter_street_address"
                         value={formValues.renter_street_address}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div>
                 <div>
@@ -154,7 +159,7 @@ const AdminFormEditor = () => {
                         name="event_type"
                         value={formValues.event_type}
                         onChange={handleChange}
-                        required
+                        
                     >
                         <option value="">Select an Event Type</option>
                         <option value="Basketball">Basketball</option>
@@ -168,10 +173,10 @@ const AdminFormEditor = () => {
                 <div>
                     <label>Preferred Start Time</label>
                     <select
-                        name="preferredTime_start"
+                        name="preferred_time"
                         value={formValues.preferred_time}
                         onChange={handleChange}
-                        required
+                        
                     >
                         <option value="">Select Start Time</option>
                         <option value="06:00:00">6:00 PM - 7:00 PM</option>
@@ -187,7 +192,7 @@ const AdminFormEditor = () => {
                         name="preferred_location_primary"
                         value={formValues.preferred_location_primary}
                         onChange={handleChange}
-                        required
+                        
                     >
                         <option value="">Select Primary Location</option>
                         <option value={1}>School 1</option>
@@ -280,7 +285,7 @@ const AdminFormEditor = () => {
                         name="eventDescription"
                         value={formValues.eventDescription}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div> */}
 
@@ -291,7 +296,7 @@ const AdminFormEditor = () => {
                         name="expected_attendance"
                         value={formValues.expected_attendance}
                         onChange={handleChange}
-                        required
+                        
                     />
                 </div>
 
@@ -301,7 +306,7 @@ const AdminFormEditor = () => {
                         name="preferred_days"
                         value={formValues.preferred_days}
                         onChange={handleChange}
-                        required
+                        
                     >
                         <option value="">Select Preferred Days</option>
                         <option value="Monday/Thursdays">Monday/Thursdays</option>
@@ -321,7 +326,7 @@ const AdminFormEditor = () => {
                         name="start_date"
                         value={formValues.start_date}
                         onChange={handleChange}
-                        required
+                        
                     />
                     Currently: {moment(formValues.start_date).format("MMM Do YY")}
                 </div>
@@ -333,7 +338,7 @@ const AdminFormEditor = () => {
                         name="end_date"
                         value={formValues.end_date}
                         onChange={handleChange}
-                        required
+                        
                     />
                     Currently: {moment(formValues.end_date).format("MMM Do YY")}
                 </div>
@@ -347,9 +352,138 @@ const AdminFormEditor = () => {
                         onChange={handleChange}
                     />
                 </div>
-                <button type="button" onClick={handleNext}>
-                    Next
-                </button>
+
+
+
+
+
+
+
+
+
+
+                <div>
+                    <label>Is the team or group made up of 85% or more WF Students?</label>
+                    <input
+                        type="checkbox"
+                        name="WF_students"
+                        checked={formValues.WF_students}
+                        onChange={handleChange}
+                    />
+                </div>
+                {formValues.WF_students && <>
+                    <div>
+                        <label>Grade Level</label>
+                        <input
+                            type="text"
+                            name="grade_level"
+                            value={formValues.grade_level}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label>Upload Team PDF</label>
+                        <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            name="team_pdf"
+                            onChange={handleFileUpload}
+                        />
+                        Currently: {formValues.team_pdf}
+                    </div>
+                </>}
+                {/* <div>
+                    <label>Liability Proof</label>
+                    <input
+                        type="text"
+                        name="liabilityProof"
+                        value={formValues.liabilityProof}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>Special Requests</label>
+                    <textarea
+                        name="specialRequests"
+                        value={formValues.specialRequests}
+                        onChange={handleChange}
+                    />
+                </div> */}
+                <div>
+                    <label>Renter First Name</label>
+                    <input
+                        type="text"
+                        name="renter_first_name"
+                        value={formValues.renter_first_name}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>Renter Last Name</label>
+                    <input
+                        type="text"
+                        name="renter_last_name"
+                        value={formValues.renter_last_name}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>Street Address</label>
+                    <input
+                        type="text"
+                        name="renter_street_address"
+                        value={formValues.renter_street_address}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>City</label>
+                    <input
+                        type="text"
+                        name="renter_city"
+                        value={formValues.renter_city}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>State</label>
+                    <input
+                        type="text"
+                        name="renter_state"
+                        value={formValues.renter_state}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>Zip Code</label>
+                    <input
+                        type="text"
+                        name="renter_zip"
+                        value={formValues.renter_zip}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>Phone Number</label>
+                    <input
+                        type="tel"
+                        name="renter_phone"
+                        value={formValues.renter_phone}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>Email Address</label>
+                    <input
+                        type="email"
+                        name="renter_email"
+                        value={formValues.renter_email}
+                        onChange={handleChange}
+                    />
+                </div>
+                
+                <button type="submit" onClick={() => handleSave()}>Save Changes</button>
+                <button type="button" onClick={() => history.push("/admin-dashboard")}>Cancel</button>
             </form>
         </div>
     );
@@ -357,22 +491,3 @@ const AdminFormEditor = () => {
 
 
 export default AdminFormEditor;
-
-
-
-
-      "rented_previously",
-      "preferred_time",
-      "priority",
-      "85%_WF_students",
-      "grade_level",
-      "team_pdf",
-      "read_rental_review",
-      "renter_street_address",
-      "renter_city",
-      "renter_state",
-      "renter_zip",
-      "renter_phone",
-      "renter_email",
-      "agree_to_respectful_use_of_space",
-      "agree_to_invoice_payment_process"

@@ -99,7 +99,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "end_date",
       "additional_dates",
       "expected_attendance",
-      "85%_WF_students",
+      "WF_students",
       "grade_level",
       "team_pdf",
       "read_rental_review",
@@ -163,6 +163,8 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       res.status(500);
     });
 });
+
+
 /**
  * PUT route template
  */
@@ -227,7 +229,7 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
       "end_date"=$17,
       "additional_dates"=$18,
       "expected_attendance"=$19,
-      "85%_WF_students"=$20,
+      "WF_students"=$20,
       "grade_level"=$21,
       "team_pdf"=$22,
       "read_rental_review"=$23,
