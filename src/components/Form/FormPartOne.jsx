@@ -26,40 +26,40 @@ const FormPartOne = () => {
       <h2>Applicant Information</h2>
       <form>
         <div>
-          <label>First Name</label>
+          <label>Renter's First Name</label>
           <input
             type="text"
-            name="firstName"
-            value={formValues.firstName}
+            name="renter_first_name"
+            value={formValues.renter_first_name}
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label>Last Name</label>
+          <label>Renter's Last Name</label>
           <input
             type="text"
-            name="lastName"
-            value={formValues.lastName}
+            name="renter_last_name"
+            value={formValues.renter_last_name}
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label>Coach First Name</label>
+          <label>Coach's First Name</label>
           <input
             type="text"
-            name="coachFirstName"
-            value={formValues.coachFirstName}
+            name="coach_contact_first_name"
+            value={formValues.coach_contact_first_name}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label>Coach Last Name</label>
+          <label>Coach's Last Name</label>
           <input
             type="text"
-            name="coachLastName"
-            value={formValues.coachLastName}
+            name="coach_contact_last_name"
+            value={formValues.coach_contact_last_name}
             onChange={handleChange}
           />
         </div>
@@ -67,8 +67,8 @@ const FormPartOne = () => {
           <label>Organization Name (if applicable)</label>
           <input
             type="text"
-            name="organizationName"
-            value={formValues.organizationName}
+            name="team_org_event"
+            value={formValues.team_org_event}
             onChange={handleChange}
           />
         </div>
@@ -76,38 +76,38 @@ const FormPartOne = () => {
           <label>Title</label>
           <input
             type="text"
-            name="title"
-            value={formValues.title}
+            name="title_w_team_org_event"
+            value={formValues.title_w_team_org_event}
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label>Email Address</label>
+          <label>Coach's Email Address</label>
           <input
             type="email"
-            name="email"
-            value={formValues.email}
+            name="coach_contact_email"
+            value={formValues.coach_contact_email}
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label>Phone Number</label>
+          <label>Coach's Phone Number</label>
           <input
             type="tel"
-            name="phoneNumber"
-            value={formValues.phoneNumber}
+            name="coach_contact_phone"
+            value={formValues.coach_contact_phone}
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label>Mailing Address</label>
+          <label>Renter's Mailing Address</label>
           <input
             type="text"
-            name="mailingAddress"
-            value={formValues.mailingAddress}
+            name="renter_street_address"
+            value={formValues.renter_street_address}
             onChange={handleChange}
             required
           />

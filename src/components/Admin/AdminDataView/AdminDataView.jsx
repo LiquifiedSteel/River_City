@@ -58,7 +58,7 @@ function AdminDataView() {
         <Col xs={6} md={4}>Frequency: {request.frequency}</Col>
 
 
-        <Col xs={6} md={4}>85% West Fargo Students?: {request.wf_students}</Col>
+        <Col xs={6} md={4}>85% West Fargo Students?: {request._students}</Col>
         <Col xs={6} md={4}>Grade Level: {request.grade_level}</Col>
         <Col xs={6} md={4}>Cloudinary Link to Roster PDF: {request.team_pdf}</Col>
         {/* <Col xs={6} md={4}>Liability  Proof: {request.liabilityProof}</Col> */}
