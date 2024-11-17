@@ -10,15 +10,14 @@ CREATE TABLE "Locations" (
 
 CREATE TABLE "Spaces" (
 	"id" SERIAL PRIMARY KEY,
-	"type" VARCHAR(30),
-	"location_id" INTEGER REFERENCES "Locations"
+	"type" VARCHAR(30)
 );
 
 CREATE TABLE "user" (
     "id" SERIAL PRIMARY KEY,
 	"username" VARCHAR(40) UNIQUE,
 	"password" VARCHAR(300) NOT NULL,
-	"email" VARCHAR(100) NOT NULL,
+	"email" VARCHAR(100),
 	"isAdmin" BOOLEAN DEFAULT FALSE,
 	"deleted" BOOLEAN DEFAULT FALSE
 );
@@ -35,10 +34,10 @@ CREATE TABLE "Requests" (
 	"website" VARCHAR(150),
 	"event_type" VARCHAR(50) NOT NULL,
 	"rented_previously" BOOLEAN NOT NULL,
-	"preferred_time" TIME NOT NULL DEFAULT NOW(),
+	"preferred_time" VARCHAR(15) NOT NULL,
 	"preferred_location_primary" INTEGER REFERENCES "Locations" NOT NULL,
 	"preferred_location_secondary" INTEGER REFERENCES "Locations" NOT NULL,
-	"preferred_space" INTEGER REFERENCES "Spaces" NOT NULL,
+	"preferred_space" VARCHAR(25) NOT NULL,
 	"priority" VARCHAR(20) NOT NULL,
 	"preferred_days" VARCHAR(20) NOT NULL,
 	"start_date" DATE NOT NULL,
@@ -89,12 +88,13 @@ VALUES
 (10, 'Company J');
 
 
-INSERT INTO "Spaces" ("id", "type", "location_id")
+INSERT INTO "Spaces" ("id", "type")
 VALUES
-(1, 'Meeting Room', 2),
-(2, 'Gym', 3),
-(3, 'Classroom', 4),
-(4, 'Auditorium', 5);
+(1, 'Gymnasium'),
+(2, 'Commons'),
+(3, 'Library / Media Center'),
+(4, 'Locker Room'),
+(5, 'Turf Field');
 
 INSERT INTO "user" ("username", "password", "email")
 VALUES

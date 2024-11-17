@@ -21,30 +21,20 @@ const FormPartOne = () => {
     history.push("/form-part-two");
   };
 
+  const handleCheckboxChange = (e) => {
+    const { name, value, checked } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: checked
+        ? [...(formValues[name] || []), value]
+        : formValues[name].filter((v) => v !== value),
+    });
+  };
+
   return (
     <div>
       <h2>Applicant Information</h2>
       <form>
-        <div>
-          <label>Renter's First Name</label>
-          <input
-            type="text"
-            name="renter_first_name"
-            value={formValues.renter_first_name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Renter's Last Name</label>
-          <input
-            type="text"
-            name="renter_last_name"
-            value={formValues.renter_last_name}
-            onChange={handleChange}
-            required
-          />
-        </div>
         <div>
           <label>Coach's First Name</label>
           <input
@@ -102,16 +92,7 @@ const FormPartOne = () => {
             required
           />
         </div>
-        <div>
-          <label>Renter's Mailing Address</label>
-          <input
-            type="text"
-            name="renter_street_address"
-            value={formValues.renter_street_address}
-            onChange={handleChange}
-            required
-          />
-        </div>
+
         <div>
           <label>Website</label>
           <input
@@ -121,6 +102,122 @@ const FormPartOne = () => {
             onChange={handleChange}
           />
         </div>
+        <div>
+          <label>Event Type</label>
+          <select
+            name="event_type"
+            value={formValues.event_type}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select an Event Type</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Volleyball">Volleyball</option>
+            <option value="Scouts">Scouts</option>
+            <option value="Dance">Dance</option>
+            <option value="Others">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Preferred Start Time</label>
+          <select
+            name="preferred_time"
+            value={formValues.preferred_time}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Start Time</option>
+            <option value="6:00 PM">6:00 PM - 7:00 PM</option>
+            <option value="7:00 PM">7:00 PM - 8:00 PM</option>
+            <option value="8:00 PM">8:00 PM - 9:00 PM</option>
+            <option value="9:00 PM">9:00 PM - 10:00 PM</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Primary Location</label>
+          <select
+            name="preferred_location_primary"
+            value={formValues.preferred_location_primary}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Primary Location</option>
+            <option value="1">School 1</option>
+            <option value="2">School 2</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Secondary Location</label>
+          <select
+            name="preferred_location_secondary"
+            value={formValues.preferred_location_secondary}
+            onChange={handleChange}
+          >
+            <option value="">Select Secondary Location</option>
+            <option value="1">School 1</option>
+            <option value="2">School 2</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Preferred Space</label>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                name="preferred_space"
+                value="Gymnasium"
+                checked={formValues.preferred_space?.includes("Gymnasium") || false}
+                onChange={handleCheckboxChange}
+              />
+              Gymnasium
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferred_space"
+                value="Commons"
+                checked={formValues.preferred_space?.includes("Commons") || false}
+                onChange={handleCheckboxChange}
+              />
+              Commons
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferred_space"
+                value="Library / Media Center"
+                checked={formValues.preferred_space?.includes("Library / Media Center") || false}
+                onChange={handleCheckboxChange}
+              />
+              Library / Media Center
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferred_space"
+                value="Locker Room"
+                checked={formValues.preferred_space?.includes("Locker Room") || false}
+                onChange={handleCheckboxChange}
+              />
+              Locker Room
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferred_space"
+                value="Turf Field"
+                checked={formValues.preferred_space?.includes("Turf Field") || false}
+                onChange={handleCheckboxChange}
+              />
+              Turf Field
+            </label>
+          </div>
+        </div>
+
         <button type="button" onClick={handleNext}>
           Next
         </button>

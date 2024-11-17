@@ -3,7 +3,10 @@ import axios from "axios";
 
 function* submitFormSaga(action) {
   try {
-    const { FormPartOne, FormPartTwo, FormPartThree } = action.payload;
+    console.log(action.payload);
+    const formData = action.payload;
+    console.log(formData.formPartTwo);
+    console.log(formData.formPartTwo.team_pdf);
 
     // ====== Handle file uploads (e.g., roster and liabilityProof) ======
     const uploadFile = async (file) => {
@@ -18,24 +21,24 @@ function* submitFormSaga(action) {
     };
 
     // ====== Upload files if they exist ======
-    const rosterUrl = FormPartThree.roster
-      ? yield call(uploadFile, FormPartThree.roster)
+    const rosterUrl = formData.formPartTwo.team_pdf
+      ? yield call(uploadFile, formData.formPartTwo.team_pdf)
       : null;
 
-    const liabilityProofUrl = FormPartThree.liabilityProof
-      ? yield call(uploadFile, FormPartThree.liabilityProof)
+    const liabilityProofUrl = formData.formPartThree.liabilityProof
+      ? yield call(uploadFile, formData.formPartThree.liabilityProof)
       : null;
 
     // ====== Prepare the final payload ======
     const finalPayload = {
-      ...FormPartOne,
-      ...FormPartTwo,
-      ...FormPartThree,
+      ...formData.formPartOne,
+      ...formData.formPartTwo,
+      ...formData.formPartThree,
       rosterUrl,
       liabilityProofUrl,
     };
-
-    const response = yield call(axios.post, "/api/form/submit", finalPayload);
+    console.log(finalPayload);
+    const response = yield call(axios.post, "/api/application", finalPayload);
 
     yield put({ type: "FORM_SUBMISSION_SUCCESS", payload: response.data });
   } catch (error) {

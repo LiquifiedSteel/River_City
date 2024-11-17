@@ -8,13 +8,13 @@ const initialState = {
     coach_contact_email: "",
     coach_contact_phone: "",
     website: "",
-  },
-  FormPartTwo: {
     event_type: "", //Basketball, Volleyball, Scouts, Dance, Other
     preferred_time: "", // Will be a timestamp 6:00 PM -7:00 PM (Elementary School Only) 7:00 PM- 8:00 PM (Elementary School Only) 8:00 PM- 9:00 PM (Elementary & Middle School) 9:00 PM- 10:00 PM (Middle School Only)
     preferred_location_primary: 0, // random two schools for testing
     preferred_location_secondary: 0, // random two schools for testing
     preferred_space: [], // Gymnasium, Commons, Library / Media Center, Locker Room, Turf Field
+  },
+  FormPartTwo: {
     eventDescription: "", //
     expected_attendance: "",
     ageGroup: "", //
@@ -26,16 +26,16 @@ const initialState = {
     end_date: "", // Will be a date
     additional_dates: "", // text field
     frequency: "", //
-  },
-  FormPartThree: {
     WF_students: false,
     grade_level: "",
     team_pdf: "",
+  },
+  FormPartThree: {
     liabilityProof: "", //
     districtAcknowledgment: false,
     specialRequests: "", //
     rented_previously: false,
-    read_Rental_Review: false,
+    read_rental_review: false,
     renter_first_name: "",
     renter_last_name: "",
     renter_street_address: "",
@@ -97,8 +97,9 @@ export const updateFormPartThree = (payload) => ({
   payload,
 });
 
-export const submitForm = () => ({
+export const submitForm = (payload) => ({
   type: SUBMIT_FORM,
+  payload,
 });
 
 export default formReducer;

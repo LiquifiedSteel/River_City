@@ -7,9 +7,10 @@ const FormPartThree = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const formPartThree = useSelector((state) => state.form.FormPartThree);
+  const formPartTwo = useSelector((state) => state.form.FormPartTwo);
+  const formPartOne = useSelector((state) => state.form.FormPartOne);
 
   const [formValues, setFormValues] = useState(formPartThree);
-  const [teamPdf, setTeamPdf] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -17,11 +18,7 @@ const FormPartThree = () => {
       ...formValues,
       [name]: type === "checkbox" ? checked : value,
     });
-  };
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    setTeamPdf(file); // ====== Save the file locally ======
+    dispatch(updateFormPartThree(formValues));
   };
 
   const handleBack = () => {
@@ -29,9 +26,7 @@ const FormPartThree = () => {
   };
 
   const handleSubmit = () => {
-    const updatedValues = { ...formValues, team_pdf: teamPdf };
-    dispatch(updateFormPartThree(updatedValues));
-    dispatch(submitForm());
+    dispatch(submitForm({ formPartOne,  formPartTwo,  formPartThree}));
     history.push("/submission-success"); 
   };
 
@@ -39,50 +34,6 @@ const FormPartThree = () => {
     <div>
       <h2>Additional Information</h2>
       <form>
-        <div>
-          <label>Are you including WF Students?</label>
-          <input
-            type="checkbox"
-            name="wf_students"
-            checked={formValues.wf_students}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Grade Level</label>
-          <input
-            type="text"
-            name="grade_level"
-            value={formValues.grade_level}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Upload Team PDF</label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            name="team_pdf"
-            onChange={handleFileUpload}
-          />
-        </div>
-        <div>
-          <label>Liability Proof</label>
-          <input
-            type="text"
-            name="liabilityProof"
-            value={formValues.liabilityProof}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Special Requests</label>
-          <textarea
-            name="specialRequests"
-            value={formValues.specialRequests}
-            onChange={handleChange}
-          />
-        </div>
         <div>
           <label>Have you rented previously?</label>
           <input
@@ -96,8 +47,8 @@ const FormPartThree = () => {
           <label>Have you read the Rental Review?</label>
           <input
             type="checkbox"
-            name="read_Rental_Review"
-            checked={formValues.read_Rental_Review}
+            name="read_rental_review"
+            checked={formValues.read_rental_review}
             onChange={handleChange}
           />
         </div>
@@ -177,8 +128,8 @@ const FormPartThree = () => {
           <label>Agree to Respectful Use of Space</label>
           <input
             type="checkbox"
-            name="agreeToRespectfulUseOfSpace"
-            checked={formValues.agreeToRespectfulUseOfSpace}
+            name="agree_to_respectful_use_of_space"
+            checked={formValues.agree_to_respectful_use_of_space}
             onChange={handleChange}
           />
         </div>
@@ -186,8 +137,8 @@ const FormPartThree = () => {
           <label>Agree to Invoice Payment Process</label>
           <input
             type="checkbox"
-            name="agreeToInvoicePaymentProcess"
-            checked={formValues.agreeToInvoicePaymentProcess}
+            name="agree_to_invoice_payment_process"
+            checked={formValues.agree_to_invoice_payment_process}
             onChange={handleChange}
           />
         </div>
