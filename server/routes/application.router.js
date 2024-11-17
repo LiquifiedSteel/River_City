@@ -4,6 +4,7 @@ const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
 const router = express.Router();
+const axios = require('axios');
 
 /**
  * GET route template
@@ -304,6 +305,30 @@ router.delete("/:applicationId", rejectUnauthenticated, (req, res) => {
       console.error(err);
       res.sendStatus(500);
     });
+});
+
+
+router.post('/verify-recaptcha', async (req, res) => {
+  const { recaptchaToken } = req.body;
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;  // SECRET KEY HERE
+
+  try {
+    const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+      params: {
+        secret: secretKey,
+        response: recaptchaToken
+      }
+    });
+
+    if (response.data.success) {
+      res.json({ success: true, message: 'reCAPTCHA verified successfully!' });
+    } else {
+      res.status(400).json({ success: false, message: 'reCAPTCHA verification failed.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;
