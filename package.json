@@ -13,12 +13,8 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "connect-pg-simple": "^9.0.1",
-<<<<<<< HEAD
-    "dotenv": "^16.0.3",
-    "emailjs-com": "^3.2.0",
-=======
     "dotenv": "^16.4.5",
->>>>>>> 7f7df0842fab7f949bb56da6865698b782de5856
+    "emailjs-com": "^3.2.0",
     "express": "^4.17.1",
     "express-session": "^1.18.0",
     "jspdf": "^2.5.2",
