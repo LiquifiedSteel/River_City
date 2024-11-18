@@ -52,14 +52,16 @@ function Nav() {
          Form Part Two 
         </Link>
 
+        <Link className="navFormPartThree navLink" to="/form-part-three">
+         Form Part Three
+        </Link>
+
         <Link className="navFormReview navLink" to="/form-review">
          Form Review
         </Link>
 
 
-        <Link className="navFormPartThree navLink" to="/form-part-three">
-         Form Part Three
-        </Link>
+        
       </div>
     </div>
   );

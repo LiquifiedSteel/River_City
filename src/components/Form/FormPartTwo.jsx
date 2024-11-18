@@ -1,7 +1,28 @@
+/** @jsxImportSource @emotion/react */
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { updateFormPartTwo } from "../../redux/reducers/form.reducer";
+import { css } from "@emotion/react";
+
+const formContainerStyle = css`
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+`;
+
+const labelStyle = css`
+  font-weight: 600;
+  margin-bottom: 5px;
+`;
+
+const descriptionStyle = css`
+  font-size: 0.9rem;
+  color: #6c757d;
+`;
 
 const FormPartTwo = () => {
   const dispatch = useDispatch();
@@ -9,12 +30,11 @@ const FormPartTwo = () => {
   const formPartTwo = useSelector((state) => state.form.FormPartTwo);
   const [teamPdf, setTeamPdf] = useState("");
   const [liabilityProofPdf, setliabilityProofPdf] = useState("");
-
   const [formValues, setFormValues] = useState(formPartTwo);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setFormValues({ ...formValues, [name]: type === "checkbox" ? checked : value });
   };
 
   const handleNext = () => {
@@ -29,142 +49,178 @@ const FormPartTwo = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    setTeamPdf(file); // ====== Save the file locally ======
+    setTeamPdf(file);
   };
 
   const handleFileUpload2 = (e) => {
     const file = e.target.files[0];
-    setliabilityProofPdf(file); // ====== Save the file locally ======
+    setliabilityProofPdf(file);
   };
 
   return (
-    <div>
-      <h2>Event Details</h2>
+    <div css={formContainerStyle} className="shadow">
+      <h2 className="text-center mb-4">Event Details</h2>
+
       <form>
-        <div>
-          <label>Event Description</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Event Description</label>
           <textarea
             name="eventDescription"
             value={formValues.eventDescription}
+            className="form-control"
             onChange={handleChange}
             required
           />
         </div>
 
-        <div>
-          <label>Expected Attendance</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Expected Attendance</label>
           <input
             type="number"
             name="expected_attendance"
             value={formValues.expected_attendance}
+            className="form-control"
             onChange={handleChange}
             required
           />
         </div>
 
-        <div>
-          <label>Preferred Days</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Preferred Days</label>
           <select
-              name="preferred_days"
-              value={formValues.preferred_days}
-              onChange={handleChange}
-              required
+            name="preferred_days"
+            value={formValues.preferred_days}
+            className="form-select"
+            onChange={handleChange}
+            required
           >
-              <option value="">Select Preferred Days</option>
-              <option value="Monday/Thursdays">Monday/Thursdays</option>
-              <option value="Tuesday/Fridays">Tuesday/Fridays</option>
-              <option value="Mondays">Mondays</option>
-              <option value="Tuesdays">Tuesdays</option>
-              <option value="Thursdays">Thursdays</option>
-              <option value="Fridays">Fridays</option>
+            <option value="">Select Preferred Days</option>
+            <option value="Monday/Thursdays">Monday/Thursdays</option>
+            <option value="Tuesday/Fridays">Tuesday/Fridays</option>
+            <option value="Mondays">Mondays</option>
+            <option value="Tuesdays">Tuesdays</option>
+            <option value="Thursdays">Thursdays</option>
+            <option value="Fridays">Fridays</option>
           </select>
-          <span> Requests for twice-weekly practices and meetings will be reserved on Mon/Thur or Tue/Fri</span>
+          <small css={descriptionStyle}>
+            Requests for twice-weekly practices and meetings will be reserved on Mon/Thur or Tue/Fri.
+          </small>
         </div>
 
-        <div>
-          <label>Start Date for your rental</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Start Date for Your Rental</label>
           <input
             type="date"
             name="start_date"
             value={formValues.start_date}
+            className="form-control"
             onChange={handleChange}
             required
           />
-          <span>Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format)</span>
+          <small css={descriptionStyle}>
+            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format).
+          </small>
         </div>
 
-        <div>
-          <label>End Date for your rental</label>
+        <div className="mb-3">
+          <label css={labelStyle}>End Date for Your Rental</label>
           <input
             type="date"
             name="end_date"
             value={formValues.end_date}
+            className="form-control"
             onChange={handleChange}
             required
           />
-          <span>Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format)</span>
+          <small css={descriptionStyle}>
+            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format).
+          </small>
         </div>
 
-        <div>
-          <label>Additional Dates for your rental</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Additional Dates for Your Rental</label>
           <input
             type="text"
             name="additional_dates"
             value={formValues.additional_dates}
+            className="form-control"
             onChange={handleChange}
           />
-          <span>Submit when requesting specific dates or additional date details are needed</span>
+          <small css={descriptionStyle}>
+            Submit when requesting specific dates or additional date details are needed.
+          </small>
         </div>
-        <div>
-          <label>Are your participants consisting of 85% West Fargo students? An event comprising at least 85% of WFPS students is eligible to receive a student discount for two 60-minute contracted slots with the required student roster. (Not eligible for weekend or large event rentals.)</label>
+
+        <div className="mb-3">
+          <label css={labelStyle}>
+            Are 85% of Your Participants West Fargo Students?
+          </label>
           <input
             type="checkbox"
             name="WF_students"
             checked={formValues.WF_students}
+            className="form-check-input ms-2"
             onChange={handleChange}
           />
+          <small css={descriptionStyle}>
+            An event comprising at least 85% of WFPS students is eligible for a student discount.
+          </small>
         </div>
-        <div>
-          <label>Grade Level</label>
+
+        <div className="mb-3">
+          <label css={labelStyle}>Grade Level</label>
           <input
             type="text"
             name="grade_level"
             value={formValues.grade_level}
+            className="form-control"
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label>Team Roster: Provide Student Name and School. Please provide a roster when submitting your application to prevent delays in processing. (A student discount is available to applicants who meet the WFPS student participant requirements). If a roster is not submitted, the regular rate will apply and changes will not be made once the invoice is sent.</label>
+
+        <div className="mb-3">
+          <label css={labelStyle}>
+            Team Roster (Provide Student Name and School)
+          </label>
           <input
             type="file"
             accept=".pdf,.doc,.docx"
             name="team_pdf"
+            className="form-control"
             onChange={handleFileUpload}
           />
+          <small css={descriptionStyle}>
+            A student discount is available if a roster meeting the requirements is provided.
+          </small>
         </div>
-        <div>
-          <label>Liability Proof</label>
+
+        <div className="mb-3">
+          <label css={labelStyle}>Liability Proof</label>
           <input
             type="file"
             accept=".pdf,.doc,.docx"
             name="liabilityProof"
+            className="form-control"
             onChange={handleFileUpload2}
           />
         </div>
-        {/* <div>
-          <label>Special Requests</label>
-          <textarea
-            name="specialRequests"
-            value={formValues.specialRequests}
-            onChange={handleChange}
-          />
-        </div> */}
-        <button type="button" onClick={handleBack}>
-          Back
-        </button>
-        <button type="button" onClick={handleNext}>
-          Next
-        </button>
+
+        <div className="d-flex justify-content-between">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleBack}
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleNext}
+          >
+            Next
+          </button>
+        </div>
       </form>
     </div>
   );
