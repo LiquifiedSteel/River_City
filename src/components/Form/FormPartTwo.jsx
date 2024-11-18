@@ -17,7 +17,6 @@ const FormPartTwo = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-
   const handleNext = () => {
     const updatedValues = { ...formValues, team_pdf: teamPdf, liabilityProof: liabilityProofPdf };
     dispatch(updateFormPartTwo(updatedValues));
@@ -79,6 +78,7 @@ const FormPartTwo = () => {
               <option value="Thursdays">Thursdays</option>
               <option value="Fridays">Fridays</option>
           </select>
+          <span> Requests for twice-weekly practices and meetings will be reserved on Mon/Thur or Tue/Fri</span>
         </div>
 
         <div>
@@ -90,6 +90,7 @@ const FormPartTwo = () => {
             onChange={handleChange}
             required
           />
+          <span>Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format)</span>
         </div>
 
         <div>
@@ -101,6 +102,7 @@ const FormPartTwo = () => {
             onChange={handleChange}
             required
           />
+          <span>Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format)</span>
         </div>
 
         <div>
@@ -111,6 +113,7 @@ const FormPartTwo = () => {
             value={formValues.additional_dates}
             onChange={handleChange}
           />
+          <span>Submit when requesting specific dates or additional date details are needed</span>
         </div>
         <div>
           <label>Are your participants consisting of 85% West Fargo students? An event comprising at least 85% of WFPS students is eligible to receive a student discount for two 60-minute contracted slots with the required student roster. (Not eligible for weekend or large event rentals.)</label>

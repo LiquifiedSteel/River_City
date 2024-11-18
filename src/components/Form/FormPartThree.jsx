@@ -27,7 +27,9 @@ const FormPartThree = () => {
     history.push("/form-part-two");
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    alert("handleSubmit is running")
     if (!recaptchaValue) {
       alert('Please complete the reCAPTCHA');
       return;
@@ -38,12 +40,13 @@ const FormPartThree = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recaptchaToken: recaptchaValue }),
       });
-  
+      
       const result = await response.json();
   
       if (result.success) {
         dispatch(submitForm({ formPartOne,  formPartTwo,  formPartThree}));
         history.push("/submission-success");
+        alert('successfull');
       } else {
         alert('reCAPTCHA verification failed.');
       }

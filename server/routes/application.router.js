@@ -23,6 +23,20 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get("/locations", rejectUnauthenticated, (req, res) => {
+  // GET route code here
+  const queryText = 'SELECT * From "Locations" ORDER BY "id" ASC';
+  pool
+    .query(queryText)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.error("Error fetching locations:", err);
+      res.sendStatus(500);
+    });
+});
+
 router.get("/:requestID", rejectUnauthenticated, (req, res) => {
   // GET route code here
   const queryText = 'SELECT * From "Requests" WHERE id=$1;';
