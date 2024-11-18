@@ -45,7 +45,7 @@ const FormPartThree = () => {
   
       if (result.success) {
         dispatch(submitForm({ formPartOne,  formPartTwo,  formPartThree}));
-        history.push("/submission-success");
+        history.push("/form-review");
         alert('successfull');
       } else {
         alert('reCAPTCHA verification failed.');
@@ -202,7 +202,9 @@ const FormPartThree = () => {
             required
           />
         </div>
+
         <p>Invoices will be issued within one business day of receiving your signed electronic rental contract and the invoice will be available to view in your online client portal. Payment must be submitted in full via credit card on your online client portal at least 24 hours prior to the start of your rental contract. If you need to pay via cash or check, special accommodation must be prearranged with the facility at least 48 hours prior to the start of your rental contract.</p>
+        
         <div>
           <p>I have read and agree to the invoice payment process.</p>
           <label>I Agree</label>
