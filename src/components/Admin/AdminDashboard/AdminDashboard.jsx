@@ -46,7 +46,7 @@ function AdminDashboard() {
                 <td>{app.team_org_event}</td>
                 <td>{app.title_w_team_org_event}</td>
                 <td>
-                  {app.coach_Contact_first_name} {app.coach_Contact_last_name}
+                  {app.coach_contact_first_name} {app.coach_contact_last_name}
                 </td>
                 <td>{app.coach_contact_phone}</td>
                 <td>{app.coach_contact_email}</td>

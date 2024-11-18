@@ -133,9 +133,9 @@ function App() {
             <AdminDataView />
           </Route>
 
-          {/* <Route exact path="/admin-form-editor">
+          <Route exact path="/admin-form-editor">
             <AdminFormEditor />
-          </Route> */}
+          </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
