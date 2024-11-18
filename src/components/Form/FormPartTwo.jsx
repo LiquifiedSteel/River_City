@@ -7,6 +7,8 @@ const FormPartTwo = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const formPartTwo = useSelector((state) => state.form.FormPartTwo);
+  const [teamPdf, setTeamPdf] = useState("");
+  const [liabilityProofPdf, setliabilityProofPdf] = useState("");
 
   const [formValues, setFormValues] = useState(formPartTwo);
 
@@ -15,18 +17,9 @@ const FormPartTwo = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleCheckboxChange = (e) => {
-    const { name, value, checked } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: checked
-        ? [...(formValues[name] || []), value]
-        : formValues[name].filter((v) => v !== value),
-    });
-  };
-
   const handleNext = () => {
-    dispatch(updateFormPartTwo(formValues));
+    const updatedValues = { ...formValues, team_pdf: teamPdf, liabilityProof: liabilityProofPdf };
+    dispatch(updateFormPartTwo(updatedValues));
     history.push("/form-part-three");
   };
 
@@ -34,126 +27,20 @@ const FormPartTwo = () => {
     history.push("/form-part-one");
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    setTeamPdf(file); // ====== Save the file locally ======
+  };
+
+  const handleFileUpload2 = (e) => {
+    const file = e.target.files[0];
+    setliabilityProofPdf(file); // ====== Save the file locally ======
+  };
+
   return (
     <div>
       <h2>Event Details</h2>
       <form>
-        <div>
-          <label>Event Type</label>
-          <select
-            name="event_type"
-            value={formValues.event_type}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select an Event Type</option>
-            <option value="Basketball">Basketball</option>
-            <option value="Volleyball">Volleyball</option>
-            <option value="Scouts">Scouts</option>
-            <option value="Dance">Dance</option>
-            <option value="Others">Other</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Preferred Start Time</label>
-          <select
-            name="preferredTime_start"
-            value={formValues.preferredTime_start}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Start Time</option>
-            <option value="6:00 PM - 7:00 PM">6:00 PM - 7:00 PM</option>
-            <option value="7:00 PM - 8:00 PM">7:00 PM - 8:00 PM</option>
-            <option value="8:00 PM - 9:00 PM">8:00 PM - 9:00 PM</option>
-            <option value="9:00 PM - 10:00 PM">9:00 PM - 10:00 PM</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Primary Location</label>
-          <select
-            name="preferred_location_primary"
-            value={formValues.preferred_location_primary}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Primary Location</option>
-            <option value="1">School 1</option>
-            <option value="2">School 2</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Secondary Location</label>
-          <select
-            name="preferred_location_secondary"
-            value={formValues.preferred_location_secondary}
-            onChange={handleChange}
-          >
-            <option value="">Select Secondary Location</option>
-            <option value="1">School 1</option>
-            <option value="2">School 2</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Preferred Space</label>
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                name="preferred_space"
-                value="Gymnasium"
-                checked={formValues.preferred_space?.includes("Gymnasium") || false}
-                onChange={handleCheckboxChange}
-              />
-              Gymnasium
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="preferred_space"
-                value="Commons"
-                checked={formValues.preferred_space?.includes("Commons") || false}
-                onChange={handleCheckboxChange}
-              />
-              Commons
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="preferred_space"
-                value="Library / Media Center"
-                checked={formValues.preferred_space?.includes("Library / Media Center") || false}
-                onChange={handleCheckboxChange}
-              />
-              Library / Media Center
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="preferred_space"
-                value="Locker Room"
-                checked={formValues.preferred_space?.includes("Locker Room") || false}
-                onChange={handleCheckboxChange}
-              />
-              Locker Room
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="preferred_space"
-                value="Turf Field"
-                checked={formValues.preferred_space?.includes("Turf Field") || false}
-                onChange={handleCheckboxChange}
-              />
-              Turf Field
-            </label>
-          </div>
-        </div>
-
         <div>
           <label>Event Description</label>
           <textarea
@@ -175,27 +62,27 @@ const FormPartTwo = () => {
           />
         </div>
 
-       <div>
-        <label>Preferred Days</label>
-        <select
-            name="preferred_days"
-            value={formValues.preferred_days}
-            onChange={handleChange}
-            required
-        >
-            <option value="">Select Preferred Days</option>
-            <option value="Monday/Thursdays">Monday/Thursdays</option>
-            <option value="Tuesday/Fridays">Tuesday/Fridays</option>
-            <option value="Mondays">Mondays</option>
-            <option value="Tuesdays">Tuesdays</option>
-            <option value="Thursdays">Thursdays</option>
-            <option value="Fridays">Fridays</option>
-        </select>
+        <div>
+          <label>Preferred Days</label>
+          <select
+              name="preferred_days"
+              value={formValues.preferred_days}
+              onChange={handleChange}
+              required
+          >
+              <option value="">Select Preferred Days</option>
+              <option value="Monday/Thursdays">Monday/Thursdays</option>
+              <option value="Tuesday/Fridays">Tuesday/Fridays</option>
+              <option value="Mondays">Mondays</option>
+              <option value="Tuesdays">Tuesdays</option>
+              <option value="Thursdays">Thursdays</option>
+              <option value="Fridays">Fridays</option>
+          </select>
+          <span> Requests for twice-weekly practices and meetings will be reserved on Mon/Thur or Tue/Fri</span>
         </div>
 
-  
         <div>
-          <label>Start Date</label>
+          <label>Start Date for your rental</label>
           <input
             type="date"
             name="start_date"
@@ -203,10 +90,11 @@ const FormPartTwo = () => {
             onChange={handleChange}
             required
           />
+          <span>Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format)</span>
         </div>
 
         <div>
-          <label>End Date</label>
+          <label>End Date for your rental</label>
           <input
             type="date"
             name="end_date"
@@ -214,18 +102,63 @@ const FormPartTwo = () => {
             onChange={handleChange}
             required
           />
+          <span>Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format)</span>
         </div>
 
         <div>
-          <label>Additional Dates</label>
+          <label>Additional Dates for your rental</label>
           <input
             type="text"
             name="additional_dates"
             value={formValues.additional_dates}
             onChange={handleChange}
           />
+          <span>Submit when requesting specific dates or additional date details are needed</span>
         </div>
-
+        <div>
+          <label>Are your participants consisting of 85% West Fargo students? An event comprising at least 85% of WFPS students is eligible to receive a student discount for two 60-minute contracted slots with the required student roster. (Not eligible for weekend or large event rentals.)</label>
+          <input
+            type="checkbox"
+            name="WF_students"
+            checked={formValues.WF_students}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Grade Level</label>
+          <input
+            type="text"
+            name="grade_level"
+            value={formValues.grade_level}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Team Roster: Provide Student Name and School. Please provide a roster when submitting your application to prevent delays in processing. (A student discount is available to applicants who meet the WFPS student participant requirements). If a roster is not submitted, the regular rate will apply and changes will not be made once the invoice is sent.</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            name="team_pdf"
+            onChange={handleFileUpload}
+          />
+        </div>
+        <div>
+          <label>Liability Proof</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            name="liabilityProof"
+            onChange={handleFileUpload2}
+          />
+        </div>
+        {/* <div>
+          <label>Special Requests</label>
+          <textarea
+            name="specialRequests"
+            value={formValues.specialRequests}
+            onChange={handleChange}
+          />
+        </div> */}
         <button type="button" onClick={handleBack}>
           Back
         </button>
