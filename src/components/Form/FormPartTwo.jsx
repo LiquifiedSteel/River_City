@@ -65,8 +65,8 @@ const FormPartTwo = () => {
         <div className="mb-3">
           <label css={labelStyle}>Event Description</label>
           <textarea
-            name="eventDescription"
-            value={formValues.eventDescription}
+            name="event_description"
+            value={formValues.event_description}
             className="form-control"
             onChange={handleChange}
             required
