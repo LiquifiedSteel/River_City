@@ -15,12 +15,6 @@ const formContainerStyle = css`
   border-radius: 8px;
 `;
 
-const sectionTitleStyle = css`
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-`;
-
 const labelStyle = css`
   font-weight: 600;
   margin-bottom: 5px;
@@ -59,9 +53,14 @@ const FormPartOne = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleNext = () => {
-    dispatch(updateFormPartOne(formValues));
-    history.push("/form-part-two");
+  const handleCheckboxChange = (e) => {
+    const { name, value, checked } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: checked
+        ? [...(formValues[name] || []), value]
+        : formValues[name].filter((v) => v !== value),
+    });
   };
 
   const handleLocation1 = (e) => {
@@ -76,29 +75,18 @@ const FormPartOne = () => {
     setLocation2(Number(value));
   };
 
+  const handleNext = () => {
+    dispatch(updateFormPartOne(formValues));
+    history.push("/form-part-two");
+  };
+
   return (
     <div css={formContainerStyle} className="shadow">
       <h2 className="text-center mb-4">Applicant Information</h2>
-      <p className={descriptionStyle}>
-        West Fargo Public Schools makes its elementary, middle, and high school
-        facilities available for public use, with some exceptions. Please
-        submit your rental application at least five business days before the
-        desired use date. <b>Note:</b> Team rosters are required if you wish to
-        claim a WFPS student discount.
-      </p>
-
-      <p className={descriptionStyle}>
-        Review the full Facility Rental Policy for detailed regulations. Use of
-        facilities is automatically canceled if schools are closed due to
-        weather or other conditions.
-      </p>
-
       <form>
         {/* Team/Organization Details */}
         <div className="mb-3">
-          <label css={labelStyle}>
-            Team/Organization/Event Name
-          </label>
+          <label css={labelStyle}>Team/Organization/Event Name</label>
           <input
             type="text"
             name="team_org_event"
@@ -106,15 +94,10 @@ const FormPartOne = () => {
             className="form-control"
             onChange={handleChange}
           />
-          <small className={descriptionStyle}>
-            Note: Avoid using local sports team names like Packers or Mustangs.
-          </small>
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>
-            Title with Team/Organization/Event
-          </label>
+          <label css={labelStyle}>Title with Team/Organization/Event</label>
           <input
             type="text"
             name="title_w_team_org_event"
@@ -148,9 +131,7 @@ const FormPartOne = () => {
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>
-            Coach/Contact Email Address
-          </label>
+          <label css={labelStyle}>Coach/Contact Email Address</label>
           <input
             type="email"
             name="coach_contact_email"
@@ -158,30 +139,10 @@ const FormPartOne = () => {
             className="form-control"
             onChange={handleChange}
           />
-          <small className={descriptionStyle}>
-            Note: Avoid using WFPS staff emails for private rentals.
-          </small>
         </div>
 
         <div className="mb-3">
-        <label css={labelStyle}>
-            Website
-        </label>
-        <input
-            type="email"
-            name="website"
-            value={formValues.website}
-            className="form-control"
-            onChange={handleChange}
-        />
-        </div>
-
-
-
-        <div className="mb-3">
-          <label css={labelStyle}>
-            Coach/Contact Phone Number
-          </label>
+          <label css={labelStyle}>Coach/Contact Phone Number</label>
           <input
             type="tel"
             name="coach_contact_phone"
@@ -191,7 +152,17 @@ const FormPartOne = () => {
           />
         </div>
 
-        {/* Event Type */}
+        <div className="mb-3">
+          <label css={labelStyle}>Website</label>
+          <input
+            type="url"
+            name="website"
+            value={formValues.website}
+            className="form-control"
+            onChange={handleChange}
+          />
+        </div>
+
         <div className="mb-3">
           <label css={labelStyle}>Event Type</label>
           <select
@@ -209,12 +180,25 @@ const FormPartOne = () => {
           </select>
         </div>
 
-        {/* Preferred Location */}
+        <div className="mb-3">
+          <label css={labelStyle}>Preferred Time</label>
+          <select
+            name="preferred_time"
+            value={formValues.preferred_time}
+            className="form-select"
+            onChange={handleChange}
+          >
+            <option value="">Select a Preferred Time</option>
+            <option value="6:00 PM">6:00 PM - 7:00 PM</option>
+            <option value="7:00 PM">7:00 PM - 8:00 PM</option>
+            <option value="8:00 PM">8:00 PM - 9:00 PM</option>
+            <option value="9:00 PM">9:00 PM - 10:00 PM</option>
+          </select>
+        </div>
+
         <div className="row mb-3">
           <div className="col-md-6">
-            <label css={labelStyle}>
-              Preferred Location (Primary)
-            </label>
+            <label css={labelStyle}>Preferred Location (Primary)</label>
             <select
               name="preferred_location_primary"
               value={formValues.preferred_location_primary}
@@ -223,9 +207,7 @@ const FormPartOne = () => {
             >
               <option value="">Select a Location</option>
               {locations
-                .filter(
-                  (location) => Number(location.id) !== location2
-                )
+                .filter((location) => Number(location.id) !== location2)
                 .map((location) => (
                   <option key={location.id} value={location.id}>
                     {location.name_of_Location}
@@ -234,9 +216,7 @@ const FormPartOne = () => {
             </select>
           </div>
           <div className="col-md-6">
-            <label css={labelStyle}>
-              Preferred Location (Secondary)
-            </label>
+            <label css={labelStyle}>Preferred Location (Secondary)</label>
             <select
               name="preferred_location_secondary"
               value={formValues.preferred_location_secondary}
@@ -245,9 +225,7 @@ const FormPartOne = () => {
             >
               <option value="">Select a Location</option>
               {locations
-                .filter(
-                  (location) => Number(location.id) !== location1
-                )
+                .filter((location) => Number(location.id) !== location1)
                 .map((location) => (
                   <option key={location.id} value={location.id}>
                     {location.name_of_Location}
@@ -255,6 +233,47 @@ const FormPartOne = () => {
                 ))}
             </select>
           </div>
+        </div>
+
+        <div className="mb-3">
+          <label css={labelStyle}>Preferred Space</label>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                name="preferred_space"
+                value="Gymnasium"
+                checked={formValues.preferred_space?.includes("Gymnasium") || false}
+                onChange={handleCheckboxChange}
+              />
+              Gymnasium
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferred_space"
+                value="Commons"
+                checked={formValues.preferred_space?.includes("Commons") || false}
+                onChange={handleCheckboxChange}
+              />
+              Commons
+            </label>
+          </div>
+        </div>
+
+        <div className="mb-3">
+          <label css={labelStyle}>Priority</label>
+          <select
+            name="priority"
+            value={formValues.priority}
+            className="form-select"
+            onChange={handleChange}
+          >
+            <option value="">Select a Priority</option>
+            <option value="Time">Preferred Time</option>
+            <option value="Days">Preferred Days</option>
+            <option value="Location">Preferred Location</option>
+          </select>
         </div>
 
         <button
