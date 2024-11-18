@@ -8,34 +8,34 @@ const initialState = {
     coach_contact_email: "",
     coach_contact_phone: "",
     website: "",
-  },
-  FormPartTwo: {
     event_type: "", //Basketball, Volleyball, Scouts, Dance, Other
-    preferredTime_start: "", // Will be a timestamp 6:00 PM -7:00 PM (Elementary School Only) 7:00 PM- 8:00 PM (Elementary School Only) 8:00 PM- 9:00 PM (Elementary & Middle School) 9:00 PM- 10:00 PM (Middle School Only)
+    preferred_time: "", // Will be a timestamp 6:00 PM -7:00 PM (Elementary School Only) 7:00 PM- 8:00 PM (Elementary School Only) 8:00 PM- 9:00 PM (Elementary & Middle School) 9:00 PM- 10:00 PM (Middle School Only)
     preferred_location_primary: 0, // random two schools for testing
     preferred_location_secondary: 0, // random two schools for testing
     preferred_space: [], // Gymnasium, Commons, Library / Media Center, Locker Room, Turf Field
+    priority: "", // might change to an integer based on what functionality we choose to do Preferred Time, Preferred Days, Preferred Location
+  },
+  FormPartTwo: {
     eventDescription: "", //
     expected_attendance: "",
     ageGroup: "", //
     preferred_days: "", // Monday/ Thursdays, Tuesday/ Fridays, Mondays, Tuesdays, Thursdays, Fridays
-    priority: "", // might change to an integer based on what functionality we choose to do Preferred Time, Preferred Days, Preferred Location
     specificAreas: "", //
     alternativeChoices: "", //
     start_date: "", // Will be a date
     end_date: "", // Will be a date
     additional_dates: "", // text field
     frequency: "", //
-  },
-  FormPartThree: {
-    wf_students: false,
+    WF_students: false,
     grade_level: "",
     team_pdf: "",
+  },
+  FormPartThree: {
     liabilityProof: "", //
     districtAcknowledgment: false,
     specialRequests: "", //
     rented_previously: false,
-    read_Rental_Review: false,
+    read_rental_review: false,
     renter_first_name: "",
     renter_last_name: "",
     renter_street_address: "",
@@ -44,8 +44,8 @@ const initialState = {
     renter_zip: "",
     renter_phone: "",
     renter_email: "",
-    agreeToRespectfulUseOfSpace: false,
-    agreeToInvoicePaymentProcess: false,
+    agree_to_respectful_use_of_space: false,
+    agree_to_invoice_payment_process: false,
   },
 };
 
@@ -97,8 +97,9 @@ export const updateFormPartThree = (payload) => ({
   payload,
 });
 
-export const submitForm = () => ({
+export const submitForm = (payload) => ({
   type: SUBMIT_FORM,
+  payload,
 });
 
 export default formReducer;

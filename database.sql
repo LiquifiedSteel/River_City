@@ -10,15 +10,14 @@ CREATE TABLE "Locations" (
 
 CREATE TABLE "Spaces" (
 	"id" SERIAL PRIMARY KEY,
-	"type" VARCHAR(30),
-	"location_id" INTEGER REFERENCES "Locations"
+	"type" VARCHAR(30)
 );
 
 CREATE TABLE "user" (
     "id" SERIAL PRIMARY KEY,
 	"username" VARCHAR(40) UNIQUE,
 	"password" VARCHAR(300) NOT NULL,
-	"email" VARCHAR(100) NOT NULL,
+	"email" VARCHAR(100),
 	"isAdmin" BOOLEAN DEFAULT FALSE,
 	"deleted" BOOLEAN DEFAULT FALSE
 );
@@ -35,14 +34,14 @@ CREATE TABLE "Requests" (
 	"website" VARCHAR(150),
 	"event_type" VARCHAR(50) NOT NULL,
 	"rented_previously" BOOLEAN NOT NULL,
-	"preferred_time" TIME NOT NULL DEFAULT NOW(),
+	"preferred_time" VARCHAR(15) NOT NULL,
 	"preferred_location_primary" INTEGER REFERENCES "Locations" NOT NULL,
 	"preferred_location_secondary" INTEGER REFERENCES "Locations" NOT NULL,
-	"preferred_space" INTEGER REFERENCES "Spaces" NOT NULL,
+	"preferred_space" VARCHAR(25) NOT NULL,
 	"priority" VARCHAR(20) NOT NULL,
 	"preferred_days" VARCHAR(20) NOT NULL,
-	"start_date" DATE NOT NULL,
-	"end_date" DATE NOT NULL,
+	"start_date" VARCHAR(30) NOT NULL,
+	"end_date" VARCHAR(30) NOT NULL,
 	"additional_dates" VARCHAR(300),
 	"expected_attendance" VARCHAR(150),
 	"WF_students" BOOLEAN NOT NULL,
@@ -61,75 +60,54 @@ CREATE TABLE "Requests" (
 	"agree_to_invoice_payment_process" BOOLEAN NOT NULL
 );
 
-CREATE TABLE "Time_Blocks" (
-	"id" SERIAL PRIMARY KEY,
-	"location_id" INTEGER REFERENCES "Locations" NOT NULL,
-	"start_time" TIME NOT NULL,
-	"end_time" TIME NOT NULL,
-	"is_blocked" BOOLEAN NOT NULL,
-	"is_recurring" BOOLEAN DEFAULT FALSE
-);
 
-CREATE TABLE "location_spaces" (
-	"location_id" integer,
-	"space_id" integer
-);
+--CREATE TABLE "Time_Blocks" (
+--	"id" SERIAL PRIMARY KEY,
+--	"location_id" INTEGER REFERENCES "Locations" NOT NULL,
+--	"start_time" TIME NOT NULL,
+--	"end_time" TIME NOT NULL,
+--	"is_blocked" BOOLEAN NOT NULL,
+--	"is_recurring" BOOLEAN DEFAULT FALSE
+--);
+--
+--CREATE TABLE "location_spaces" (
+--	"location_id" integer,
+--	"space_id" integer
+--);
 
 INSERT INTO "Locations" ("id", "name_of_Location")
 VALUES
-(1, 'Company A'),
-(2, 'Company B'),
-(3, 'Company C'),
-(4, 'Company D'),
-(5, 'Company E'),
-(6, 'Company F'),
-(7, 'Company G'),
-(8, 'Company H'),
-(9, 'Company I'),
-(10, 'Company J');
+(1, 'Aurora Elementary'),
+(2, 'Brooks Harbor Elementary'),
+(3, 'Cheney Middle School'),
+(4, 'Deer Creek Elementary'),
+(5, 'Eastwood Elementary'),
+(6, 'Freedom Elementary'),
+(7, 'Harwood Elementary'),
+(8, 'Heritage Middle School'),
+(9, 'Horace Elementary'),
+(10, 'Independance Elementary (unavailable until late spring)'),
+(11, 'L.E. Berger Elementary'),
+(12, 'Legacy Elementary'),
+(13, 'Liberty Middle School'),
+(14, 'Meadowlark Elementary (unavailable until fall 2025'),
+(15, 'Osgood Elementary'),
+(16, 'South Elementary'),
+(17, 'Westside Elementary'),
+(18, 'Willow Park Elementary');
 
 
-INSERT INTO "Spaces" ("id", "type", "location_id")
+INSERT INTO "Spaces" ("id", "type")
 VALUES
-(1, 'Meeting Room', 2),
-(2, 'Gym', 3),
-(3, 'Classroom', 4),
-(4, 'Auditorium', 5);
+(1, 'Gymnasium'),
+(2, 'Commons'),
+(3, 'Library / Media Center'),
+(4, 'Locker Room'),
+(5, 'Turf Field');
 
-INSERT INTO "user" ("username", "password", "email")
-VALUES
-('user1', 'password123', 'user1@gmail.com'),
-('user2', 'password456', 'user2@gmail.com'),
-('user3', 'password789', 'user3@gmail.com'),
-('user4', 'password101112', 'user4@gmail.com'),
-('user5', 'password131415', 'user5@gmail.com'),
-('user6', 'password161718', 'user6@gmail.com'),
-('user7', 'password192021', 'user7@gmail.com'),
-('user8', 'password222324', 'user8@gmail.com'),
-('user9', 'password252627', 'user9@gmail.com');
 
 INSERT INTO "Requests" ("id", "team_org_event", "title_w_team_org_event", "coach_contact_first_name", "coach_contact_last_name", "coach_contact_email", "coach_contact_phone", "website", "event_type", "rented_previously", "preferred_time", "preferred_location_primary", "preferred_location_secondary", "preferred_space", "priority", "preferred_days", "start_date", "end_date", "additional_dates", "expected_attendance", "WF_students", "grade_level", "team_pdf", "read_rental_review", "renter_first_name", "renter_last_name", "renter_street_address", "renter_city", "renter_state", "renter_zip", "renter_phone", "renter_email", "agree_to_respectful_use_of_space", "agree_to_invoice_payment_process")
 VALUES
 (1, 'Tech Enthusiasts', 'Coding Workshop', 'John', 'Doe', 'john.doe@example.com', '123-456-7890', 'http://techevent.com', 'Educational', TRUE, '10:00:00', 1, 2, 4, 'High', 'Weekends', '2024-11-15', '2024-11-16', 'None', '100', 'Yes', 'College', '/pdfs/event1.pdf', TRUE, 'Jane', 'Smith', '123 Elm St', 'Nis', 'TX', '75001', '123-456-7890', 'jane.smith@example.com', TRUE, TRUE),
 (2, 'Youth Basketball Club', 'Regional Basketball Finals', 'Michael', 'Jordan', 'michael.jordan@example.com', '234-567-8901', 'http://basketball.com', 'Sports', FALSE, '15:00:00', 3, 4, 2, 'Medium', 'Weekdays', '2024-11-20', '2024-11-22', 'Extra time slots requested on Nov 23', '300', 'No', 'High School', '/pdfs/event2.pdf', TRUE, 'Robert', 'James', '456 Maple Ave', 'Dallas', 'TX', '75201', '234-567-8901', 'robert.james@example.com', TRUE, TRUE),
 (3, 'Local Arts Group', 'Painting Exhibition', 'Emily', 'Brown', 'emily.brown@example.com', '345-678-9012', 'http://arts.org', 'Recreational', TRUE, '09:00:00', 5, 6, 3, 'Low', 'Daily', '2024-11-25', '2024-11-30', 'Holiday closure adjustments needed', '50', 'Yes', 'Middle', '/pdfs/event3.pdf', FALSE, 'Anne', 'Lee', '789 Birch St', 'Austin', 'TX', '73301', '345-678-9012', 'anne.lee@example.com', TRUE, TRUE);
-
-INSERT INTO "Time_Blocks" (
-    "id", 
-    "location_id", 
-    "start_time", 
-    "end_time", 
-    "is_blocked", 
-    "is_recurring"
-)
-VALUES
-(1, 1, '08:00:00', '10:00:00', TRUE, FALSE),
-(2, 2, '10:30:00', '12:30:00', FALSE, TRUE),
-(3, 3, '13:00:00', '15:00:00', TRUE, FALSE),
-(4, 4, '15:30:00', '17:30:00', FALSE, TRUE),
-(5, 5, '18:00:00', '20:00:00', TRUE, FALSE),
-(6, 6, '07:30:00', '09:30:00', FALSE, FALSE),
-(7, 7, '10:00:00', '12:00:00', TRUE, TRUE),
-(8, 8, '12:30:00', '14:30:00', FALSE, TRUE),
-(9, 9, '15:00:00', '17:00:00', TRUE, FALSE),
-(10, 10, '17:30:00', '19:30:00', FALSE, FALSE);
