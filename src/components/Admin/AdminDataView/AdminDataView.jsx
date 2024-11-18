@@ -42,20 +42,123 @@ function AdminDataView() {
       20
     );
     doc.text(
-      `Coach's Name: ${request.coach_contact_first_name || "N/A"} ${
-        request.coach_contact_last_name || "N/A"
+      `
+      Title with Team/ Organization/ Event: ${
+        request.title_w_team_org_event || "N/A"
       }`,
+      10,
+      40
+    );
+    doc.text(
+      `Coach/Contact First Name: ${
+        request.coach_contact_first_name || "N/A"
+      }  Coach/Contact Last Name${request.coach_contact_last_name || "N/A"}`,
       10,
       30
     );
-    doc.text(`Coach's Email: ${request.coach_contact_email || "N/A"}`, 10, 40);
+    doc.text(
+      `Coach/Contact Email Address: ${request.coach_contact_email || "N/A"}`,
+      10,
+      40
+    );
+
+    doc.text(
+      `
+      Coach/Contact Phone Number: ${request.coach_contact_phone || "N/A"}`,
+      10,
+      40
+    );
+
+    doc.text(`Website: ${request.website || "N/A"}`, 10, 40);
+    doc.text(`Event Type:  ${request.event_type || "N/A"}`, 10, 40);
+    request.preferredTime_start;
+    doc.text(`Preferred Time: ${request.preferred_time || "N/A"}`, 10, 40);
     doc.text(
       `Preferred Location: ${request.preferred_location_primary || "N/A"}`,
       10,
       50
     );
-    doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
-    doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
+    doc.text(`Preferred Space: ${request.preferred_space || "N/A"}`, 10, 40);
+    doc.text(
+      `Priority For Event Scheduling: ${request.priority || "N/A"}`,
+      10,
+      40
+    );
+    doc.text(`Event Description: ${request.eventDescription || "N/A"}`, 10, 40);
+    doc.text(
+      `Expected Attendance: ${request.expected_attendance || "N/A"}`,
+      10,
+      40
+    );
+    doc.text(`Preferred Days: ${request.preferred_days || "N/A"}`, 10, 40);
+    doc.text(
+      `Start Date For Your Rental: ${request.start_date || "N/A"}`,
+      10,
+      70
+    );
+    doc.text(`End Date For Your Rental: ${request.end_date || "N/A"}`, 10, 70);
+    doc.text(`additional_dates: ${request.additional_dates || "N/A"}`, 10, 70);
+    doc.text(
+      `Are 85% of Your Participants West Fargo Students?: ${
+        request.wf_students || "N/A"
+      }`,
+      10,
+      70
+    );
+    doc.text(`Grade Level:  ${request.grade_level || "N/A"}`, 10, 70);
+    doc.text(
+      `Team Roster (Provide Student Name and School):  ${
+        request.team_pdf || "N/A"
+      }`,
+      10,
+      70
+    );
+    doc.text(
+      `Renter First Name:  ${request.renter_first_name || "N/A"} ${
+        request.renter_last_name
+      }`,
+      10,
+      70
+    );
+    doc.text(
+      `Renter's Street Address: ${request.renter_street_address || "N/A"}`,
+      10,
+      70
+    );
+    doc.text(`Renter's City: ${request.renter_city || "N/A"}`, 10, 70);
+    doc.text(`Renter's State: ${request.renter_state || "N/A"}`, 10, 70);
+    doc.text(`Renter's Zip Code: ${request.renter_zip || "N/A"}`, 10, 70);
+    doc.text(`Renter's Phone Number: ${request.renter_phone || "N/A"}`, 10, 70);
+    doc.text(
+      `Renter's Email Address: ${request.renter_email || "N/A"}`,
+      10,
+      70
+    );
+    doc.text(`Special Requests: ${request.renter_email || "N/A"}`, 10, 70);
+    doc.text(
+      `Rented Previously: ${request.rented_previously || "N/A"}`,
+      10,
+      70
+    );
+    doc.text(
+      `Read Rental Review: ${request.read_rental_review || "N/A"}`,
+      10,
+      70
+    );
+    doc.text(
+      `Agree to Respectful Use of Space: ${
+        request.agree_to_respectful_use_of_space || "N/A"
+      }`,
+      10,
+      70
+    );
+    doc.text(
+      `Agree to Invoice Payment Process: ${
+        request.agree_to_invoice_payment_process || "N/A"
+      }`,
+      10,
+      70
+    );
     doc.save("AdminDataView.pdf");
   };
 
@@ -129,27 +232,45 @@ function AdminDataView() {
           Type of Event: {request.event_type}
         </Col>
         <Col xs={6} md={4}>
-          Preferred Timeframe: {request.preferred_time !== "6:00 PM" ? request.preferred_time !== "7:00 PM" ? request.preferred_time !== "8:00 PM" ? request.preferred_time !== "9:00 PM" ? "N/A": "9:00 PM - 10:00 PM" : "8:00 PM - 9:00 PM" : "7:00 PM - 8:00 PM" : "6:00 PM - 7:00 PM"}
+          Preferred Timeframe:{" "}
+          {request.preferred_time !== "6:00 PM"
+            ? request.preferred_time !== "7:00 PM"
+              ? request.preferred_time !== "8:00 PM"
+                ? request.preferred_time !== "9:00 PM"
+                  ? "N/A"
+                  : "9:00 PM - 10:00 PM"
+                : "8:00 PM - 9:00 PM"
+              : "7:00 PM - 8:00 PM"
+            : "6:00 PM - 7:00 PM"}
         </Col>
 
         <Col xs={6} md={4}>
-          Preferred Space: {!request.preferred_space ? null : request.preferred_space.slice(2, -2)}
+          Preferred Space:{" "}
+          {!request.preferred_space
+            ? null
+            : request.preferred_space.slice(2, -2)}
         </Col>
 
         <Col xs={6}>
           Preferred Location (Primary Option):{" "}
-          {locations.map(loc => {if (loc.id === request.preferred_location_primary) {
-            return <span key={loc.id}>{loc.name_of_Location}</span>
-          }})}
+          {locations.map((loc) => {
+            if (loc.id === request.preferred_location_primary) {
+              return <span key={loc.id}>{loc.name_of_Location}</span>;
+            }
+          })}
         </Col>
 
         <Col xs={6}>
           Preferred Location (Secondary Option):{" "}
-          {locations.map(loc => {if (Number(loc.id) === Number(request.preferred_location_secondary)) {
-            return <span key={loc.id}>{loc.name_of_Location}</span>
-          }})}
+          {locations.map((loc) => {
+            if (
+              Number(loc.id) === Number(request.preferred_location_secondary)
+            ) {
+              return <span key={loc.id}>{loc.name_of_Location}</span>;
+            }
+          })}
         </Col>
-        
+
         <Col xs={6} md={4}>
           Expected Attendance: {request.expected_attendance} {" people"}
         </Col>
@@ -170,13 +291,19 @@ function AdminDataView() {
           Additional Dates: {request.additional_dates}
         </Col>
 
-        <Col xs={6} md={4}>85% West Fargo Students?: {request.wf_students ? "Yes" : "No"}</Col>
-        <Col xs={6} md={4}>Grade Level: {request.grade_level}</Col>
-        <Col xs={6} md={4}>Cloudinary Link to Roster PDF: {request.team_pdf}</Col>
+        <Col xs={6} md={4}>
+          85% West Fargo Students?: {request.wf_students ? "Yes" : "No"}
+        </Col>
+        <Col xs={6} md={4}>
+          Grade Level: {request.grade_level}
+        </Col>
+        <Col xs={6} md={4}>
+          Cloudinary Link to Roster PDF: {request.team_pdf}
+        </Col>
         {/* <Col xs={6} md={4}>Liability  Proof: {request.liabilityProof}</Col> */}
         {/* <Col xs={6} md={4}>District Acknowledgment: {request.districtAcknowledgment}</Col>
         <Col xs={6} md={4}>Special Requests: {request.specialRequests}</Col> */}
-        
+
         <Col xs={12}></Col>
         <br />
         <Col xs={6} md={4}>
@@ -209,7 +336,7 @@ function AdminDataView() {
         <Col xs={6} md={4}>
           Renter's Email: {request.renter_email}
         </Col>
-        
+
         {/* <Col xs={6} md={4}>Frequency: {request.agreeToRespectfulUseOfSpace}</Col>
         <Col xs={6} md={4}>Frequency: {request.agreeToInvoicePaymentProcess}</Col> */}
       </Row>
