@@ -33,6 +33,7 @@ CREATE TABLE "Requests" (
 	"coach_contact_phone" VARCHAR(18) NOT NULL,
 	"website" VARCHAR(150),
 	"event_type" VARCHAR(50) NOT NULL,
+	"event_description" VARCHAR(1000) NOT NULL,
 	"rented_previously" BOOLEAN NOT NULL,
 	"preferred_time" VARCHAR(15) NOT NULL,
 	"preferred_location_primary" INTEGER REFERENCES "Locations" NOT NULL,
