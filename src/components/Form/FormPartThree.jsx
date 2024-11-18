@@ -70,6 +70,7 @@ const FormPartThree = () => {
       }
     } catch (error) {
       console.error("Error during reCAPTCHA verification:", error);
+      alert("Failed Recaptcha");
     }
   };
 

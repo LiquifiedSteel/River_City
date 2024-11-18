@@ -11,6 +11,9 @@ const AdminFormEditor = () => {
   const history = useHistory();
   const requestID = new URLSearchParams(location.search).get("requestID");
   const [formValues, setFormValues] = useState({});
+  const [location1, setLocation1] = useState(null);
+  const [location2, setLocation2] = useState(null);
+  const [locations, setLocations] = useState([]);
   console.log(formValues);
 
   useEffect(() => {
@@ -52,6 +55,17 @@ const AdminFormEditor = () => {
       }
     };
     saveUpdate();
+    
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get(`/api/application/locations`);
+        setLocations(response.data);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+
+    fetchLocations();
     history.push("/admin-dashboard");
   };
 
@@ -77,24 +91,7 @@ const AdminFormEditor = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label>Renter's First Name</label>
-          <input
-            type="text"
-            name="renter_first_name"
-            value={formValues.renter_first_name}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Renter's Last Name</label>
-          <input
-            type="text"
-            name="renter_last_name"
-            value={formValues.renter_last_name}
-            onChange={handleChange}
-          />
-        </div>
+
         <div>
           <label>Organization Name (if applicable)</label>
           <input
@@ -181,16 +178,22 @@ const AdminFormEditor = () => {
         </div>
 
         <div>
-          <label>Primary Location</label>
-          <select
-            name="preferred_location_primary"
-            value={formValues.preferred_location_primary}
-            onChange={handleChange}
-          >
-            <option value="">Select Primary Location</option>
-            <option value={1}>School 1</option>
-            <option value={2}>School 2</option>
-          </select>
+        <label css={labelStyle}>Preferred Location (Primary)</label>
+            <select
+              name="preferred_location_primary"
+              value={formValues.preferred_location_primary}
+              className="form-select"
+              onChange={handleLocation1}
+            >
+              <option value="">Select a Location</option>
+              {locations
+                .filter((location) => Number(location.id) !== location2)
+                .map((location) => (
+                  <option key={location.id} value={location.id}>
+                    {location.name_of_Location}
+                  </option>
+                ))}
+            </select>
         </div>
 
         <div>
@@ -276,8 +279,8 @@ const AdminFormEditor = () => {
         {/* <div>
                     <label>Event Description</label>
                     <textarea
-                        name="eventDescription"
-                        value={formValues.eventDescription}
+                        name="event_description"
+                        value={formValues.event_description}
                         onChange={handleChange}
                         
                     />

@@ -123,7 +123,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "renter_state",
       "renter_zip",
       "renter_phone",
-      "renter_email",
+      "renter_email"
     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 
      $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
       $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31)
@@ -225,7 +225,7 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
       "coach_contact_phone"=$6,
       "website"=$7,
       "event_type"=$8,
-      "event_description"=$9
+      "event_description"=$9,
       "rented_previously"=$10,
       "preferred_time"=$11,
       "preferred_location_primary"=$12,
@@ -275,7 +275,6 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
       WF_students,
       grade_level,
       team_pdf,
-      read_rental_review,
       renter_first_name,
       renter_last_name,
       renter_street_address,
@@ -284,12 +283,10 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
       renter_zip,
       renter_phone,
       renter_email,
-      agree_to_respectful_use_of_space,
-      agree_to_invoice_payment_process,
       applicationId,
     ])
     .then((result) => {
-      console.log("Created a new request", result.rows[0]);
+      console.log("Updated a request", applicationId);
       res.sendStatus(200);
     })
     .catch((err) => {

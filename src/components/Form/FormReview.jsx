@@ -106,7 +106,7 @@ const ReviewPage = () => {
       <div css={cardStyle}>
         <h3 css={sectionTitleStyle}>Part Two: Event Details</h3>
         <div css={fieldStyle}>
-          <span>Event Description:</span> {formState.FormPartTwo.eventDescription}
+          <span>Event Description:</span> {formState.FormPartTwo.event_description}
         </div>
         <div css={fieldStyle}>
           <span>Expected Attendance:</span> {formState.FormPartTwo.expected_attendance}
