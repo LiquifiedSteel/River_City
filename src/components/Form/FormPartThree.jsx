@@ -1,8 +1,29 @@
+/** @jsxImportSource @emotion/react */
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { updateFormPartThree, submitForm } from "../../redux/reducers/form.reducer";
-import ReCAPTCHA from 'react-google-recaptcha';
+import ReCAPTCHA from "react-google-recaptcha";
+import { css } from "@emotion/react";
+
+const formContainerStyle = css`
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+`;
+
+const labelStyle = css`
+  font-weight: 600;
+  margin-bottom: 5px;
+`;
+
+const descriptionStyle = css`
+  font-size: 0.9rem;
+  color: #6c757d;
+`;
 
 const FormPartThree = () => {
   const dispatch = useDispatch();
@@ -20,7 +41,6 @@ const FormPartThree = () => {
       ...formValues,
       [name]: type === "checkbox" ? checked : value,
     });
-    dispatch(updateFormPartThree(formValues));
   };
 
   const handleBack = () => {
@@ -29,30 +49,28 @@ const FormPartThree = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("handleSubmit is running")
     if (!recaptchaValue) {
-      alert('Please complete the reCAPTCHA');
+      alert("Please complete the reCAPTCHA");
       return;
     }
     try {
-      const response = await fetch('api/application/verify-recaptcha', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("api/application/verify-recaptcha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ recaptchaToken: recaptchaValue }),
       });
-      
+
       const result = await response.json();
-  
+
       if (result.success) {
         dispatch(submitForm({ formPartOne,  formPartTwo,  formPartThree}));
-        history.push("/submission-success");
-        alert('successfull');
+        history.push("/form-review");
       } else {
-        alert('reCAPTCHA verification failed.');
+        alert("reCAPTCHA verification failed.");
       }
     } catch (error) {
-      console.error('Error during reCAPTCHA verification:', error);
-    } 
+      console.error("Error during reCAPTCHA verification:", error);
+    }
   };
 
   const handleRecaptchaChange = (value) => {
@@ -60,175 +78,192 @@ const FormPartThree = () => {
   };
 
   return (
-    <div>
-      <h2>Additional Information</h2>
+    <div css={formContainerStyle} className="shadow">
+      <h2 className="text-center mb-4">Additional Information</h2>
       <form onSubmit={handleSubmit}>
-        <p>
-          Rental  Review
-          The rental contract must be electronically signed by the client at least 5 business days in advance of the desired use date. The rental invoice must be electronically paid by the client at least 24 hours in advance of the desired use date in order to avoid cancellation of reservations and/or the rental contract. Use of a West Fargo Public Schools space will not be permitted without a signed contract.
-          In the event a rental occurs on a day, time, or location not listed on the signed contract, a $50 fee will be charged to the renter. The renter utilizing the space will also be billed for the used space at 125% of the regular rate to account for unplanned overtime expenses. Discounted rates will not apply on non-contracted spaces used. 
-          Cancellation of any event is permitted. In order to avoid a penalty, the cancellation notice must be received at least 24 hours in advance. After the second time the client does not notify the Facility Rental Program and does not arrive for a scheduled event, the entire contract will be terminated. Deviations from this guideline may be permitted by the Facility Rental Program.
-          Once a rental contract is drafted, the only allowable changes are cancellations of confirmed dates. Any other change (date/time/location/equipment) must be done through the submission of a new application and will result in the loss of currently reserved space.
-          If you have any questions contact Facility Rentals at facilityrentals@west-fargo.k12.nd.us
-        </p>
-        <div>
-          <label>I have read the Rental Review</label>
-          <input
-            type="checkbox"
-            name="read_rental_review"
-            checked={formValues.read_rental_review}
-            onChange={handleChange}
-            required
-          />
+        {/* Rental Review */}
+        <div className="mb-4">
+          <p className={descriptionStyle}>
+            The rental contract must be electronically signed at least 5 business days
+            before the desired use date. Payment must be made at least 24 hours before the
+            event. Failure to comply may result in penalties or cancellations. Contact
+            facilityrentals@west-fargo.k12.nd.us for questions.
+          </p>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              name="read_rental_review"
+              id="readRentalReview"
+              className="form-check-input"
+              checked={formValues.read_rental_review}
+              onChange={handleChange}
+              required
+            />
+            <label htmlFor="readRentalReview" className="form-check-label">
+              I have read the Rental Review
+            </label>
+          </div>
         </div>
-        <p>Billing Information</p>
-        <div>
-          <label>Renter First Name</label>
-          <input
-            type="text"
-            name="renter_first_name"
-            value={formValues.renter_first_name}
-            onChange={handleChange}
-            required
-          />
+
+        {/* Billing Information */}
+        <h4 className="mb-3">Billing Information</h4>
+        <div className="row mb-3">
+          <div className="col-md-6">
+            <label css={labelStyle}>Renter First Name</label>
+            <input
+              type="text"
+              name="renter_first_name"
+              className="form-control"
+              value={formValues.renter_first_name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col-md-6">
+            <label css={labelStyle}>Renter Last Name</label>
+            <input
+              type="text"
+              name="renter_last_name"
+              className="form-control"
+              value={formValues.renter_last_name}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
-        <div>
-          <label>Renter Last Name</label>
-          <input
-            type="text"
-            name="renter_last_name"
-            value={formValues.renter_last_name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Street Address</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Street Address</label>
           <input
             type="text"
             name="renter_street_address"
+            className="form-control"
             value={formValues.renter_street_address}
             onChange={handleChange}
             required
           />
         </div>
-        <div>
-          <label>City</label>
-          <input
-            type="text"
-            name="renter_city"
-            value={formValues.renter_city}
-            onChange={handleChange}
-            required
-          />
+        <div className="row mb-3">
+          <div className="col-md-4">
+            <label css={labelStyle}>City</label>
+            <input
+              type="text"
+              name="renter_city"
+              className="form-control"
+              value={formValues.renter_city}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col-md-4">
+            <label css={labelStyle}>State</label>
+            <input
+              type="text"
+              name="renter_state"
+              className="form-control"
+              value={formValues.renter_state}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col-md-4">
+            <label css={labelStyle}>Zip Code</label>
+            <input
+              type="text"
+              name="renter_zip"
+              className="form-control"
+              value={formValues.renter_zip}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
-        <div>
-          <label>State</label>
-          <input
-            type="text"
-            name="renter_state"
-            value={formValues.renter_state}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Zip Code</label>
-          <input
-            type="text"
-            name="renter_zip"
-            value={formValues.renter_zip}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Phone Number</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Phone Number</label>
           <input
             type="tel"
             name="renter_phone"
+            className="form-control"
             value={formValues.renter_phone}
             onChange={handleChange}
             required
           />
         </div>
-        <div>
-          <label>Email Address</label>
+        <div className="mb-3">
+          <label css={labelStyle}>Email Address</label>
           <input
             type="email"
             name="renter_email"
+            className="form-control"
             value={formValues.renter_email}
             onChange={handleChange}
             required
           />
-          <p>(no WFPS staff emails for private rentals)</p>
-        </div>
-        <p>As indicated in West Fargo Public Schools “Use of District Facilities for other than School Purposes – Guideline 9,” clients are expected to conduct activities and use the space(s) in a respectful and orderly manner. It is expected that all clients will show respect to the building, staff, equipment, and each other when utilizing the space for their contractual period.</p>
-        <p>Specific examples of the expectations that need to be followed include, but are not limited to:</p>
-        <ul>
-          <li>Requesting any necessary equipment or set-up needs at time of application and adhering to a contract once it has been created and signed.</li>
-          <li>Appropriate adult supervision of all children and participants.</li>
-          <li>Refraining from bouncing, kicking, or passing balls in any area other than a gymnasium.</li>
-          <li>Not attempting to alter the current state of the gymnasium bleachers upon arrival.</li>
-          <li>Not impeding on other clients’ use of the space by arriving early, staying late, or invading any space that is in current use by another client.</li>
-          <li>Occupying your designated space only for the time indicated on your contract - you cannot use any additional spaces or times other than what is listed on your contract.</li>
-          <li>Not climbing on chairs, tables, shelves, or other structures that may prove dangerous or cause damage to school property.</li>
-          <li>Recognizing that a space is being used by another client and providing them a comfortable and respectful level of space and noise to have a positive experience.</li>
-          <li>Not impeding on the building staff’s district and facility-level responsibilities.</li>
-          <li>Keeping exterior and interior doors closed at all times.</li>
-          <li>Using appropriate volume levels.</li>
-          <li>Picking-up any equipment you have been approved for use.</li>
-          <li>Addressing spills, messes, and damages in a timely manner and with appropriate action.</li>
-          <li>Speaking to all building occupants in a respectful tone, without the use of derogatory, insulting, or hateful language.</li>
-          <li>Notifying the Facilities Rental Program at least 24 hours in advance of a cancellation.</li>
-        </ul>
-        <div>
-          <label>Have you rented from West Fargo Public Schools before?</label>
-          <input
-            type="checkbox"
-            name="rented_previously"
-            checked={formValues.rented_previously}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <p>I have read and agree to abide by the respectful use of space guidelines</p>
-          <label>I Agree</label>
-          <input
-            type="checkbox"
-            name="agree_to_respectful_use_of_space"
-            checked={formValues.agree_to_respectful_use_of_space}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <p>Invoices will be issued within one business day of receiving your signed electronic rental contract and the invoice will be available to view in your online client portal. Payment must be submitted in full via credit card on your online client portal at least 24 hours prior to the start of your rental contract. If you need to pay via cash or check, special accommodation must be prearranged with the facility at least 48 hours prior to the start of your rental contract.</p>
-        <div>
-          <p>I have read and agree to the invoice payment process.</p>
-          <label>I Agree</label>
-          <input
-            type="checkbox"
-            name="agree_to_invoice_payment_process"
-            checked={formValues.agree_to_invoice_payment_process}
-            onChange={handleChange}
-            required
-          />
+          <small css={descriptionStyle}>(No WFPS staff emails for private rentals.)</small>
         </div>
 
-        {/* Google reCAPTCHA Checkbox */}
-        <div>
+        {/* Respectful Use */}
+        <div className="mb-4">
+          <h4>Respectful Use of Space</h4>
+          <p className={descriptionStyle}>
+            By signing this agreement, you confirm adherence to respectful use guidelines.
+            Failure to comply may result in penalties or cancellation.
+          </p>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              name="agree_to_respectful_use_of_space"
+              id="agreeToRespectfulUse"
+              className="form-check-input"
+              checked={formValues.agree_to_respectful_use_of_space}
+              onChange={handleChange}
+              required
+            />
+            <label htmlFor="agreeToRespectfulUse" className="form-check-label">
+              I agree to the respectful use of space guidelines
+            </label>
+          </div>
+        </div>
+
+        {/* Invoice Agreement */}
+        <div className="mb-4">
+          <h4>Invoice Agreement</h4>
+          <p className={descriptionStyle}>
+            Invoices must be paid in full at least 24 hours before the start of your rental
+            period. Special accommodations for cash or check payments must be arranged in
+            advance.
+          </p>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              name="agree_to_invoice_payment_process"
+              id="agreeToInvoice"
+              className="form-check-input"
+              checked={formValues.agree_to_invoice_payment_process}
+              onChange={handleChange}
+              required
+            />
+            <label htmlFor="agreeToInvoice" className="form-check-label">
+              I agree to the invoice payment process
+            </label>
+          </div>
+        </div>
+
+        {/* Google reCAPTCHA */}
+        <div className="mb-4">
           <ReCAPTCHA
-            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}  // Site key goes here
+            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
             onChange={handleRecaptchaChange}
           />
         </div>
 
-        <button type="button" onClick={handleBack}>
-          Back
-        </button>
-        <button type="submit">
-          Submit
-        </button>
+        <div className="d-flex justify-content-between">
+          <button type="button" className="btn btn-secondary" onClick={handleBack}>
+            Back
+          </button>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );

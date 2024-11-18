@@ -16,16 +16,12 @@ const initialState = {
     priority: "", // might change to an integer based on what functionality we choose to do Preferred Time, Preferred Days, Preferred Location
   },
   FormPartTwo: {
-    eventDescription: "", //
+    event_description: "", //
     expected_attendance: "",
-    ageGroup: "", //
     preferred_days: "", // Monday/ Thursdays, Tuesday/ Fridays, Mondays, Tuesdays, Thursdays, Fridays
-    specificAreas: "", //
-    alternativeChoices: "", //
     start_date: "", // Will be a date
     end_date: "", // Will be a date
     additional_dates: "", // text field
-    frequency: "", //
     WF_students: false,
     grade_level: "",
     team_pdf: "",
@@ -33,7 +29,6 @@ const initialState = {
   FormPartThree: {
     liabilityProof: "", //
     districtAcknowledgment: false,
-    specialRequests: "", //
     rented_previously: false,
     read_rental_review: false,
     renter_first_name: "",

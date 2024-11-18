@@ -33,6 +33,7 @@ CREATE TABLE "Requests" (
 	"coach_contact_phone" VARCHAR(18) NOT NULL,
 	"website" VARCHAR(150),
 	"event_type" VARCHAR(50) NOT NULL,
+	"event_description" VARCHAR(1000) NOT NULL,
 	"rented_previously" BOOLEAN NOT NULL,
 	"preferred_time" VARCHAR(15) NOT NULL,
 	"preferred_location_primary" INTEGER REFERENCES "Locations" NOT NULL,
@@ -47,7 +48,6 @@ CREATE TABLE "Requests" (
 	"WF_students" BOOLEAN NOT NULL,
 	"grade_level" VARCHAR(30),
 	"team_pdf" VARCHAR,
-	"read_rental_review" BOOLEAN NOT NULL,
 	"renter_first_name" VARCHAR(25) NOT NULL,
 	"renter_last_name" VARCHAR(25) NOT NULL,
 	"renter_street_address" VARCHAR(60) NOT NULL,
@@ -55,11 +55,8 @@ CREATE TABLE "Requests" (
 	"renter_state" VARCHAR(30) NOT NULL,
 	"renter_zip" VARCHAR(10) NOT NULL,
 	"renter_phone" VARCHAR(18) NOT NULL,
-	"renter_email" VARCHAR(40) NOT NULL,
-	"agree_to_respectful_use_of_space" BOOLEAN NOT NULL,
-	"agree_to_invoice_payment_process" BOOLEAN NOT NULL
+	"renter_email" VARCHAR(40) NOT NULL
 );
-
 
 --CREATE TABLE "Time_Blocks" (
 --	"id" SERIAL PRIMARY KEY,
@@ -106,8 +103,8 @@ VALUES
 (5, 'Turf Field');
 
 
-INSERT INTO "Requests" ("id", "team_org_event", "title_w_team_org_event", "coach_contact_first_name", "coach_contact_last_name", "coach_contact_email", "coach_contact_phone", "website", "event_type", "rented_previously", "preferred_time", "preferred_location_primary", "preferred_location_secondary", "preferred_space", "priority", "preferred_days", "start_date", "end_date", "additional_dates", "expected_attendance", "WF_students", "grade_level", "team_pdf", "read_rental_review", "renter_first_name", "renter_last_name", "renter_street_address", "renter_city", "renter_state", "renter_zip", "renter_phone", "renter_email", "agree_to_respectful_use_of_space", "agree_to_invoice_payment_process")
+INSERT INTO "Requests" ("id", "team_org_event", "title_w_team_org_event", "coach_contact_first_name", "coach_contact_last_name", "coach_contact_email", "coach_contact_phone", "website", "event_type", "rented_previously", "preferred_time", "preferred_location_primary", "preferred_location_secondary", "preferred_space", "priority", "preferred_days", "start_date", "end_date", "additional_dates", "expected_attendance", "WF_students", "grade_level", "team_pdf", "renter_first_name", "renter_last_name", "renter_street_address", "renter_city", "renter_state", "renter_zip", "renter_phone", "renter_email", "event_description")
 VALUES
-(1, 'Tech Enthusiasts', 'Coding Workshop', 'John', 'Doe', 'john.doe@example.com', '123-456-7890', 'http://techevent.com', 'Educational', TRUE, '10:00:00', 1, 2, 4, 'High', 'Weekends', '2024-11-15', '2024-11-16', 'None', '100', 'Yes', 'College', '/pdfs/event1.pdf', TRUE, 'Jane', 'Smith', '123 Elm St', 'Nis', 'TX', '75001', '123-456-7890', 'jane.smith@example.com', TRUE, TRUE),
-(2, 'Youth Basketball Club', 'Regional Basketball Finals', 'Michael', 'Jordan', 'michael.jordan@example.com', '234-567-8901', 'http://basketball.com', 'Sports', FALSE, '15:00:00', 3, 4, 2, 'Medium', 'Weekdays', '2024-11-20', '2024-11-22', 'Extra time slots requested on Nov 23', '300', 'No', 'High School', '/pdfs/event2.pdf', TRUE, 'Robert', 'James', '456 Maple Ave', 'Dallas', 'TX', '75201', '234-567-8901', 'robert.james@example.com', TRUE, TRUE),
-(3, 'Local Arts Group', 'Painting Exhibition', 'Emily', 'Brown', 'emily.brown@example.com', '345-678-9012', 'http://arts.org', 'Recreational', TRUE, '09:00:00', 5, 6, 3, 'Low', 'Daily', '2024-11-25', '2024-11-30', 'Holiday closure adjustments needed', '50', 'Yes', 'Middle', '/pdfs/event3.pdf', FALSE, 'Anne', 'Lee', '789 Birch St', 'Austin', 'TX', '73301', '345-678-9012', 'anne.lee@example.com', TRUE, TRUE);
+(1, 'Tech Enthusiasts', 'Coding Workshop', 'John', 'Doe', 'john.doe@example.com', '123-456-7890', 'http://techevent.com', 'Educational', TRUE, '10:00:00', 1, 2, 4, 'High', 'Weekends', '2024-11-15', '2024-11-16', 'None', '100', 'Yes', 'College', '/pdfs/event1.pdf', 'Jane', 'Smith', '123 Elm St', 'Nis', 'TX', '75001', '123-456-7890', 'jane.smith@example.com', 'brief description'),
+(2, 'Youth Basketball Club', 'Regional Basketball Finals', 'Michael', 'Jordan', 'michael.jordan@example.com', '234-567-8901', 'http://basketball.com', 'Sports', FALSE, '15:00:00', 3, 4, 2, 'Medium', 'Weekdays', '2024-11-20', '2024-11-22', 'Extra time slots requested on Nov 23', '300', 'No', 'High School', '/pdfs/event2.pdf', 'Robert', 'James', '456 Maple Ave', 'Dallas', 'TX', '75201', '234-567-8901', 'robert.james@example.com', 'brief description'),
+(3, 'Local Arts Group', 'Painting Exhibition', 'Emily', 'Brown', 'emily.brown@example.com', '345-678-9012', 'http://arts.org', 'Recreational', TRUE, '09:00:00', 5, 6, 3, 'Low', 'Daily', '2024-11-25', '2024-11-30', 'Holiday closure adjustments needed', '50', 'Yes', 'Middle', '/pdfs/event3.pdf', 'Anne', 'Lee', '789 Birch St', 'Austin', 'TX', '73301', '345-678-9012', 'anne.lee@example.com', 'brief description');

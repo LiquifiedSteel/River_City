@@ -377,22 +377,14 @@ const AdminFormEditor = () => {
           </>
         )}
         {/* <div>
-                    <label>Liability Proof</label>
-                    <input
-                        type="text"
-                        name="liabilityProof"
-                        value={formValues.liabilityProof}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label>Special Requests</label>
-                    <textarea
-                        name="specialRequests"
-                        value={formValues.specialRequests}
-                        onChange={handleChange}
-                    />
-                </div> */}
+              <label>Liability Proof</label>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                name="team_pdf"
+                onChange={handleFileUpload}
+              />
+            </div> */}
         <div>
           <label>Renter First Name</label>
           <input
