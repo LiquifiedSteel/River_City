@@ -25,7 +25,7 @@ function AdminDataView() {
     fetchRequest();
   }, [requestID]);
 
-  const handleDownload = () => {
+  const handlePrint = () => {
     const doc = new jsPDF();
     doc.text(heading, 10, 10);
     doc.text(
@@ -37,6 +37,7 @@ function AdminDataView() {
       `Coach's Name: ${request.coach_contact_first_name || "N/A"} ${
         request.coach_contact_last_name || "N/A"
       }`,
+
       10,
       30
     );
@@ -160,9 +161,15 @@ function AdminDataView() {
           Frequency: {request.frequency}
         </Col>
 
-        <Col xs={6} md={4}>85% West Fargo Students?: {request.wf_students}</Col>
-        <Col xs={6} md={4}>Grade Level: {request.grade_level}</Col>
-        <Col xs={6} md={4}>Cloudinary Link to Roster PDF: {request.team_pdf}</Col>
+        <Col xs={6} md={4}>
+          85% West Fargo Students?: {request.wf_students}
+        </Col>
+        <Col xs={6} md={4}>
+          Grade Level: {request.grade_level}
+        </Col>
+        <Col xs={6} md={4}>
+          Cloudinary Link to Roster PDF: {request.team_pdf}
+        </Col>
         {/* <Col xs={6} md={4}>Liability  Proof: {request.liabilityProof}</Col> */}
         {/* <Col xs={6} md={4}>District Acknowledgment: {request.districtAcknowledgment}</Col>
         <Col xs={6} md={4}>Special Requests: {request.specialRequests}</Col> */}
@@ -196,7 +203,7 @@ function AdminDataView() {
         {/* <Col xs={6} md={4}>Frequency: {request.agreeToRespectfulUseOfSpace}</Col>
         <Col xs={6} md={4}>Frequency: {request.agreeToInvoicePaymentProcess}</Col> */}
       </Row>
-      <Button onClick={handleDownload}>Download Pdf</Button>{" "}
+      <Button onClick={handlePrint}>Download Pdf</Button>{" "}
       <Button onClick={handleSendByEmail}>Send by email</Button>
     </Container>
   );
