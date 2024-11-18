@@ -123,7 +123,7 @@ function AdminDataView() {
           Related Website: {request.website}
         </Col>
 
-        <Col xs={12}>Event Description: {request.eventDescription}</Col>
+        <Col xs={12}>Event Description: {request.event_description}</Col>
 
         <Col xs={6} md={4}>
           Type of Event: {request.event_type}
