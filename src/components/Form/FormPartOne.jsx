@@ -25,6 +25,13 @@ const descriptionStyle = css`
   color: #6c757d;
 `;
 
+const infoTextStyle = css`
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #6c757d;
+`;
+
 const FormPartOne = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -83,10 +90,48 @@ const FormPartOne = () => {
   return (
     <div css={formContainerStyle} className="shadow">
       <h2 className="text-center mb-4">Applicant Information</h2>
+
+      <p css={infoTextStyle}>
+        <strong>Rental Information</strong>: West Fargo Public Schools makes
+        its elementary, middle, and high school facilities available for public
+        use, with some exceptions. Please submit your rental application at
+        least five business days in advance of the desired use date(s).
+        Team/organization rosters must be submitted in conjunction with an
+        application if an organization feels they may be eligible for the WFPS
+        student discount.
+      </p>
+
+      <p css={infoTextStyle}>
+        Applications may be referred to another school facility if the
+        requested facility is unavailable or inappropriate for the purposes of
+        the requesting client. Use of the facilities shall not be permitted to
+        interfere with the operation of the schools or with school activities.
+        School-sponsored activities always take precedence, even when scheduled
+        after the signing of a facility rental contract.
+      </p>
+
+      <p css={infoTextStyle}>
+        Once the application has been approved by all appropriate parties
+        within the district, a rental contract will be issued, and the event
+        will be added to the appropriate district calendar(s).
+      </p>
+
+      <p css={infoTextStyle}>
+        Use of the facilities by clients is automatically canceled when schools
+        must be closed due to inclement weather or other conditions.
+      </p>
+
+      <p css={infoTextStyle}>
+        <strong>Note:</strong> Review the complete Facility Rental Policy
+        located on our Facility Rental Website or on your contract.
+      </p>
+
       <form>
         {/* Team/Organization Details */}
         <div className="mb-3">
-          <label css={labelStyle}>Team/Organization/Event Name</label>
+          <label css={labelStyle}>
+            Team/Organization/Event Name
+          </label>
           <input
             type="text"
             name="team_org_event"
@@ -94,10 +139,15 @@ const FormPartOne = () => {
             className="form-control"
             onChange={handleChange}
           />
+          <small className={descriptionStyle}>
+            Avoid using local sports team names like Packers or Mustangs.
+          </small>
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Title with Team/Organization/Event</label>
+          <label css={labelStyle}>
+            Title with Team/Organization/Event
+          </label>
           <input
             type="text"
             name="title_w_team_org_event"
@@ -131,7 +181,9 @@ const FormPartOne = () => {
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Coach/Contact Email Address</label>
+          <label css={labelStyle}>
+            Coach/Contact Email Address
+          </label>
           <input
             type="email"
             name="coach_contact_email"
@@ -139,10 +191,15 @@ const FormPartOne = () => {
             className="form-control"
             onChange={handleChange}
           />
+          <small className={descriptionStyle}>
+            Avoid using WFPS staff emails for private rentals.
+          </small>
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Coach/Contact Phone Number</label>
+          <label css={labelStyle}>
+            Coach/Contact Phone Number
+          </label>
           <input
             type="tel"
             name="coach_contact_phone"
@@ -238,38 +295,33 @@ const FormPartOne = () => {
         <div className="mb-3">
           <label css={labelStyle}>Preferred Space</label>
           <div>
-            <label>
-              <input
-                type="checkbox"
-                name="preferred_space"
-                value="Gymnasium"
-                checked={formValues.preferred_space?.includes("Gymnasium") || false}
-                onChange={handleCheckboxChange}
-              />
-              Gymnasium
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="preferred_space"
-                value="Commons"
-                checked={formValues.preferred_space?.includes("Commons") || false}
-                onChange={handleCheckboxChange}
-              />
-              Commons
-            </label>
+            {["Gymnasium", "Commons", "Library / Media Center", "Locker Room", "Turf Field"].map(
+              (space) => (
+                <label key={space} className="me-3">
+                  <input
+                    type="checkbox"
+                    name="preferred_space"
+                    value={space}
+                    checked={formValues.preferred_space?.includes(space) || false}
+                    onChange={handleCheckboxChange}
+                    className="me-2"
+                  />
+                  {space}
+                </label>
+              )
+            )}
           </div>
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Priority</label>
+          <label css={labelStyle}>Priority for Event Scheduling</label>
           <select
             name="priority"
             value={formValues.priority}
             className="form-select"
             onChange={handleChange}
           >
-            <option value="">Select a Priority</option>
+            <option value="">Select Priority</option>
             <option value="Time">Preferred Time</option>
             <option value="Days">Preferred Days</option>
             <option value="Location">Preferred Location</option>
