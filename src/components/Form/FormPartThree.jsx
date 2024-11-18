@@ -37,11 +37,17 @@ const FormPartThree = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormValues({
+  
+    const updatedValues = {
       ...formValues,
       [name]: type === "checkbox" ? checked : value,
-    });
+    };
+  
+    setFormValues(updatedValues);
+  
+    dispatch(updateFormPartThree(updatedValues));
   };
+  
 
   const handleBack = () => {
     history.push("/form-part-two");
@@ -54,11 +60,11 @@ const FormPartThree = () => {
       return;
     }
     try {
-      const response = await fetch("api/application/verify-recaptcha", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recaptchaToken: recaptchaValue }),
-      });
+        const response = await fetch("/api/application/verify-recaptcha", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ recaptchaToken: recaptchaValue }),
+          });
 
       const result = await response.json();
 

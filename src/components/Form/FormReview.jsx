@@ -50,9 +50,17 @@ const ReviewPage = () => {
   const formState = useSelector((state) => state.form);
 
   const handleSubmit = () => {
-    dispatch(submitForm());
+    dispatch(
+      submitForm({
+        formPartOne: formState.FormPartOne,
+        formPartTwo: formState.FormPartTwo,
+        formPartThree: formState.FormPartThree,
+      })
+    );
     history.push("/submission-success");
   };
+
+  
 
   return (
     <div css={containerStyle} className="shadow">
