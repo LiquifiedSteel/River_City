@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import jsPDF from "jspdf";
-import { EmailJSResponseStatus } from "emailjs-com";
+import { jsPDF } from "jspdf";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
@@ -23,7 +23,73 @@ function AdminDataView() {
     };
 
     fetchRequest();
-  }, []);
+  }, [requestID]);
+
+  const handlePrint = () => {
+    const doc = new jsPDF();
+    doc.text(heading, 10, 10);
+    doc.text(
+      `Team/Organization/Event: ${request.team_org_event || "N/A"}`,
+      10,
+      20
+    );
+    doc.text(
+      `Coach's Name: ${request.coach_contact_first_name || "N/A"} ${
+        request.coach_contact_last_name || "N/A"
+      }`,
+      10,
+      30
+    );
+    doc.text(`Coach's Email: ${request.coach_contact_email || "N/A"}`, 10, 40);
+    doc.text(
+      `Preferred Location: ${request.preferred_location_primary || "N/A"}`,
+      10,
+      50
+    );
+    doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
+    doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
+    doc.save("AdminDataView.pdf");
+  };
+
+  const handleSendByEmail = async () => {
+    const doc = new jsPDF();
+    doc.text(heading, 10, 10);
+    doc.text(
+      `Team/Organization/Event: ${request.team_org_event || "N/A"}`,
+      10,
+      20
+    );
+    doc.text(
+      `Coach's Name: ${request.coach_contact_first_name || "N/A"} ${
+        request.coach_contact_last_name || "N/A"
+      }`,
+      10,
+      30
+    );
+    doc.text(`Coach's Email: ${request.coach_contact_email || "N/A"}`, 10, 40);
+    doc.text(
+      `Preferred Location: ${request.preferred_location_primary || "N/A"}`,
+      10,
+      50
+    );
+    doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
+    doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
+
+    const pdfBlob = doc.output("blob");
+
+    const formData = new FormData();
+    formData.append("pdf", pdfBlob, "AdminDataView.pdf");
+
+    try {
+      await axios.post("/send-email", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      alert("Email sent successfully!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email.");
+    }
+  };
 
   return !request ? null : (
     <Container fluid>
@@ -136,7 +202,8 @@ function AdminDataView() {
         {/* <Col xs={6} md={4}>Frequency: {request.agreeToRespectfulUseOfSpace}</Col>
         <Col xs={6} md={4}>Frequency: {request.agreeToInvoicePaymentProcess}</Col> */}
       </Row>
-      <Button>Download Pdf</Button> <Button>Send by email</Button>
+      <Button onClick={handlePrint}>Download Pdf</Button>{" "}
+      <Button onClick={handleSendByEmail}>Send by email</Button>
     </Container>
   );
 }
