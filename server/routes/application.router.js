@@ -101,7 +101,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "coach_contact_phone",
       "website",
       "event_type",
-      event_description,
+      "event_description",
       "rented_previously",
       "preferred_time",
       "preferred_location_primary",

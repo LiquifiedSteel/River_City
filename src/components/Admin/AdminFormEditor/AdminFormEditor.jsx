@@ -26,6 +26,16 @@ const AdminFormEditor = () => {
       }
     };
     fetchRequest();
+
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get(`/api/application/locations`);
+        setLocations(response.data);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+    fetchLocations();
   }, []);
 
   const handleChange = (e) => {
@@ -39,6 +49,18 @@ const AdminFormEditor = () => {
     } else {
       setFormValues({ ...formValues, [name]: value });
     }
+  };
+
+  const handleLocation1 = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+    setLocation1(Number(value));
+  };
+
+  const handleLocation2 = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+    setLocation2(Number(value));
   };
 
   const handleFileUpload = (e) => {
@@ -55,7 +77,7 @@ const AdminFormEditor = () => {
       }
     };
     saveUpdate();
-    
+
     const fetchLocations = async () => {
       try {
         const response = await axios.get(`/api/application/locations`);
@@ -158,8 +180,19 @@ const AdminFormEditor = () => {
             <option value="Volleyball">Volleyball</option>
             <option value="Scouts">Scouts</option>
             <option value="Dance">Dance</option>
-            <option value="Others">Other</option>
+            <option value="Other">Other</option>
           </select>
+        </div>
+
+        <div>
+          <label>Event Description</label>
+          <textarea
+            name="event_description"
+            value={formValues.event_description}
+            className="form-control"
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div>
@@ -178,7 +211,7 @@ const AdminFormEditor = () => {
         </div>
 
         <div>
-        <label css={labelStyle}>Preferred Location (Primary)</label>
+        <label>Preferred Location (Primary)</label>
             <select
               name="preferred_location_primary"
               value={formValues.preferred_location_primary}
@@ -197,16 +230,22 @@ const AdminFormEditor = () => {
         </div>
 
         <div>
-          <label>Secondary Location</label>
-          <select
-            name="preferred_location_secondary"
-            value={formValues.preferred_location_secondary}
-            onChange={handleChange}
-          >
-            <option value="">Select Secondary Location</option>
-            <option value={1}>School 1</option>
-            <option value={2}>School 2</option>
-          </select>
+        <label>Preferred Location (Secondary)</label>
+            <select
+              name="preferred_location_secondary"
+              value={formValues.preferred_location_secondary}
+              className="form-select"
+              onChange={handleLocation2}
+            >
+              <option value="">Select a Location</option>
+              {locations
+                .filter((location) => Number(location.id) !== location1)
+                .map((location) => (
+                  <option key={location.id} value={location.id}>
+                    {location.name_of_Location}
+                  </option>
+                ))}
+            </select>
         </div>
 
         <div>
@@ -224,54 +263,6 @@ const AdminFormEditor = () => {
                 <option value={4}>Auditorium</option>
                 <option value={5}>Turf Field</option>
               </select>
-              {/* <input
-                                type="checkbox"
-                                name="preferred_space"
-                                value="Gymnasium"
-                                checked={formValues.preferred_space?.includes("Gymnasium") || false}
-                                onChange={handleCheckboxChange}
-                            />
-                            Gymnasium
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="preferred_space"
-                                value="Commons"
-                                checked={formValues.preferred_space?.includes("Commons") || false}
-                                onChange={handleCheckboxChange}
-                            />
-                            Commons
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="preferred_space"
-                                value="Library / Media Center"
-                                checked={formValues.preferred_space?.includes("Library / Media Center") || false}
-                                onChange={handleCheckboxChange}
-                            />
-                            Library / Media Center
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="preferred_space"
-                                value="Locker Room"
-                                checked={formValues.preferred_space?.includes("Locker Room") || false}
-                                onChange={handleCheckboxChange}
-                            />
-                            Locker Room
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="preferred_space"
-                                value="Turf Field"
-                                checked={formValues.preferred_space?.includes("Turf Field") || false}
-                                onChange={handleCheckboxChange}
-                            />
-                            Turf Field */}
             </label>
           </div>
         </div>

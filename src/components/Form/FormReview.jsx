@@ -137,12 +137,6 @@ const ReviewPage = () => {
       <div css={cardStyle}>
         <h3 css={sectionTitleStyle}>Part Three: Additional Information</h3>
         <div css={fieldStyle}>
-          <span>Liability Proof:</span> {formState.FormPartThree.liabilityProof || "N/A"}
-        </div>
-        <div css={fieldStyle}>
-          <span>Special Requests:</span> {formState.FormPartThree.specialRequests || "N/A"}
-        </div>
-        <div css={fieldStyle}>
           <span>Rented Previously:</span>{" "}
           {formState.FormPartThree.rented_previously ? "Yes" : "No"}
         </div>
