@@ -47,8 +47,98 @@ function AdminDataView() {
       10,
       50
     );
-    doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
-    doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
+    // doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
+    // doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
+    /* 
+  doc.text(`
+Title with Team/ Organization/ Event: ${request.title_w_team_org_event || "N/A"}`,10, 40); 
+       
+          
+       
+       doc.text(`
+Coach's Phone: ${request.coach_contact_phone || "N/A"}`,10, 40);
+       doc.text(` Related Website: ${request.website || "N/A"}`,10, 40);
+       doc.text(`Event Description: ${request.eventDescription || "N/A"}`, 10, 40);
+        doc.text(`Type of Event:  ${request.event_type || "N/A"}`, 10, 40);
+        request.preferredTime_start
+
+	"date_submitted" 
+
+	"event_type" 
+	"rented_previously" 
+	"preferred_time" 
+	"preferred_location_secondary" 
+	"preferred_space" 
+	"priority" 
+	"preferred_days" 
+	"start_date" 
+	"end_date" 
+	"additional_dates" 
+	"expected_attendance" 
+	"WF_students" 
+	"grade_level" 
+	"team_pdf" 
+	"read_rental_review" 
+	"renter_first_name" 
+	"renter_last_name" 
+	"renter_street_address" 
+	"renter_city" 
+	"renter_state" 
+	"renter_zip" 
+	"renter_phone" 
+	"renter_email" 
+	"agree_to_respectful_use_of_space" 
+	"agree_to_invoice_payment_process" 
+ 
+      
+        
+        
+       
+          Preferred Location (Secondary Option)
+          
+       
+          Preferred Space: request.preferred_space
+      request.expected_attendance}
+   
+       request.ageGroup
+        request.preferred_days
+       request.specificAreas
+       request.alternativeChoices
+        request.start_date
+        request.end_date
+          Additional Dates: request.additional_dates
+       
+          Frequency: request.frequency
+        
+          85% West Fargo Students?: request.wf_students
+        
+          Grade Level: request.grade_level
+        
+          Cloudinary Link to Roster PDF: request.team_pdf
+        District Acknowledgment: request.districtAcknowledgment
+       Special Requests: request.specialRequests
+        
+          Rented Previously: request.rented_previously
+       Frequency: request.read_Rental_Review
+       
+          Renter's Name: request.renter_first_name request.renter_last_name
+       
+          Renter's Street Address: request.renter_street_address
+       
+          Renter's City: request.renter_city
+        
+          Renter's State: request.renter_state
+       
+          Renter's ZIP code: request.renter_zip
+        
+          Renter's Phone #: request.renter_phone
+        
+          Renter's Email: request.renter_email
+       
+
+
+*/
+    doc.text(``);
     doc.save("AdminDataView.pdf");
   };
 
