@@ -80,8 +80,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     expected_attendance,
     WF_students,
     grade_level,
-    team_pdf,
-    read_rental_review,
+    team_pdf,  
     renter_first_name,
     renter_last_name,
     renter_street_address,
@@ -89,9 +88,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     renter_state,
     renter_zip,
     renter_phone,
-    renter_email,
-    agree_to_respectful_use_of_space,
-    agree_to_invoice_payment_process,
+    renter_email
   } = req.body;
 
   const queryText = `
@@ -119,7 +116,6 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "WF_students",
       "grade_level",
       "team_pdf",
-      "read_rental_review",
       "renter_first_name",
       "renter_last_name",
       "renter_street_address",
@@ -128,11 +124,9 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       "renter_zip",
       "renter_phone",
       "renter_email",
-      "agree_to_respectful_use_of_space",
-      "agree_to_invoice_payment_process"
     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 
      $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
-      $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34)
+      $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31)
     RETURNING id;
   `;
   pool
@@ -160,7 +154,6 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     WF_students,
     grade_level,
     team_pdf,
-    read_rental_review,
     renter_first_name,
     renter_last_name,
     renter_street_address,
@@ -168,9 +161,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     renter_state,
     renter_zip,
     renter_phone,
-    renter_email,
-    agree_to_respectful_use_of_space,
-    agree_to_invoice_payment_process,
+    renter_email
     ])
     .then((result) => {
       console.log("Created a new request", result.rows[0]);
@@ -214,7 +205,6 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
     WF_students,
     grade_level,
     team_pdf,
-    read_rental_review,
     renter_first_name,
     renter_last_name,
     renter_street_address,
@@ -223,8 +213,6 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
     renter_zip,
     renter_phone,
     renter_email,
-    agree_to_respectful_use_of_space,
-    agree_to_invoice_payment_process,
   } = req.body;
 
   const queryText = `
@@ -252,17 +240,14 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
       "WF_students"=$21,
       "grade_level"=$22,
       "team_pdf"=$23,
-      "read_rental_review"=$24,
-      "renter_first_name"=$25,
-      "renter_last_name"=$26,
-      "renter_street_address"=$27,
-      "renter_city"=$28,
-      "renter_state"=$29,
-      "renter_zip"=$30,
-      "renter_phone"=$31,
-      "renter_email"=$32,
-      "agree_to_respectful_use_of_space"=$33,
-      "agree_to_invoice_payment_process"=$34 WHERE "id"=$35;
+      "renter_first_name"=$24,
+      "renter_last_name"=$25,
+      "renter_street_address"=$26,
+      "renter_city"=$27,
+      "renter_state"=$28,
+      "renter_zip"=$29,
+      "renter_phone"=$30,
+      "renter_email"=$31 WHERE "id"=$32;
   `;
 
   pool
