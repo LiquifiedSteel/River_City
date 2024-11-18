@@ -21,10 +21,11 @@ import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
 import AdminDataView from "../Admin/AdminDataView/AdminDataView";
-import AdminFormEditor from "../Admin/AdminFormEditor/AdminFormEditor";
+// import AdminFormEditor from "../Admin/AdminFormEditor/AdminFormEditor";
 import FormPartOne from "../Form/FormPartOne";
 import FormPartTwo from "../Form/FormPartTwo";
 import FormPartThree from "../Form/FormPartThree";
+import FormReview from "../Form/FormReview";
 
 import "./App.css";
 
@@ -124,13 +125,17 @@ function App() {
             <FormPartThree />
           </Route>
 
+          <Route exact path="/form-review">
+            <FormReview />
+          </Route>
+
           <Route exact path="/admin-data-view">
             <AdminDataView />
           </Route>
 
-          <Route exact path="/admin-form-editor">
+          {/* <Route exact path="/admin-form-editor">
             <AdminFormEditor />
-          </Route>
+          </Route> */}
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
