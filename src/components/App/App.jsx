@@ -21,7 +21,7 @@ import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
 import AdminDataView from "../Admin/AdminDataView/AdminDataView";
-// import AdminFormEditor from "../Admin/AdminFormEditor/AdminFormEditor";
+import AdminFormEditor from "../Admin/AdminFormEditor/AdminFormEditor";
 import FormPartOne from "../Form/FormPartOne";
 import FormPartTwo from "../Form/FormPartTwo";
 import FormPartThree from "../Form/FormPartThree";
