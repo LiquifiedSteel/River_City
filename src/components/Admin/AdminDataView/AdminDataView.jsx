@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-
+import jsPDF from "jspdf";
+import { EmailJSResponseStatus } from "emailjs-com";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
@@ -135,7 +136,7 @@ function AdminDataView() {
         {/* <Col xs={6} md={4}>Frequency: {request.agreeToRespectfulUseOfSpace}</Col>
         <Col xs={6} md={4}>Frequency: {request.agreeToInvoicePaymentProcess}</Col> */}
       </Row>
-      <Button>Print</Button> <Button>Send by email</Button>
+      <Button>Download Pdf</Button> <Button>Send by email</Button>
     </Container>
   );
 }
