@@ -4,7 +4,7 @@ const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
 const router = express.Router();
-const axios = require('axios');
+const axios = require("axios");
 
 /**
  * GET route template
@@ -138,39 +138,39 @@ router.post("/", rejectUnauthenticated, (req, res) => {
   pool
     .query(queryText, [
       team_org_event,
-    title_w_team_org_event,
-    coach_contact_first_name,
-    coach_contact_last_name,
-    coach_contact_email,
-    coach_contact_phone,
-    website,
-    event_type,
-    event_description,
-    rented_previously,
-    preferred_time,
-    preferred_location_primary,
-    preferred_location_secondary,
-    preferred_space,
-    priority,
-    preferred_days,
-    start_date,
-    end_date,
-    additional_dates,
-    expected_attendance,
-    WF_students,
-    grade_level,
-    team_pdf,
-    read_rental_review,
-    renter_first_name,
-    renter_last_name,
-    renter_street_address,
-    renter_city,
-    renter_state,
-    renter_zip,
-    renter_phone,
-    renter_email,
-    agree_to_respectful_use_of_space,
-    agree_to_invoice_payment_process,
+      title_w_team_org_event,
+      coach_contact_first_name,
+      coach_contact_last_name,
+      coach_contact_email,
+      coach_contact_phone,
+      website,
+      event_type,
+      event_description,
+      rented_previously,
+      preferred_time,
+      preferred_location_primary,
+      preferred_location_secondary,
+      preferred_space,
+      priority,
+      preferred_days,
+      start_date,
+      end_date,
+      additional_dates,
+      expected_attendance,
+      WF_students,
+      grade_level,
+      team_pdf,
+      read_rental_review,
+      renter_first_name,
+      renter_last_name,
+      renter_street_address,
+      renter_city,
+      renter_state,
+      renter_zip,
+      renter_phone,
+      renter_email,
+      agree_to_respectful_use_of_space,
+      agree_to_invoice_payment_process,
     ])
     .then((result) => {
       console.log("Created a new request", result.rows[0]);
@@ -181,7 +181,6 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       res.status(500);
     });
 });
-
 
 /**
  * PUT route template
@@ -327,27 +326,35 @@ router.delete("/:applicationId", rejectUnauthenticated, (req, res) => {
     });
 });
 
-
-router.post('/verify-recaptcha', async (req, res) => {
+router.post("/verify-recaptcha", async (req, res) => {
   const { recaptchaToken } = req.body;
-  const secretKey = process.env.RECAPTCHA_SECRET_KEY;  // SECRET KEY HERE
+
+  if (!recaptchaToken) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing reCAPTCHA token." });
+  }
 
   try {
-    const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
-      params: {
-        secret: secretKey,
-        response: recaptchaToken
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    const response = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify`,
+      null,
+      {
+        params: { secret: secretKey, response: recaptchaToken },
       }
-    });
+    );
 
     if (response.data.success) {
-      res.json({ success: true, message: 'reCAPTCHA verified successfully!' });
+      res.json({ success: true, message: "reCAPTCHA verified successfully!" });
     } else {
-      res.status(400).json({ success: false, message: 'reCAPTCHA verification failed.' });
+      res
+        .status(400)
+        .json({ success: false, message: "reCAPTCHA verification failed." });
     }
   } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
+    console.error("Error verifying reCAPTCHA:", error.message);
+    res.status(500).json({ success: false, message: "Internal Server Error." });
   }
 });
 
