@@ -25,7 +25,7 @@ function AdminDataView() {
     fetchRequest();
   }, [requestID]);
 
-  const handlePrint = () => {
+  const handleDownload = () => {
     const doc = new jsPDF();
     doc.text(heading, 10, 10);
     doc.text(
@@ -196,7 +196,7 @@ function AdminDataView() {
         {/* <Col xs={6} md={4}>Frequency: {request.agreeToRespectfulUseOfSpace}</Col>
         <Col xs={6} md={4}>Frequency: {request.agreeToInvoicePaymentProcess}</Col> */}
       </Row>
-      <Button onClick={handlePrint}>Download Pdf</Button>{" "}
+      <Button onClick={handleDownload}>Download Pdf</Button>{" "}
       <Button onClick={handleSendByEmail}>Send by email</Button>
     </Container>
   );
