@@ -84,7 +84,7 @@ const FormPartOne = () => {
 
   const handleNext = (e) => {
     e.preventDefault();
-    if(formValues.priority !== "") {
+    if(formValues.preferred_space.length !== 0) {
       dispatch(updateFormPartOne(formValues));
       history.push("/form-part-two");
     } else {
