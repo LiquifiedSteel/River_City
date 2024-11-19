@@ -33,159 +33,76 @@ function AdminDataView() {
     fetchRequest();
   }, [requestID]);
 
-  const handlePrint = () => {
+  const generatePdfContent = (doc) => {
+    let yPosition = 10;
+    const lineHeight = 10;
+
+    doc.text(heading, 10, yPosition);
+    yPosition += lineHeight;
+
+    const fields = [
+      ["Team/Organization/Event", request.team_org_event],
+      ["Title with Team/Organization/Event", request.title_w_team_org_event],
+      [
+        "Coach/Contact Name",
+        `${request.coach_contact_first_name || ""} ${
+          request.coach_contact_last_name || ""
+        }`,
+      ],
+      ["Coach/Contact Email", request.coach_contact_email],
+      ["Coach/Contact Phone", request.coach_contact_phone],
+      ["Website", request.website],
+      ["Event Type", request.event_type],
+      ["Preferred Time", request.preferred_time],
+      ["Preferred Location", request.preferred_location_primary],
+      ["Preferred Space", request.preferred_space],
+      ["Priority", request.priority],
+      ["Event Description", request.event_description],
+      ["Expected Attendance", request.expected_attendance],
+      ["Preferred Days", request.preferred_days],
+      ["Start Date", request.start_date],
+      ["End Date", request.end_date],
+      ["Additional Dates", request.additional_dates],
+      ["West Fargo Students?", request.wf_students ? "Yes" : "No"],
+      ["Grade Level", request.grade_level],
+      ["Team Roster", request.team_pdf],
+      [
+        "Renter Name",
+        `${request.renter_first_name || ""} ${request.renter_last_name || ""}`,
+      ],
+      ["Renter Address", request.renter_street_address],
+      ["Renter City", request.renter_city],
+      ["Renter State", request.renter_state],
+      ["Renter ZIP", request.renter_zip],
+      ["Renter Phone", request.renter_phone],
+      ["Renter Email", request.renter_email],
+      ["Special Requests", request.special_requests],
+      ["Rented Previously", request.rented_previously ? "Yes" : "No"],
+      [
+        "Respectful Use of Space Agreement",
+        request.agree_to_respectful_use_of_space ? "Yes" : "No",
+      ],
+      [
+        "Invoice Payment Agreement",
+        request.agree_to_invoice_payment_process ? "Yes" : "No",
+      ],
+    ];
+
+    fields.forEach(([label, value]) => {
+      doc.text(`${label}: ${value || "N/A"}`, 10, yPosition);
+      yPosition += lineHeight;
+    });
+  };
+
+  const handleDownload = () => {
     const doc = new jsPDF();
-    doc.text(heading, 10, 10);
-    doc.text(
-      `Team/Organization/Event: ${request.team_org_event || "N/A"}`,
-      10,
-      20
-    );
-    doc.text(
-      `
-      Title with Team/ Organization/ Event: ${
-        request.title_w_team_org_event || "N/A"
-      }`,
-      10,
-      40
-    );
-    doc.text(
-      `Coach/Contact First Name: ${
-        request.coach_contact_first_name || "N/A"
-      }  Coach/Contact Last Name${request.coach_contact_last_name || "N/A"}`,
-      10,
-      30
-    );
-    doc.text(
-      `Coach/Contact Email Address: ${request.coach_contact_email || "N/A"}`,
-      10,
-      40
-    );
-
-    doc.text(
-      `
-      Coach/Contact Phone Number: ${request.coach_contact_phone || "N/A"}`,
-      10,
-      40
-    );
-
-    doc.text(`Website: ${request.website || "N/A"}`, 10, 40);
-    doc.text(`Event Type:  ${request.event_type || "N/A"}`, 10, 40);
-    request.preferredTime_start;
-    doc.text(`Preferred Time: ${request.preferred_time || "N/A"}`, 10, 40);
-    doc.text(
-      `Preferred Location: ${request.preferred_location_primary || "N/A"}`,
-      10,
-      50
-    );
-    doc.text(`Preferred Space: ${request.preferred_space || "N/A"}`, 10, 40);
-    doc.text(
-      `Priority For Event Scheduling: ${request.priority || "N/A"}`,
-      10,
-      40
-    );
-    doc.text(`Event Description: ${request.eventDescription || "N/A"}`, 10, 40);
-    doc.text(
-      `Expected Attendance: ${request.expected_attendance || "N/A"}`,
-      10,
-      40
-    );
-    doc.text(`Preferred Days: ${request.preferred_days || "N/A"}`, 10, 40);
-    doc.text(
-      `Start Date For Your Rental: ${request.start_date || "N/A"}`,
-      10,
-      70
-    );
-    doc.text(`End Date For Your Rental: ${request.end_date || "N/A"}`, 10, 70);
-    doc.text(`additional_dates: ${request.additional_dates || "N/A"}`, 10, 70);
-    doc.text(
-      `Are 85% of Your Participants West Fargo Students?: ${
-        request.wf_students || "N/A"
-      }`,
-      10,
-      70
-    );
-    doc.text(`Grade Level:  ${request.grade_level || "N/A"}`, 10, 70);
-    doc.text(
-      `Team Roster (Provide Student Name and School):  ${
-        request.team_pdf || "N/A"
-      }`,
-      10,
-      70
-    );
-    doc.text(
-      `Renter First Name:  ${request.renter_first_name || "N/A"} ${
-        request.renter_last_name
-      }`,
-      10,
-      70
-    );
-    doc.text(
-      `Renter's Street Address: ${request.renter_street_address || "N/A"}`,
-      10,
-      70
-    );
-    doc.text(`Renter's City: ${request.renter_city || "N/A"}`, 10, 70);
-    doc.text(`Renter's State: ${request.renter_state || "N/A"}`, 10, 70);
-    doc.text(`Renter's Zip Code: ${request.renter_zip || "N/A"}`, 10, 70);
-    doc.text(`Renter's Phone Number: ${request.renter_phone || "N/A"}`, 10, 70);
-    doc.text(
-      `Renter's Email Address: ${request.renter_email || "N/A"}`,
-      10,
-      70
-    );
-    doc.text(`Special Requests: ${request.renter_email || "N/A"}`, 10, 70);
-    doc.text(
-      `Rented Previously: ${request.rented_previously || "N/A"}`,
-      10,
-      70
-    );
-    doc.text(
-      `Read Rental Review: ${request.read_rental_review || "N/A"}`,
-      10,
-      70
-    );
-    doc.text(
-      `Agree to Respectful Use of Space: ${
-        request.agree_to_respectful_use_of_space || "N/A"
-      }`,
-      10,
-      70
-    );
-    doc.text(
-      `Agree to Invoice Payment Process: ${
-        request.agree_to_invoice_payment_process || "N/A"
-      }`,
-      10,
-      70
-    );
+    generatePdfContent(doc);
     doc.save("AdminDataView.pdf");
   };
 
   const handleSendByEmail = async () => {
     const doc = new jsPDF();
-    doc.text(heading, 10, 10);
-    doc.text(
-      `Team/Organization/Event: ${request.team_org_event || "N/A"}`,
-      10,
-      20
-    );
-    doc.text(
-      `Coach's Name: ${request.coach_contact_first_name || "N/A"} ${
-        request.coach_contact_last_name || "N/A"
-      }`,
-      10,
-      30
-    );
-    doc.text(`Coach's Email: ${request.coach_contact_email || "N/A"}`, 10, 40);
-    doc.text(
-      `Preferred Location: ${request.preferred_location_primary || "N/A"}`,
-      10,
-      50
-    );
-    doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
-    doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
-
+    generatePdfContent(doc);
     const pdfBlob = doc.output("blob");
 
     const formData = new FormData();
@@ -202,146 +119,22 @@ function AdminDataView() {
     }
   };
 
-  return !request ? null : (
+  return (
     <Container fluid>
       <h2>{heading}</h2>
       <Row>
-        <Col xs={6} md={4}>
-          Team / Organization / Event: {request.team_org_event}
-        </Col>
-        <Col xs={6} md={4}>
-          Title with Team/ Organization/ Event: {request.title_w_team_org_event}
-        </Col>
-        <Col xs={6} md={4}>
-          Coach's Name: {request.coach_contact_first_name}{" "}
-          {request.coach_contact_last_name}
-        </Col>
-        <Col xs={6} md={4}>
-          Coach's Email: {request.coach_contact_email}
-        </Col>
-        <Col xs={6} md={4}>
-          Coach's Phone #: {request.coach_contact_phone}
-        </Col>
-        <Col xs={6} md={4}>
-          Related Website: {request.website}
-        </Col>
-
-        <Col xs={12}>Event Description: {request.event_description}</Col>
-
-        <Col xs={6} md={4}>
-          Type of Event: {request.event_type}
-        </Col>
-        <Col xs={6} md={4}>
-          Preferred Timeframe:{" "}
-          {request.preferred_time !== "6:00 PM"
-            ? request.preferred_time !== "7:00 PM"
-              ? request.preferred_time !== "8:00 PM"
-                ? request.preferred_time !== "9:00 PM"
-                  ? "N/A"
-                  : "9:00 PM - 10:00 PM"
-                : "8:00 PM - 9:00 PM"
-              : "7:00 PM - 8:00 PM"
-            : "6:00 PM - 7:00 PM"}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Preferred Space:{" "}
-          {!request.preferred_space
-            ? null
-            : request.preferred_space.slice(2, -2)}
-        </Col>
-
-        <Col xs={6}>
-          Preferred Location (Primary Option):{" "}
-          {locations.map((loc) => {
-            if (loc.id === request.preferred_location_primary) {
-              return <span key={loc.id}>{loc.name_of_Location}</span>;
-            }
-          })}
-        </Col>
-
-        <Col xs={6}>
-          Preferred Location (Secondary Option):{" "}
-          {locations.map((loc) => {
-            if (
-              Number(loc.id) === Number(request.preferred_location_secondary)
-            ) {
-              return <span key={loc.id}>{loc.name_of_Location}</span>;
-            }
-          })}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Expected Attendance: {request.expected_attendance} {" people"}
-        </Col>
-        {/* <Col xs={6} md={4}>Age Group: {request.ageGroup}</Col> */}
-        <Col xs={6} md={4}>
-          Preferred Days: {request.preferred_days}
-        </Col>
-        <Col xs={6} md={4}>
-          Priority: Preffered {request.priority}
-        </Col>
-        <Col xs={6} md={4}>
-          Start Date: {request.start_date}
-        </Col>
-        <Col xs={6} md={4}>
-          End Date: {request.end_date}
-        </Col>
-        <Col xs={6} md={4}>
-          Additional Dates: {request.additional_dates}
-        </Col>
-
-        <Col xs={6} md={4}>
-          85% West Fargo Students?: {request.wf_students ? "Yes" : "No"}
-        </Col>
-        <Col xs={6} md={4}>
-          Grade Level: {request.grade_level}
-        </Col>
-        <Col xs={6} md={4}>
-          Cloudinary Link to Roster PDF: {request.team_pdf}
-        </Col>
-        {/* <Col xs={6} md={4}>Liability  Proof: {request.liabilityProof}</Col> */}
-        {/* <Col xs={6} md={4}>District Acknowledgment: {request.districtAcknowledgment}</Col>
-        <Col xs={6} md={4}>Special Requests: {request.specialRequests}</Col> */}
-
-        <Col xs={12}></Col>
-        <br />
-        <Col xs={6} md={4}>
-          Renter's Name: {request.renter_first_name} {request.renter_last_name}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Rented Previously: {request.rented_previously ? "Yes" : "No"}
-        </Col>
-        <Col xs={6} md={4}>
-          Renter's Street Address: {request.renter_street_address}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's City: {request.renter_city}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's State: {request.renter_state}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's ZIP code: {request.renter_zip}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's Phone #: {request.renter_phone}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's Email: {request.renter_email}
-        </Col>
-
-        {/* <Col xs={6} md={4}>Frequency: {request.agreeToRespectfulUseOfSpace}</Col>
-        <Col xs={6} md={4}>Frequency: {request.agreeToInvoicePaymentProcess}</Col> */}
+        {Object.keys(request).map((key, index) => (
+          <Col xs={6} md={4} key={index}>
+            <strong>{key.replace(/_/g, " ")}:</strong> {request[key] || "N/A"}
+          </Col>
+        ))}
       </Row>
-      <Button onClick={handlePrint}>Download Pdf</Button>{" "}
-      <Button onClick={handleSendByEmail}>Send by email</Button>
+      <Button className="mt-3" onClick={handleDownload}>
+        Download PDF
+      </Button>{" "}
+      <Button className="mt-3" onClick={handleSendByEmail}>
+        Send by Email
+      </Button>
     </Container>
   );
 }
