@@ -35,17 +35,11 @@ const FormPartTwo = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    setFormValues({ ...formValues, [name]: type === "checkbox" ? checked : value, });
   };
 
   const handleNext = () => {
-    const updatedValues = {
-      ...formValues,
-      team_pdf: teamPdf,
-    };
+    const updatedValues = { ...formValues, team_pdf: teamPdf, };
     dispatch(updateFormPartTwo(updatedValues));
     history.push("/form-part-three");
   };
@@ -80,7 +74,7 @@ const FormPartTwo = () => {
     <div css={formContainerStyle} className="shadow">
       <h2 className="text-center mb-4">Event Details</h2>
 
-      <form>
+      <form onSubmit={handleNext}>
         <div className="mb-3">
           <label css={labelStyle}>Event Description</label>
           <textarea
@@ -88,7 +82,6 @@ const FormPartTwo = () => {
             value={formValues.event_description}
             className="form-control"
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -100,12 +93,11 @@ const FormPartTwo = () => {
             value={formValues.expected_attendance}
             className="form-control"
             onChange={handleChange}
-            required
           />
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Preferred Days</label>
+          <label css={labelStyle}>Preferred Days *</label>
           <select
             name="preferred_days"
             value={formValues.preferred_days}
@@ -122,13 +114,12 @@ const FormPartTwo = () => {
             <option value="Fridays">Fridays</option>
           </select>
           <small css={descriptionStyle}>
-            Requests for twice-weekly practices and meetings will be reserved on
-            Mon/Thur or Tue/Fri.
+            Requests for twice-weekly practices and meetings will be reserved on Mon/Thur or Tue/Fri.
           </small>
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Start Date for Your Rental</label>
+          <label css={labelStyle}>Start Date for Your Rental *</label>
           <input
             type="date"
             name="start_date"
@@ -138,13 +129,12 @@ const FormPartTwo = () => {
             required
           />
           <small css={descriptionStyle}>
-            Example: September 15 to December 20 or March 15-May 14 (Must
-            contain a date in M/D/YYYY format).
+            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in MM/DD/YYYY format).
           </small>
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>End Date for Your Rental</label>
+          <label css={labelStyle}>End Date for Your Rental *</label>
           <input
             type="date"
             name="end_date"
@@ -154,8 +144,7 @@ const FormPartTwo = () => {
             required
           />
           <small css={descriptionStyle}>
-            Example: September 15 to December 20 or March 15-May 14 (Must
-            contain a date in M/D/YYYY format).
+            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in MM/DD/YYYY format).
           </small>
         </div>
 
@@ -169,8 +158,7 @@ const FormPartTwo = () => {
             onChange={handleChange}
           />
           <small css={descriptionStyle}>
-            Submit when requesting specific dates or additional date details are
-            needed.
+            Submit when requesting specific dates or additional date details are needed.
           </small>
         </div>
 
@@ -186,48 +174,50 @@ const FormPartTwo = () => {
             onChange={handleChange}
           />
           <small css={descriptionStyle}>
-            An event comprising at least 85% of WFPS students is eligible for a
-            student discount.
+            An event comprising at least 85% of WFPS students is eligible for a student discount.
           </small>
         </div>
-
-        <div className="mb-3">
-          <label css={labelStyle}>Grade Level</label>
-          <input
-            type="text"
-            name="grade_level"
-            value={formValues.grade_level}
-            className="form-control"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label css={labelStyle}>
-            Team Roster (Provide Student Name and School)
-          </label>
-
-          {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
-          <p className="userTextColor">
-            File to upload:{" "}
-            <button type="button" onClick={openWidget}>
-              Pick File
-            </button>
-          </p>
-
-          {teamPdf && (
-            <p className="text-success mt-2">
-              Uploaded:{" "}
-              <a href={teamPdf} target="_blank" rel="noopener noreferrer">
-                View File
-              </a>
-            </p>
-          )}
-          <small css={descriptionStyle}>
-            A student discount is available if a roster meeting the requirements
-            is provided.
-          </small>
-        </div>
+        
+        {formValues.WF_students && (
+          <>
+            <div className="mb-3">
+              <label css={labelStyle}>Grade Level *</label>
+              <input
+                type="text"
+                name="grade_level"
+                value={formValues.grade_level}
+                className="form-control"
+                onChange={handleChange}
+              />
+            </div>
+    
+            <div className="mb-3">
+              <label css={labelStyle}>
+                Team Roster (Provide Student Name and School) *
+              </label>
+    
+              {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
+              <p className="userTextColor">
+                File to upload:{" "}
+                <button type="button" onClick={openWidget}>
+                  Pick File
+                </button>
+              </p>
+    
+              {teamPdf && (
+                <p className="text-success mt-2">
+                  Uploaded:{" "}
+                  <a href={teamPdf} target="_blank" rel="noopener noreferrer">
+                    View File
+                  </a>
+                </p>
+              )}
+              <small css={descriptionStyle}>
+                A student discount is available if a roster meeting the requirements is provided.
+              </small>
+            </div>
+          </>
+        )}
 
         <div className="d-flex justify-content-between">
           <button
