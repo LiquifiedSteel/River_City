@@ -121,7 +121,6 @@ const FormPartThree = () => {
               className="form-check-input"
               checked={formValues.rented_previously}
               onChange={handleChange}
-              required
             />
             <label htmlFor="rentedPreviously" className="form-check-label">
               I have rented before
