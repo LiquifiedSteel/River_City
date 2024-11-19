@@ -27,6 +27,7 @@ const initialState = {
     team_pdf: "",
   },
   FormPartThree: {
+    rented_previously: false,
     renter_first_name: "",
     renter_last_name: "",
     renter_street_address: "",

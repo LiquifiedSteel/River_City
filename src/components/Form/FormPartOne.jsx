@@ -82,9 +82,14 @@ const FormPartOne = () => {
     setLocation2(Number(value));
   };
 
-  const handleNext = () => {
-    dispatch(updateFormPartOne(formValues));
-    history.push("/form-part-two");
+  const handleNext = (e) => {
+    e.preventDefault();
+    if(formValues.preferred_space.length !== 0) {
+      dispatch(updateFormPartOne(formValues));
+      history.push("/form-part-two");
+    } else {
+      alert("Please choose one or more preferred types of spaces.");
+    }
   };
 
   return (
@@ -126,11 +131,11 @@ const FormPartOne = () => {
         located on our Facility Rental Website or on your contract.
       </p>
 
-      <form>
+      <form onSubmit={handleNext}>
         {/* Team/Organization Details */}
         <div className="mb-3">
           <label css={labelStyle}>
-            Team/Organization/Event Name
+            Team/Organization/Event Name *
           </label>
           <input
             type="text"
@@ -138,6 +143,7 @@ const FormPartOne = () => {
             value={formValues.team_org_event}
             className="form-control"
             onChange={handleChange}
+            required
           />
           <small className={descriptionStyle}>
             Avoid using local sports team names like Packers or Mustangs.
@@ -159,30 +165,32 @@ const FormPartOne = () => {
 
         <div className="row mb-3">
           <div className="col-md-6">
-            <label css={labelStyle}>Coach/Contact First Name</label>
+            <label css={labelStyle}>Coach/Contact First Name *</label>
             <input
               type="text"
               name="coach_contact_first_name"
               value={formValues.coach_contact_first_name}
               className="form-control"
               onChange={handleChange}
+              required
             />
           </div>
           <div className="col-md-6">
-            <label css={labelStyle}>Coach/Contact Last Name</label>
+            <label css={labelStyle}>Coach/Contact Last Name *</label>
             <input
               type="text"
               name="coach_contact_last_name"
               value={formValues.coach_contact_last_name}
               className="form-control"
               onChange={handleChange}
+              required
             />
           </div>
         </div>
 
         <div className="mb-3">
           <label css={labelStyle}>
-            Coach/Contact Email Address
+            Coach/Contact Personal Email Address *
           </label>
           <input
             type="email"
@@ -190,6 +198,7 @@ const FormPartOne = () => {
             value={formValues.coach_contact_email}
             className="form-control"
             onChange={handleChange}
+            required
           />
           <small className={descriptionStyle}>
             Avoid using WFPS staff emails for private rentals.
@@ -198,7 +207,7 @@ const FormPartOne = () => {
 
         <div className="mb-3">
           <label css={labelStyle}>
-            Coach/Contact Phone Number
+            Coach/Contact Personal Phone Number *
           </label>
           <input
             type="tel"
@@ -206,6 +215,7 @@ const FormPartOne = () => {
             value={formValues.coach_contact_phone}
             className="form-control"
             onChange={handleChange}
+            required
           />
         </div>
 
@@ -221,12 +231,13 @@ const FormPartOne = () => {
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Event Type</label>
+          <label css={labelStyle}>Event Type *</label>
           <select
             name="event_type"
             value={formValues.event_type}
             className="form-select"
             onChange={handleChange}
+            required
           >
             <option value="">Select an Event Type</option>
             <option value="Basketball">Basketball</option>
@@ -238,29 +249,34 @@ const FormPartOne = () => {
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Preferred Time</label>
+          <label css={labelStyle}>Preferred Time *</label>
           <select
             name="preferred_time"
             value={formValues.preferred_time}
             className="form-select"
             onChange={handleChange}
+            required
           >
             <option value="">Select a Preferred Time</option>
-            <option value="6:00 PM">6:00 PM - 7:00 PM</option>
-            <option value="7:00 PM">7:00 PM - 8:00 PM</option>
-            <option value="8:00 PM">8:00 PM - 9:00 PM</option>
-            <option value="9:00 PM">9:00 PM - 10:00 PM</option>
+            <option value="6:00 PM">6:00 PM - 7:00 PM (Elementary School Only)</option>
+            <option value="7:00 PM">7:00 PM - 8:00 PM (Elementary School Only)</option>
+            <option value="8:00 PM">8:00 PM - 9:00 PM (Elementary & Middle School)</option>
+            <option value="9:00 PM">9:00 PM - 10:00 PM (Middle School Only)</option>
           </select>
+          <small className={descriptionStyle}>
+            Elem schools are only available from 6PM - 9PM Middle schools are only available from 8pm-10pm
+          </small>
         </div>
 
         <div className="row mb-3">
           <div className="col-md-6">
-            <label css={labelStyle}>Preferred Location (Primary)</label>
+            <label css={labelStyle}>Preferred Location (Primary) *</label>
             <select
               name="preferred_location_primary"
               value={formValues.preferred_location_primary}
               className="form-select"
               onChange={handleLocation1}
+              required
             >
               <option value="">Select a Location</option>
               {locations
@@ -273,12 +289,13 @@ const FormPartOne = () => {
             </select>
           </div>
           <div className="col-md-6">
-            <label css={labelStyle}>Preferred Location (Secondary)</label>
+            <label css={labelStyle}>Preferred Location (Secondary) *</label>
             <select
               name="preferred_location_secondary"
               value={formValues.preferred_location_secondary}
               className="form-select"
               onChange={handleLocation2}
+              required
             >
               <option value="">Select a Location</option>
               {locations
@@ -293,7 +310,7 @@ const FormPartOne = () => {
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Preferred Space</label>
+          <label css={labelStyle}>Preferred Space *</label>
           <div>
             {["Gymnasium", "Commons", "Library / Media Center", "Locker Room", "Turf Field"].map(
               (space) => (
@@ -314,12 +331,13 @@ const FormPartOne = () => {
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Priority for Event Scheduling</label>
+          <label css={labelStyle}>Priority for Event Scheduling *</label>
           <select
             name="priority"
             value={formValues.priority}
             className="form-select"
             onChange={handleChange}
+            required
           >
             <option value="">Select Priority</option>
             <option value="Time">Preferred Time</option>
@@ -329,9 +347,8 @@ const FormPartOne = () => {
         </div>
 
         <button
-          type="button"
+          type="submit"
           className="btn btn-primary w-100 mt-3"
-          onClick={handleNext}
         >
           Next
         </button>
