@@ -34,6 +34,7 @@ const FormPartThree = () => {
   const formPartOne = useSelector((state) => state.form.FormPartOne);
 
   const [formValues, setFormValues] = useState(formPartThree);
+  console.log(formValues);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -102,8 +103,6 @@ const FormPartThree = () => {
               name="read_rental_review"
               id="readRentalReview"
               className="form-check-input"
-              checked={formValues.read_rental_review}
-              onChange={handleChange}
               required
             />
             <label htmlFor="readRentalReview" className="form-check-label">
@@ -125,12 +124,12 @@ const FormPartThree = () => {
               required
             />
             <label htmlFor="rentedPreviously" className="form-check-label">
-              I have read rented before
+              I have rented before
             </label>
           </div>
         <div className="row mb-3">
           <div className="col-md-6">
-            <label css={labelStyle}>Renter First Name</label>
+            <label css={labelStyle}>Renter First Name *</label>
             <input
               type="text"
               name="renter_first_name"
@@ -141,7 +140,7 @@ const FormPartThree = () => {
             />
           </div>
           <div className="col-md-6">
-            <label css={labelStyle}>Renter Last Name</label>
+            <label css={labelStyle}>Renter Last Name *</label>
             <input
               type="text"
               name="renter_last_name"
@@ -153,7 +152,7 @@ const FormPartThree = () => {
           </div>
         </div>
         <div className="mb-3">
-          <label css={labelStyle}>Street Address</label>
+          <label css={labelStyle}>Street Address *</label>
           <input
             type="text"
             name="renter_street_address"
@@ -165,7 +164,7 @@ const FormPartThree = () => {
         </div>
         <div className="row mb-3">
           <div className="col-md-4">
-            <label css={labelStyle}>City</label>
+            <label css={labelStyle}>City *</label>
             <input
               type="text"
               name="renter_city"
@@ -176,7 +175,7 @@ const FormPartThree = () => {
             />
           </div>
           <div className="col-md-4">
-            <label css={labelStyle}>State</label>
+            <label css={labelStyle}>State *</label>
             <input
               type="text"
               name="renter_state"
@@ -187,7 +186,7 @@ const FormPartThree = () => {
             />
           </div>
           <div className="col-md-4">
-            <label css={labelStyle}>Zip Code</label>
+            <label css={labelStyle}>Zip Code *</label>
             <input
               type="text"
               name="renter_zip"
@@ -199,7 +198,7 @@ const FormPartThree = () => {
           </div>
         </div>
         <div className="mb-3">
-          <label css={labelStyle}>Phone Number</label>
+          <label css={labelStyle}>Phone Number *</label>
           <input
             type="tel"
             name="renter_phone"
@@ -210,7 +209,7 @@ const FormPartThree = () => {
           />
         </div>
         <div className="mb-3">
-          <label css={labelStyle}>Email Address</label>
+          <label css={labelStyle}>Email Address *</label>
           <input
             type="email"
             name="renter_email"
@@ -235,8 +234,6 @@ const FormPartThree = () => {
               name="agree_to_respectful_use_of_space"
               id="agreeToRespectfulUse"
               className="form-check-input"
-              checked={formValues.agree_to_respectful_use_of_space}
-              onChange={handleChange}
               required
             />
             <label htmlFor="agreeToRespectfulUse" className="form-check-label">
@@ -259,8 +256,6 @@ const FormPartThree = () => {
               name="agree_to_invoice_payment_process"
               id="agreeToInvoice"
               className="form-check-input"
-              checked={formValues.agree_to_invoice_payment_process}
-              onChange={handleChange}
               required
             />
             <label htmlFor="agreeToInvoice" className="form-check-label">
