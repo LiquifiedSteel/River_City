@@ -84,31 +84,11 @@ const FormPartOne = () => {
 
   const handleNext = (e) => {
     e.preventDefault();
-    if (formValues.event_type !== "") {
-      if (formValues.preferred_time !== "") {
-        if(formValues.preferred_location_primary !== "" && formValues.preferred_location_primary !== 0) {
-          if(formValues.preferred_location_secondary !== "" && formValues.preferred_location_secondary !== 0) {
-            if(formValues.preferred_space.length !== 0) {
-              if(formValues.priority !== "") {
-                dispatch(updateFormPartOne(formValues));
-                history.push("/form-part-two");
-              } else {
-                alert("Please choose what you want prioritized");
-              }
-            } else {
-              alert("Please choose one or more preferred types of spaces.");
-            }
-          } else {
-            alert("Please choose a secondary location option.");
-          }
-        } else {
-          alert("Please choose a primary location option.");
-        }
-      } else {
-        alert("Please choose a preferred time.");
-      }
+    if(formValues.priority !== "") {
+      dispatch(updateFormPartOne(formValues));
+      history.push("/form-part-two");
     } else {
-      alert("Please choose an event type.");
+      alert("Please choose one or more preferred types of spaces.");
     }
   };
 
@@ -257,6 +237,7 @@ const FormPartOne = () => {
             value={formValues.event_type}
             className="form-select"
             onChange={handleChange}
+            required
           >
             <option value="">Select an Event Type</option>
             <option value="Basketball">Basketball</option>
@@ -274,6 +255,7 @@ const FormPartOne = () => {
             value={formValues.preferred_time}
             className="form-select"
             onChange={handleChange}
+            required
           >
             <option value="">Select a Preferred Time</option>
             <option value="6:00 PM">6:00 PM - 7:00 PM (Elementary School Only)</option>
@@ -294,6 +276,7 @@ const FormPartOne = () => {
               value={formValues.preferred_location_primary}
               className="form-select"
               onChange={handleLocation1}
+              required
             >
               <option value="">Select a Location</option>
               {locations
@@ -312,6 +295,7 @@ const FormPartOne = () => {
               value={formValues.preferred_location_secondary}
               className="form-select"
               onChange={handleLocation2}
+              required
             >
               <option value="">Select a Location</option>
               {locations
@@ -353,6 +337,7 @@ const FormPartOne = () => {
             value={formValues.priority}
             className="form-select"
             onChange={handleChange}
+            required
           >
             <option value="">Select Priority</option>
             <option value="Time">Preferred Time</option>
