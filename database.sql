@@ -38,7 +38,7 @@ CREATE TABLE "Requests" (
 	"preferred_time" VARCHAR(15) NOT NULL,
 	"preferred_location_primary" INTEGER REFERENCES "Locations" NOT NULL,
 	"preferred_location_secondary" INTEGER REFERENCES "Locations" NOT NULL,
-	"preferred_space" VARCHAR(25) NOT NULL,
+	"preferred_space" VARCHAR(100) NOT NULL,
 	"priority" VARCHAR(20) NOT NULL,
 	"preferred_days" VARCHAR(20) NOT NULL,
 	"start_date" VARCHAR(30) NOT NULL,

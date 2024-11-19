@@ -61,7 +61,7 @@ const FormPartTwo = () => {
     <div css={formContainerStyle} className="shadow">
       <h2 className="text-center mb-4">Event Details</h2>
 
-      <form>
+      <form onSubmit={handleNext}>
         <div className="mb-3">
           <label css={labelStyle}>Event Description</label>
           <textarea
@@ -69,7 +69,6 @@ const FormPartTwo = () => {
             value={formValues.event_description}
             className="form-control"
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -81,12 +80,11 @@ const FormPartTwo = () => {
             value={formValues.expected_attendance}
             className="form-control"
             onChange={handleChange}
-            required
           />
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Preferred Days</label>
+          <label css={labelStyle}>Preferred Days *</label>
           <select
             name="preferred_days"
             value={formValues.preferred_days}
@@ -108,7 +106,7 @@ const FormPartTwo = () => {
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>Start Date for Your Rental</label>
+          <label css={labelStyle}>Start Date for Your Rental *</label>
           <input
             type="date"
             name="start_date"
@@ -118,12 +116,12 @@ const FormPartTwo = () => {
             required
           />
           <small css={descriptionStyle}>
-            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format).
+            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in MM/DD/YYYY format).
           </small>
         </div>
 
         <div className="mb-3">
-          <label css={labelStyle}>End Date for Your Rental</label>
+          <label css={labelStyle}>End Date for Your Rental *</label>
           <input
             type="date"
             name="end_date"
@@ -133,7 +131,7 @@ const FormPartTwo = () => {
             required
           />
           <small css={descriptionStyle}>
-            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in M/D/YYYY format).
+            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in MM/DD/YYYY format).
           </small>
         </div>
 
@@ -166,44 +164,38 @@ const FormPartTwo = () => {
             An event comprising at least 85% of WFPS students is eligible for a student discount.
           </small>
         </div>
-
-        <div className="mb-3">
-          <label css={labelStyle}>Grade Level</label>
-          <input
-            type="text"
-            name="grade_level"
-            value={formValues.grade_level}
-            className="form-control"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label css={labelStyle}>
-            Team Roster (Provide Student Name and School)
-          </label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            name="team_pdf"
-            className="form-control"
-            onChange={handleFileUpload}
-          />
-          <small css={descriptionStyle}>
-            A student discount is available if a roster meeting the requirements is provided.
-          </small>
-        </div>
-
-        <div className="mb-3">
-          <label css={labelStyle}>Liability Proof</label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            name="liabilityProof"
-            className="form-control"
-            onChange={handleFileUpload2}
-          />
-        </div>
+        {formValues.WF_students && (
+          <>
+            <div className="mb-3">
+              <label css={labelStyle}>Grade Level *</label>
+              <input
+                type="text"
+                name="grade_level"
+                value={formValues.grade_level}
+                className="form-control"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            
+            <div className="mb-3">
+              <label css={labelStyle}>
+                Team Roster (Provide Student Name and School) *
+              </label>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                name="team_pdf"
+                className="form-control"
+                onChange={handleFileUpload}
+                required
+              />
+              <small css={descriptionStyle}>
+                A student discount is available if a roster meeting the requirements is provided.
+              </small>
+            </div>
+          </>
+        )}
 
         <div className="d-flex justify-content-between">
           <button
@@ -214,9 +206,8 @@ const FormPartTwo = () => {
             Back
           </button>
           <button
-            type="button"
+            type="submit"
             className="btn btn-primary"
-            onClick={handleNext}
           >
             Next
           </button>
