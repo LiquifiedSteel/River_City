@@ -211,41 +211,41 @@ const AdminFormEditor = () => {
         </div>
 
         <div>
-        <label>Preferred Location (Primary)</label>
-            <select
-              name="preferred_location_primary"
-              value={formValues.preferred_location_primary}
-              className="form-select"
-              onChange={handleLocation1}
-            >
-              <option value="">Select a Location</option>
-              {locations
-                .filter((location) => Number(location.id) !== location2)
-                .map((location) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name_of_Location}
-                  </option>
-                ))}
-            </select>
+          <label>Preferred Location (Primary)</label>
+          <select
+            name="preferred_location_primary"
+            value={formValues.preferred_location_primary}
+            className="form-select"
+            onChange={handleLocation1}
+          >
+            <option value="">Select a Location</option>
+            {locations
+              .filter((location) => Number(location.id) !== location2)
+              .map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.name_of_Location}
+                </option>
+              ))}
+          </select>
         </div>
 
         <div>
-        <label>Preferred Location (Secondary)</label>
-            <select
-              name="preferred_location_secondary"
-              value={formValues.preferred_location_secondary}
-              className="form-select"
-              onChange={handleLocation2}
-            >
-              <option value="">Select a Location</option>
-              {locations
-                .filter((location) => Number(location.id) !== location1)
-                .map((location) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name_of_Location}
-                  </option>
-                ))}
-            </select>
+          <label>Preferred Location (Secondary)</label>
+          <select
+            name="preferred_location_secondary"
+            value={formValues.preferred_location_secondary}
+            className="form-select"
+            onChange={handleLocation2}
+          >
+            <option value="">Select a Location</option>
+            {locations
+              .filter((location) => Number(location.id) !== location1)
+              .map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.name_of_Location}
+                </option>
+              ))}
+          </select>
         </div>
 
         <div>
