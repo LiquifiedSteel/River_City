@@ -141,10 +141,6 @@ const ReviewPage = () => {
           {formState.FormPartThree.rented_previously ? "Yes" : "No"}
         </div>
         <div css={fieldStyle}>
-          <span>Read Rental Review:</span>{" "}
-          {formState.FormPartThree.read_rental_review ? "Yes" : "No"}
-        </div>
-        <div css={fieldStyle}>
           <span>Renter First Name:</span> {formState.FormPartThree.renter_first_name}
         </div>
         <div css={fieldStyle}>
@@ -167,14 +163,6 @@ const ReviewPage = () => {
         </div>
         <div css={fieldStyle}>
           <span>Email:</span> {formState.FormPartThree.renter_email}
-        </div>
-        <div css={fieldStyle}>
-          <span>Agree to Respectful Use of Space:</span>{" "}
-          {formState.FormPartThree.agree_to_respectful_use_of_space ? "Yes" : "No"}
-        </div>
-        <div css={fieldStyle}>
-          <span>Agree to Invoice Payment Process:</span>{" "}
-          {formState.FormPartThree.agree_to_invoice_payment_process ? "Yes" : "No"}
         </div>
       </div>
 
