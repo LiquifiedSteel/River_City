@@ -26,6 +26,7 @@ import FormPartOne from "../Form/FormPartOne";
 import FormPartTwo from "../Form/FormPartTwo";
 import FormPartThree from "../Form/FormPartThree";
 import FormReview from "../Form/FormReview";
+import FormSubmissionSuccess from "../Form/FormSubmissionSuccess"
 
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -136,6 +137,10 @@ function App() {
 
           <Route exact path="/admin-form-editor">
             <AdminFormEditor />
+          </Route>
+
+          <Route exact path="/submission-success">
+            <FormSubmissionSuccess />
           </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
