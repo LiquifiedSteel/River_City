@@ -50,7 +50,6 @@ const ReviewPage = () => {
   const history = useHistory();
   const formState = useSelector((state) => state.form);
   const [heading, setHeading] = useState("Review Your Submission");
-  const [request, setRequest] = useState({});
   const [locations, setLocations] = useState([]);
 
   const handleSubmit = () => {
@@ -65,6 +64,7 @@ const ReviewPage = () => {
   };
 
   const generatePdfContent = (doc) => {
+    const request = { ...formState.FormPartOne, ...formState.FormPartTwo, ...formState.FormPartThree };
     let yPosition = 10;
     const lineHeight = 10;
 
@@ -190,7 +190,8 @@ const ReviewPage = () => {
       <div css={cardStyle}>
         <h3 css={sectionTitleStyle}>Part Two: Event Details</h3>
         <div css={fieldStyle}>
-          <span>Event Description:</span> {formState.FormPartTwo.event_description}
+          <span>Event Description:</span>{" "}
+          {formState.FormPartTwo.eventDescription}
         </div>
         <div css={fieldStyle}>
           <span>Expected Attendance:</span>{" "}
@@ -213,7 +214,7 @@ const ReviewPage = () => {
 
       {/* Part Three */}
       <div css={cardStyle}>
-        <h3 css={sectionTitleStyle}>Part Three: Additional Information</h3> .
+        <h3 css={sectionTitleStyle}>Part Three: Additional Information</h3>
         <div css={fieldStyle}>
           <span>Rented Previously:</span>{" "}
           {formState.FormPartThree.rented_previously ? "Yes" : "No"}
