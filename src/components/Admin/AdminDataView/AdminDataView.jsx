@@ -1,16 +1,63 @@
+/** @jsxImportSource @emotion/react */
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { jsPDF } from "jspdf";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { css } from "@emotion/react";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col, Button } from "react-bootstrap";
+const headingStyle = css`
+  text-align: center;
+  margin: 20px 0;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #2c3e50;
+`;
 
-function AdminDataView() {
-  const [heading, setHeading] = useState("Admin Data View");
+const cardStyle = css`
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const sectionTitleStyle = css`
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #34495e;
+`;
+
+const labelStyle = css`
+  font-weight: bold;
+  color: #2c3e50;
+`;
+
+const fieldValueStyle = css`
+  color: #34495e;
+`;
+
+const buttonStyle = css`
+  background-color: #3498db;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+  }
+`;
+
+const AdminDataView = () => {
+  const [heading] = useState("Admin Data View");
   const [request, setRequest] = useState({});
   const [locations, setLocations] = useState([]);
-
   const location = useLocation();
   const requestID = new URLSearchParams(location.search).get("requestID");
 
@@ -36,52 +83,18 @@ function AdminDataView() {
   const handlePrint = () => {
     const doc = new jsPDF();
     doc.text(heading, 10, 10);
-    doc.text(
-      `Team/Organization/Event: ${request.team_org_event || "N/A"}`,
-      10,
-      20
-    );
-    doc.text(
-      `Coach's Name: ${request.coach_contact_first_name || "N/A"} ${
-        request.coach_contact_last_name || "N/A"
-      }`,
-      10,
-      30
-    );
-    doc.text(`Coach's Email: ${request.coach_contact_email || "N/A"}`, 10, 40);
-    doc.text(
-      `Preferred Location: ${request.preferred_location_primary || "N/A"}`,
-      10,
-      50
-    );
-    doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
-    doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
+    Object.entries(request).forEach(([key, value], index) => {
+      doc.text(`${key.replace(/_/g, " ")}: ${value || "N/A"}`, 10, 20 + index * 10);
+    });
     doc.save("AdminDataView.pdf");
   };
 
   const handleSendByEmail = async () => {
     const doc = new jsPDF();
     doc.text(heading, 10, 10);
-    doc.text(
-      `Team/Organization/Event: ${request.team_org_event || "N/A"}`,
-      10,
-      20
-    );
-    doc.text(
-      `Coach's Name: ${request.coach_contact_first_name || "N/A"} ${
-        request.coach_contact_last_name || "N/A"
-      }`,
-      10,
-      30
-    );
-    doc.text(`Coach's Email: ${request.coach_contact_email || "N/A"}`, 10, 40);
-    doc.text(
-      `Preferred Location: ${request.preferred_location_primary || "N/A"}`,
-      10,
-      50
-    );
-    doc.text(`Start Date: ${request.start_date || "N/A"}`, 10, 60);
-    doc.text(`End Date: ${request.end_date || "N/A"}`, 10, 70);
+    Object.entries(request).forEach(([key, value], index) => {
+      doc.text(`${key.replace(/_/g, " ")}: ${value || "N/A"}`, 10, 20 + index * 10);
+    });
 
     const pdfBlob = doc.output("blob");
 
@@ -99,124 +112,89 @@ function AdminDataView() {
     }
   };
 
-  return !request ? null : (
+  const renderField = (label, value) => (
+    <Col xs={12} md={6} className="mb-3">
+      <span css={labelStyle}>{label}: </span>
+      <span css={fieldValueStyle}>{value || "N/A"}</span>
+    </Col>
+  );
+
+  const primaryLocation = locations.find(
+    (loc) => loc.id === request.preferred_location_primary
+  )?.name_of_Location;
+
+  const secondaryLocation = locations.find(
+    (loc) => loc.id === request.preferred_location_secondary
+  )?.name_of_Location;
+
+  return (
     <Container fluid>
-      <h2>{heading}</h2>
-      <Row>
-        <Col xs={6} md={4}>
-          Team / Organization / Event: {request.team_org_event}
-        </Col>
-        <Col xs={6} md={4}>
-          Title with Team/ Organization/ Event: {request.title_w_team_org_event}
-        </Col>
-        <Col xs={6} md={4}>
-          Coach's Name: {request.coach_contact_first_name}{" "}
-          {request.coach_contact_last_name}
-        </Col>
-        <Col xs={6} md={4}>
-          Coach's Email: {request.coach_contact_email}
-        </Col>
-        <Col xs={6} md={4}>
-          Coach's Phone #: {request.coach_contact_phone}
-        </Col>
-        <Col xs={6} md={4}>
-          Related Website: {request.website}
-        </Col>
+      <h2 css={headingStyle}>{heading}</h2>
+      <Card css={cardStyle}>
+        <h3 css={sectionTitleStyle}>Team / Event Details</h3>
+        <Row>
+          {renderField("Team / Organization / Event", request.team_org_event)}
+          {renderField("Title with Team / Organization / Event", request.title_w_team_org_event)}
+          {renderField(
+            "Coach's Name",
+            `${request.coach_contact_first_name || ""} ${request.coach_contact_last_name || ""}`
+          )}
+          {renderField("Coach's Email", request.coach_contact_email)}
+          {renderField("Coach's Phone", request.coach_contact_phone)}
+          {renderField("Website", request.website)}
+        </Row>
+      </Card>
 
-        <Col xs={12}>Event Description: {request.event_description}</Col>
+      <Card css={cardStyle}>
+        <h3 css={sectionTitleStyle}>Event Details</h3>
+        <Row>
+          {renderField("Event Description", request.event_description)}
+          {renderField("Event Type", request.event_type)}
+          {renderField("Preferred Timeframe", request.preferred_time)}
+          {renderField("Expected Attendance", `${request.expected_attendance || "0"} people`)}
+          {renderField("Preferred Days", request.preferred_days)}
+          {renderField("Start Date", request.start_date)}
+          {renderField("End Date", request.end_date)}
+          {renderField("Additional Dates", request.additional_dates)}
+        </Row>
+      </Card>
 
-        <Col xs={6} md={4}>
-          Type of Event: {request.event_type}
-        </Col>
-        <Col xs={6} md={4}>
-          Preferred Timeframe: {request.preferred_time !== "6:00 PM" ? request.preferred_time !== "7:00 PM" ? request.preferred_time !== "8:00 PM" ? request.preferred_time !== "9:00 PM" ? "N/A": "9:00 PM - 10:00 PM" : "8:00 PM - 9:00 PM" : "7:00 PM - 8:00 PM" : "6:00 PM - 7:00 PM"}
-        </Col>
+      <Card css={cardStyle}>
+        <h3 css={sectionTitleStyle}>Location Preferences</h3>
+        <Row>
+          {renderField("Preferred Location (Primary)", primaryLocation)}
+          {renderField("Preferred Location (Secondary)", secondaryLocation)}
+          {renderField("Preferred Space", request.preferred_space?.slice(2, -2))}
+        </Row>
+      </Card>
 
-        <Col xs={6} md={4}>
-          Preferred Space: {!request.preferred_space ? null : request.preferred_space.slice(2, -2)}
-        </Col>
+      <Card css={cardStyle}>
+        <h3 css={sectionTitleStyle}>Renter Details</h3>
+        <Row>
+          {renderField(
+            "Renter's Name",
+            `${request.renter_first_name || ""} ${request.renter_last_name || ""}`
+          )}
+          {renderField("Renter's Email", request.renter_email)}
+          {renderField("Street Address", request.renter_street_address)}
+          {renderField("City", request.renter_city)}
+          {renderField("State", request.renter_state)}
+          {renderField("ZIP Code", request.renter_zip)}
+          {renderField("Phone", request.renter_phone)}
+          {renderField("Rented Previously", request.rented_previously ? "Yes" : "No")}
+        </Row>
+      </Card>
 
-        <Col xs={6}>
-          Preferred Location (Primary Option):{" "}
-          {locations.map(loc => {if (loc.id === request.preferred_location_primary) {
-            return <span key={loc.id}>{loc.name_of_Location}</span>
-          }})}
-        </Col>
-
-        <Col xs={6}>
-          Preferred Location (Secondary Option):{" "}
-          {locations.map(loc => {if (Number(loc.id) === Number(request.preferred_location_secondary)) {
-            return <span key={loc.id}>{loc.name_of_Location}</span>
-          }})}
-        </Col>
-        
-        <Col xs={6} md={4}>
-          Expected Attendance: {request.expected_attendance} {" people"}
-        </Col>
-        {/* <Col xs={6} md={4}>Age Group: {request.ageGroup}</Col> */}
-        <Col xs={6} md={4}>
-          Preferred Days: {request.preferred_days}
-        </Col>
-        <Col xs={6} md={4}>
-          Priority: Preffered {request.priority}
-        </Col>
-        <Col xs={6} md={4}>
-          Start Date: {request.start_date}
-        </Col>
-        <Col xs={6} md={4}>
-          End Date: {request.end_date}
-        </Col>
-        <Col xs={6} md={4}>
-          Additional Dates: {request.additional_dates}
-        </Col>
-
-        <Col xs={6} md={4}>85% West Fargo Students?: {request.wf_students ? "Yes" : "No"}</Col>
-        <Col xs={6} md={4}>Grade Level: {request.grade_level}</Col>
-        <Col xs={6} md={4}>Cloudinary Link to Roster PDF: {request.team_pdf}</Col>
-        {/* <Col xs={6} md={4}>Liability  Proof: {request.liabilityProof}</Col> */}
-        {/* <Col xs={6} md={4}>District Acknowledgment: {request.districtAcknowledgment}</Col>
-        <Col xs={6} md={4}>Special Requests: {request.specialRequests}</Col> */}
-        
-        <Col xs={12}></Col>
-        <br />
-        <Col xs={6} md={4}>
-          Renter's Name: {request.renter_first_name} {request.renter_last_name}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Rented Previously: {request.rented_previously ? "Yes" : "No"}
-        </Col>
-        <Col xs={6} md={4}>
-          Renter's Street Address: {request.renter_street_address}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's City: {request.renter_city}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's State: {request.renter_state}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's ZIP code: {request.renter_zip}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's Phone #: {request.renter_phone}
-        </Col>
-
-        <Col xs={6} md={4}>
-          Renter's Email: {request.renter_email}
-        </Col>
-        
-        {/* <Col xs={6} md={4}>Frequency: {request.agreeToRespectfulUseOfSpace}</Col>
-        <Col xs={6} md={4}>Frequency: {request.agreeToInvoicePaymentProcess}</Col> */}
-      </Row>
-      <Button onClick={handlePrint}>Download Pdf</Button>{" "}
-      <Button onClick={handleSendByEmail}>Send by email</Button>
+      <div className="d-flex justify-content-center mt-4">
+        <button css={buttonStyle} onClick={handlePrint} className="mx-2">
+          Download PDF
+        </button>
+        <button css={buttonStyle} onClick={handleSendByEmail} className="mx-2">
+          Send by Email
+        </button>
+      </div>
     </Container>
   );
-}
+};
 
 export default AdminDataView;

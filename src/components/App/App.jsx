@@ -28,6 +28,7 @@ import FormPartThree from "../Form/FormPartThree";
 import FormReview from "../Form/FormReview";
 
 import "./App.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const dispatch = useDispatch();
