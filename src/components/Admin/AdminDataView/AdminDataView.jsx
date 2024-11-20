@@ -248,7 +248,7 @@ const AdminDataView = () => {
       </Card>
 
       <div className="d-flex justify-content-center mt-4">
-        <button css={buttonStyle} onClick={handlePrint} className="mx-2">
+        <button css={buttonStyle} onClick={handleDownload} className="mx-2">
           Download PDF
         </button>
         <button css={buttonStyle} onClick={handleSendByEmail} className="mx-2">
