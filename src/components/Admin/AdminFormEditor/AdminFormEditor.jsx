@@ -101,6 +101,9 @@ const AdminFormEditor = () => {
   const history = useHistory();
   const requestID = new URLSearchParams(location.search).get("requestID");
   const [formValues, setFormValues] = useState({});
+  const [location1, setLocation1] = useState(null);
+  const [location2, setLocation2] = useState(null);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -109,6 +112,12 @@ const AdminFormEditor = () => {
         setFormValues(response.data[0]);
       } catch (error) {
         console.error("Error fetching request:", error);
+      }
+      try {
+        const response = await axios.get(`/api/application/locations`);
+        setLocations(response.data);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
       }
     };
     fetchRequest();
@@ -121,6 +130,17 @@ const AdminFormEditor = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  const handleCheckboxChange = (e) => {
+    const { name, value, checked } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: checked
+        ? [...(formValues[name] || []), value]
+        : formValues[name].filter((v) => v !== value),
+    });
+  };
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     setFormValues((prev) => ({ ...prev, team_pdf: file.name }));
@@ -136,6 +156,18 @@ const AdminFormEditor = () => {
       }
     };
     saveUpdate();
+  };
+
+  const handleLocation1 = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+    setLocation1(Number(value));
+  };
+
+  const handleLocation2 = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+    setLocation2(Number(value));
   };
 
   return (
@@ -261,10 +293,10 @@ const AdminFormEditor = () => {
             css={selectStyle}
           >
             <option value="">Select Start Time</option>
-            <option value="06:00:00">6:00 PM - 7:00 PM</option>
-            <option value="07:00:00">7:00 PM - 8:00 PM</option>
-            <option value="08:00:00">8:00 PM - 9:00 PM</option>
-            <option value="09:00:00">9:00 PM - 10:00 PM</option>
+            <option value="6:00 PM">6:00 PM - 7:00 PM</option>
+            <option value="7:00 PM">7:00 PM - 8:00 PM</option>
+            <option value="8:00 PM">8:00 PM - 9:00 PM</option>
+            <option value="9:00 PM">9:00 PM - 10:00 PM</option>
           </select>
 
           <label css={labelStyle}>Expected Attendance</label>
@@ -281,6 +313,7 @@ const AdminFormEditor = () => {
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Dates</h2>
           <label css={labelStyle}>Start Date</label>
+          <span>Currently: {moment(formValues.start_date).format("MMM Do YY")}</span>
           <input
             type="date"
             name="start_date"
@@ -288,9 +321,9 @@ const AdminFormEditor = () => {
             onChange={handleChange}
             css={inputStyle}
           />
-          <span>Currently: {moment(formValues.start_date).format("MMM Do YY")}</span>
 
           <label css={labelStyle}>End Date</label>
+          <span>Currently: {moment(formValues.end_date).format("MMM Do YY")}</span>
           <input
             type="date"
             name="end_date"
@@ -298,7 +331,6 @@ const AdminFormEditor = () => {
             onChange={handleChange}
             css={inputStyle}
           />
-          <span>Currently: {moment(formValues.end_date).format("MMM Do YY")}</span>
 
           <label css={labelStyle}>Additional Dates</label>
           <input
@@ -317,38 +349,50 @@ const AdminFormEditor = () => {
           <select
             name="preferred_location_primary"
             value={formValues.preferred_location_primary || ""}
-            onChange={handleChange}
+            onChange={handleLocation1}
             css={selectStyle}
           >
             <option value="">Select Primary Location</option>
-            <option value={1}>School 1</option>
-            <option value={2}>School 2</option>
+            {locations.filter((location) => Number(location.id) !== location2).map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.name_of_Location}
+              </option>
+            ))}
           </select>
 
           <label css={labelStyle}>Secondary Location</label>
           <select
             name="preferred_location_secondary"
             value={formValues.preferred_location_secondary || ""}
-            onChange={handleChange}
+            onChange={handleLocation2}
             css={selectStyle}
           >
             <option value="">Select Secondary Location</option>
-            <option value={1}>School 1</option>
-            <option value={2}>School 2</option>
+            {locations.filter((location) => Number(location.id) !== location1).map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.name_of_Location}
+              </option>
+            ))}
           </select>
 
           <label css={labelStyle}>Preferred Space</label>
-          <select
-            name="preferred_space"
-            value={formValues.preferred_space || ""}
-            onChange={handleChange}
-            css={selectStyle}
-          >
-            <option value="">Select Preferred Space</option>
-            <option value="Meeting Room">Meeting Room</option>
-            <option value="Classroom">Classroom</option>
-            <option value="Auditorium">Auditorium</option>
-          </select>
+          <div>
+            {["Gymnasium", "Commons", "Library / Media Center", "Locker Room", "Turf Field"].map(
+              (space) => (
+                <label key={space} className="me-3">
+                  <input
+                    type="checkbox"
+                    name="preferred_space"
+                    value={space}
+                    checked={formValues.preferred_space?.includes(space) || false}
+                    onChange={handleCheckboxChange}
+                    className="me-2"
+                  />
+                  {space}
+                </label>
+              )
+            )}
+          </div>
         </div>
 
         {/* Additional */}
