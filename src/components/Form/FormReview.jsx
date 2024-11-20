@@ -64,11 +64,7 @@ const ReviewPage = () => {
   };
 
   const generatePdfContent = (doc) => {
-    const request = {
-      ...formState.FormPartOne,
-      ...formState.FormPartTwo,
-      ...formState.FormPartThree,
-    };
+    const request = { ...formState.FormPartOne, ...formState.FormPartTwo, ...formState.FormPartThree };
     let yPosition = 10;
     const lineHeight = 10;
 
@@ -220,20 +216,8 @@ const ReviewPage = () => {
       <div css={cardStyle}>
         <h3 css={sectionTitleStyle}>Part Three: Additional Information</h3>
         <div css={fieldStyle}>
-          <span>Liability Proof:</span>{" "}
-          {formState.FormPartThree.liabilityProof || "N/A"}
-        </div>
-        <div css={fieldStyle}>
-          <span>Special Requests:</span>{" "}
-          {formState.FormPartThree.specialRequests || "N/A"}
-        </div>
-        <div css={fieldStyle}>
           <span>Rented Previously:</span>{" "}
           {formState.FormPartThree.rented_previously ? "Yes" : "No"}
-        </div>
-        <div css={fieldStyle}>
-          <span>Read Rental Review:</span>{" "}
-          {formState.FormPartThree.read_rental_review ? "Yes" : "No"}
         </div>
         <div css={fieldStyle}>
           <span>Renter First Name:</span>{" "}
@@ -261,18 +245,6 @@ const ReviewPage = () => {
         </div>
         <div css={fieldStyle}>
           <span>Email:</span> {formState.FormPartThree.renter_email}
-        </div>
-        <div css={fieldStyle}>
-          <span>Agree to Respectful Use of Space:</span>{" "}
-          {formState.FormPartThree.agree_to_respectful_use_of_space
-            ? "Yes"
-            : "No"}
-        </div>
-        <div css={fieldStyle}>
-          <span>Agree to Invoice Payment Process:</span>{" "}
-          {formState.FormPartThree.agree_to_invoice_payment_process
-            ? "Yes"
-            : "No"}
         </div>
       </div>
 
