@@ -151,28 +151,28 @@ const AdminDataView = () => {
     doc.save("AdminDataView.pdf");
   };
 
-  const handleSendByEmail = async () => {
-    const doc = new jsPDF();
-    doc.text(heading, 10, 10);
-    Object.entries(request).forEach(([key, value], index) => {
-      doc.text( `${key.replace(/_/g, " ")}: ${value || "N/A"}`, 10, 20 + index * 10 );
-    });
+  // const handleSendByEmail = async () => {
+  //   const doc = new jsPDF();
+  //   doc.text(heading, 10, 10);
+  //   Object.entries(request).forEach(([key, value], index) => {
+  //     doc.text(`${key.replace(/_/g, " ")}: ${value || "N/A"}`, 10, 20 + index * 10);
+  //   });
 
-    const pdfBlob = doc.output("blob");
+  //   const pdfBlob = doc.output("blob");
 
-    const formData = new FormData();
-    formData.append("pdf", pdfBlob, "AdminDataView.pdf");
+  //   const formData = new FormData();
+  //   formData.append("pdf", pdfBlob, "AdminDataView.pdf");
 
-    try {
-      await axios.post("/send-email", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      alert("Email sent successfully!");
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("Failed to send email.");
-    }
-  };
+  //   try {
+  //     await axios.post("/send-email", formData, {
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     });
+  //     alert("Email sent successfully!");
+  //   } catch (error) {
+  //     console.error("Error sending email:", error);
+  //     alert("Failed to send email.");
+  //   }
+  // };
 
   const renderField = (label, value) => (
     <Col xs={12} md={6} className="mb-3">
@@ -223,7 +223,10 @@ const AdminDataView = () => {
         <Row>
           {renderField("Preferred Location (Primary)", primaryLocation)}
           {renderField("Preferred Location (Secondary)", secondaryLocation)}
-          {renderField("Preferred Space", request.preferred_space?.slice(2, -2))}
+          {renderField(
+            "Preferred Space",
+            request.preferred_space?.slice(2, -2)
+          )}
         </Row>
       </Card>
 
@@ -237,7 +240,10 @@ const AdminDataView = () => {
           {renderField("State", request.renter_state)}
           {renderField("ZIP Code", request.renter_zip)}
           {renderField("Phone", request.renter_phone)}
-          {renderField("Rented Previously", request.rented_previously ? "Yes" : "No")}
+          {renderField(
+            "Rented Previously",
+            request.rented_previously ? "Yes" : "No"
+          )}
         </Row>
       </Card>
 
@@ -245,9 +251,9 @@ const AdminDataView = () => {
         <button css={buttonStyle} onClick={handleDownload} className="mx-2">
           Download PDF
         </button>
-        <button css={buttonStyle} onClick={handleSendByEmail} className="mx-2">
+        {/* <button css={buttonStyle} onClick={handleSendByEmail} className="mx-2">
           Send by Email
-        </button>
+        </button> */}
         <ExportExcelButton />
       </div>
     </Container>

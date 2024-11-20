@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { updateFormPartThree, submitForm } from "../../redux/reducers/form.reducer";
+import {
+  updateFormPartThree,
+  submitForm,
+} from "../../redux/reducers/form.reducer";
 import ReCAPTCHA from "react-google-recaptcha";
 import { css } from "@emotion/react";
 
@@ -35,17 +38,16 @@ const FormPartThree = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+
     const updatedValues = {
       ...formValues,
       [name]: type === "checkbox" ? checked : value,
     };
-  
+
     setFormValues(updatedValues);
-  
+
     dispatch(updateFormPartThree(updatedValues));
   };
-  
 
   const handleBack = () => {
     history.push("/form-part-two");
@@ -58,11 +60,11 @@ const FormPartThree = () => {
       return;
     }
     try {
-        const response = await fetch("/api/application/verify-recaptcha", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ recaptchaToken: recaptchaValue }),
-          });
+      const response = await fetch("/api/application/verify-recaptcha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recaptchaToken: recaptchaValue }),
+      });
 
       const result = await response.json();
 
@@ -88,9 +90,10 @@ const FormPartThree = () => {
         {/* Rental Review */}
         <div className="mb-4">
           <p className={descriptionStyle}>
-            The rental contract must be electronically signed at least 5 business days
-            before the desired use date. Payment must be made at least 24 hours before the
-            event. Failure to comply may result in penalties or cancellations. Contact
+            The rental contract must be electronically signed at least 5
+            business days before the desired use date. Payment must be made at
+            least 24 hours before the event. Failure to comply may result in
+            penalties or cancellations. Contact
             facilityrentals@west-fargo.k12.nd.us for questions.
           </p>
           <div className="form-check">
@@ -110,18 +113,18 @@ const FormPartThree = () => {
         {/* Billing Information */}
         <h4 className="mb-3">Billing Information</h4>
         <div className="form-check">
-            <input
-              type="checkbox"
-              name="rented_previously"
-              id="rentedPreviously"
-              className="form-check-input"
-              checked={formValues.rented_previously}
-              onChange={handleChange}
-            />
-            <label htmlFor="rentedPreviously" className="form-check-label">
-              I have rented before
-            </label>
-          </div>
+          <input
+            type="checkbox"
+            name="rented_previously"
+            id="rentedPreviously"
+            className="form-check-input"
+            checked={formValues.rented_previously}
+            onChange={handleChange}
+          />
+          <label htmlFor="rentedPreviously" className="form-check-label">
+            I have rented before
+          </label>
+        </div>
         <div className="row mb-3">
           <div className="col-md-6">
             <label css={labelStyle}>Renter First Name *</label>
@@ -213,15 +216,18 @@ const FormPartThree = () => {
             onChange={handleChange}
             required
           />
-          <small css={descriptionStyle}>(No WFPS staff emails for private rentals.)</small>
+          <small css={descriptionStyle}>
+            (No WFPS staff emails for private rentals.)
+          </small>
         </div>
 
         {/* Respectful Use */}
         <div className="mb-4">
           <h4>Respectful Use of Space</h4>
           <p className={descriptionStyle}>
-            By signing this agreement, you confirm adherence to respectful use guidelines.
-            Failure to comply may result in penalties or cancellation.
+            By signing this agreement, you confirm adherence to respectful use
+            guidelines. Failure to comply may result in penalties or
+            cancellation.
           </p>
           <div className="form-check">
             <input
@@ -241,9 +247,9 @@ const FormPartThree = () => {
         <div className="mb-4">
           <h4>Invoice Agreement</h4>
           <p className={descriptionStyle}>
-            Invoices must be paid in full at least 24 hours before the start of your rental
-            period. Special accommodations for cash or check payments must be arranged in
-            advance.
+            Invoices must be paid in full at least 24 hours before the start of
+            your rental period. Special accommodations for cash or check
+            payments must be arranged in advance.
           </p>
           <div className="form-check">
             <input
@@ -268,7 +274,11 @@ const FormPartThree = () => {
         </div>
 
         <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-secondary" onClick={handleBack}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleBack}
+          >
             Back
           </button>
           <button type="submit" className="btn btn-primary">
