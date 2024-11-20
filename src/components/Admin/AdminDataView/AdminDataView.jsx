@@ -5,6 +5,7 @@ import axios from "axios";
 import { jsPDF } from "jspdf";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { css } from "@emotion/react";
+import ExportExcelButton from "../../ExcelExport/ExcelExport";
 
 const headingStyle = css`
   text-align: center;
@@ -253,6 +254,7 @@ const AdminDataView = () => {
         <button css={buttonStyle} onClick={handleSendByEmail} className="mx-2">
           Send by Email
         </button>
+        <ExportExcelButton />
       </div>
     </Container>
   );
