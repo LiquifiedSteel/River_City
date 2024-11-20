@@ -8,11 +8,12 @@ import { css } from "@emotion/react";
 
 const formContainerStyle = css`
   max-width: 900px;
-  margin: 0 auto;
+  margin: 40px auto;
   padding: 20px;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: #205831; 
   border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #f8f8f8; 
 `;
 
 const labelStyle = css`
@@ -22,15 +23,48 @@ const labelStyle = css`
 
 const descriptionStyle = css`
   font-size: 0.9rem;
-  color: #6c757d;
+  color: #eeeeee;
 `;
 
 const infoTextStyle = css`
   margin-bottom: 15px;
   font-size: 0.85rem;
   line-height: 1.5;
-  color: #6c757d;
+  color: #eeeeee;
 `;
+
+const buttonContainerStyle = css`
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px 0;
+`;
+
+const buttonStyle = css`
+  background-color: #ad9143;
+  color: #252525;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  width: auto;
+  max-width: 200px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: #8c7634;
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5);
+  }
+`;
+
+
 
 const FormPartOne = () => {
   const dispatch = useDispatch();
@@ -348,7 +382,8 @@ const FormPartOne = () => {
 
         <button
           type="submit"
-          className="btn btn-primary w-100 mt-3"
+          className="btn w-100 mt-3"
+          css={buttonStyle}
         >
           Next
         </button>
