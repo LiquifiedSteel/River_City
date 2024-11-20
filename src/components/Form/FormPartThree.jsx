@@ -70,7 +70,6 @@ const FormPartThree = () => {
       const result = await response.json();
 
       if (result.success) {
-        dispatch(submitForm({ formPartOne,  formPartTwo,  formPartThree }));
         history.push("/form-review");
       } else {
         alert("reCAPTCHA verification failed.");
@@ -276,7 +275,7 @@ const FormPartThree = () => {
             Back
           </button>
           <button type="submit" className="btn btn-primary">
-            Submit
+            Review
           </button>
         </div>
       </form>
