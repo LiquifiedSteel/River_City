@@ -1,15 +1,36 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+/** @jsxImportSource @emotion/react */
+import React from "react";
+import { useDispatch } from "react-redux";
+import { css } from "@emotion/react";
+
+const buttonStyle = css`
+  background-color: #e74c3c;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: #c0392b; 
+    transform: translateY(-2px); 
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.4); 
+  }
+`;
 
 function LogOutButton(props) {
   const dispatch = useDispatch();
   return (
     <button
-      // This button shows up in multiple locations and is styled differently
-      // because it's styled differently depending on where it is used, the className
-      // is passed to it from it's parents through React props
-      className={props.className}
-      onClick={() => dispatch({ type: 'LOGOUT' })}
+      css={buttonStyle}
+      className={props.className} 
+      onClick={() => dispatch({ type: "LOGOUT" })}
     >
       Log Out
     </button>
@@ -17,3 +38,4 @@ function LogOutButton(props) {
 }
 
 export default LogOutButton;
+
