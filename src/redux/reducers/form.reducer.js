@@ -27,10 +27,7 @@ const initialState = {
     team_pdf: "",
   },
   FormPartThree: {
-    liabilityProof: "", //
-    districtAcknowledgment: false,
     rented_previously: false,
-    read_rental_review: false,
     renter_first_name: "",
     renter_last_name: "",
     renter_street_address: "",
@@ -39,8 +36,6 @@ const initialState = {
     renter_zip: "",
     renter_phone: "",
     renter_email: "",
-    agree_to_respectful_use_of_space: false,
-    agree_to_invoice_payment_process: false,
   },
 };
 
