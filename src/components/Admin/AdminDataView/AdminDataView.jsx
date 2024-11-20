@@ -145,7 +145,11 @@ const AdminDataView = () => {
     const doc = new jsPDF();
     doc.text(heading, 10, 10);
     Object.entries(request).forEach(([key, value], index) => {
-      doc.text(`${key.replace(/_/g, " ")}: ${value || "N/A"}`, 10, 20 + index * 10);
+      doc.text(
+        `${key.replace(/_/g, " ")}: ${value || "N/A"}`,
+        10,
+        20 + index * 10
+      );
     });
     doc.save("AdminDataView.pdf");
   };
@@ -154,7 +158,11 @@ const AdminDataView = () => {
     const doc = new jsPDF();
     doc.text(heading, 10, 10);
     Object.entries(request).forEach(([key, value], index) => {
-      doc.text(`${key.replace(/_/g, " ")}: ${value || "N/A"}`, 10, 20 + index * 10);
+      doc.text(
+        `${key.replace(/_/g, " ")}: ${value || "N/A"}`,
+        10,
+        20 + index * 10
+      );
     });
 
     const pdfBlob = doc.output("blob");
@@ -195,10 +203,15 @@ const AdminDataView = () => {
         <h3 css={sectionTitleStyle}>Team / Event Details</h3>
         <Row>
           {renderField("Team / Organization / Event", request.team_org_event)}
-          {renderField("Title with Team / Organization / Event", request.title_w_team_org_event)}
+          {renderField(
+            "Title with Team / Organization / Event",
+            request.title_w_team_org_event
+          )}
           {renderField(
             "Coach's Name",
-            `${request.coach_contact_first_name || ""} ${request.coach_contact_last_name || ""}`
+            `${request.coach_contact_first_name || ""} ${
+              request.coach_contact_last_name || ""
+            }`
           )}
           {renderField("Coach's Email", request.coach_contact_email)}
           {renderField("Coach's Phone", request.coach_contact_phone)}
@@ -212,7 +225,10 @@ const AdminDataView = () => {
           {renderField("Event Description", request.event_description)}
           {renderField("Event Type", request.event_type)}
           {renderField("Preferred Timeframe", request.preferred_time)}
-          {renderField("Expected Attendance", `${request.expected_attendance || "0"} people`)}
+          {renderField(
+            "Expected Attendance",
+            `${request.expected_attendance || "0"} people`
+          )}
           {renderField("Preferred Days", request.preferred_days)}
           {renderField("Start Date", request.start_date)}
           {renderField("End Date", request.end_date)}
@@ -225,7 +241,10 @@ const AdminDataView = () => {
         <Row>
           {renderField("Preferred Location (Primary)", primaryLocation)}
           {renderField("Preferred Location (Secondary)", secondaryLocation)}
-          {renderField("Preferred Space", request.preferred_space?.slice(2, -2))}
+          {renderField(
+            "Preferred Space",
+            request.preferred_space?.slice(2, -2)
+          )}
         </Row>
       </Card>
 
@@ -234,7 +253,9 @@ const AdminDataView = () => {
         <Row>
           {renderField(
             "Renter's Name",
-            `${request.renter_first_name || ""} ${request.renter_last_name || ""}`
+            `${request.renter_first_name || ""} ${
+              request.renter_last_name || ""
+            }`
           )}
           {renderField("Renter's Email", request.renter_email)}
           {renderField("Street Address", request.renter_street_address)}
@@ -242,12 +263,15 @@ const AdminDataView = () => {
           {renderField("State", request.renter_state)}
           {renderField("ZIP Code", request.renter_zip)}
           {renderField("Phone", request.renter_phone)}
-          {renderField("Rented Previously", request.rented_previously ? "Yes" : "No")}
+          {renderField(
+            "Rented Previously",
+            request.rented_previously ? "Yes" : "No"
+          )}
         </Row>
       </Card>
 
       <div className="d-flex justify-content-center mt-4">
-        <button css={buttonStyle} onClick={handlePrint} className="mx-2">
+        <button css={buttonStyle} onClick={handleDownload} className="mx-2">
           Download PDF
         </button>
         <button css={buttonStyle} onClick={handleSendByEmail} className="mx-2">
