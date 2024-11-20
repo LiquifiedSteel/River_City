@@ -30,11 +30,8 @@ const FormPartThree = () => {
   const history = useHistory();
   const [recaptchaValue, setRecaptchaValue] = useState(null);
   const formPartThree = useSelector((state) => state.form.FormPartThree);
-  const formPartTwo = useSelector((state) => state.form.FormPartTwo);
-  const formPartOne = useSelector((state) => state.form.FormPartOne);
 
   const [formValues, setFormValues] = useState(formPartThree);
-  console.log(formValues);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

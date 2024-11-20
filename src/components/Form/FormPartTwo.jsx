@@ -45,9 +45,22 @@ const FormPartTwo = () => {
   };
 
   const handleNext = () => {
-    const updatedValues = { ...formValues, team_pdf: teamPdf, };
-    dispatch(updateFormPartTwo(updatedValues));
-    history.push("/form-part-three");
+    const dateFromTimestamp = new Date().getTime(); // grabs the timestamp for right now
+    const startDay = new Date(formValues.start_date).getTime(); // grabs the timestamp for the chosen start_date
+
+    if (dateFromTimestamp < (startDay-432000000)) {
+      if (formValues.end_date < formValues.start_date) {
+        alert("The end date of your event cannot be before the start date.");
+        return;
+      } else {
+        const updatedValues = { ...formValues, team_pdf: teamPdf, };
+        dispatch(updateFormPartTwo(updatedValues));
+        history.push("/form-part-three");
+      }
+    } else {
+      alert("The Start Date of the event must be 5 or more days after the date you are submitting this request.");
+      return;
+    }
   };
 
   const handleBack = () => {
