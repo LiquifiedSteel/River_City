@@ -35,6 +35,12 @@ const FormPartTwo = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "WF_students") {
+      let elements = document.querySelectorAll('.hide85');
+      for(let element of elements) {
+        element.classList.toggle("hide85True");
+      }
+    }
     setFormValues({ ...formValues, [name]: type === "checkbox" ? checked : value, });
   };
 
@@ -178,46 +184,42 @@ const FormPartTwo = () => {
           </small>
         </div>
         
-        {formValues.WF_students && (
-          <>
-            <div className="mb-3">
-              <label css={labelStyle}>Grade Level *</label>
-              <input
-                type="text"
-                name="grade_level"
-                value={formValues.grade_level}
-                className="form-control"
-                onChange={handleChange}
-              />
-            </div>
+        <div className="mb-3 hide85 hide85True">
+          <label css={labelStyle}>Grade Level *</label>
+          <input
+            type="text"
+            name="grade_level"
+            value={formValues.grade_level}
+            className="form-control"
+            onChange={handleChange}
+          />
+        </div>
     
-            <div className="mb-3">
-              <label css={labelStyle}>
-                Team Roster (Provide Student Name and School) *
-              </label>
+        <div className="mb-3 hide85 hide85True">
+          <label css={labelStyle}>
+            Team Roster (Provide Student Name and School) *
+          </label>
     
-              {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
-              <p className="userTextColor">
-                File to upload:{" "}
-                <button type="button" onClick={openWidget}>
-                  Pick File
-                </button>
-              </p>
+          {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
+          <p className="userTextColor">
+            File to upload:{" "}
+            <button type="button" onClick={openWidget}>
+              Pick File
+            </button>
+          </p>
     
-              {teamPdf && (
-                <p className="text-success mt-2">
-                  Uploaded:{" "}
-                  <a href={teamPdf} target="_blank" rel="noopener noreferrer">
-                    View File
-                  </a>
-                </p>
-              )}
-              <small css={descriptionStyle}>
-                A student discount is available if a roster meeting the requirements is provided.
-              </small>
-            </div>
-          </>
-        )}
+          {teamPdf && (
+            <p className="text-success mt-2">
+              Uploaded:{" "}
+              <a href={teamPdf} target="_blank" rel="noopener noreferrer">
+                View File
+              </a>
+            </p>
+          )}
+          <small css={descriptionStyle}>
+            A student discount is available if a roster meeting the requirements is provided.
+          </small>
+        </div>
 
         <div className="d-flex justify-content-between">
           <button
