@@ -77,6 +77,7 @@ const FormPartOne = () => {
   const [formValues, setFormValues] = useState(formPartOne);
 
   useEffect(() => {
+    document.title = "Rental Request Form";
     const fetchLocations = async () => {
       try {
         const response = await axios.get(`/api/application/locations`);

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
+import React, {useEffect} from "react";
 import LoginForm from "../LoginForm/LoginForm";
 import { useHistory } from "react-router-dom";
 import { css } from "@emotion/react";
@@ -38,6 +38,10 @@ const buttonStyle = css`
 
 const LoginPage = () => {
   const history = useHistory();
+
+  useEffect(() => {
+    document.title = "Log-In";
+  }, []);
 
   return (
     <div css={pageStyle}>

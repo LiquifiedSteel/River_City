@@ -53,7 +53,7 @@ const Nav = () => {
 
   return (
     <div css={navBarStyle}>
-      <Link to="/home" css={navTitleStyle}>
+      <Link to="/form-part-one" css={navTitleStyle}>
         WFPS
       </Link>
       <div css={navLinksContainer}>

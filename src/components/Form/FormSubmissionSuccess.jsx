@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
+import React, {useEffect} from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { css } from "@emotion/react";
 
@@ -54,6 +54,10 @@ const buttonStyle = css`
 
 const SuccessPage = () => {
   const history = useHistory();
+
+  useEffect(() => {
+    document.title = "Submission Success";
+  }, []);
 
   const handleRedirect = () => {
     history.push("/home"); // Replace "/home" with the desired route

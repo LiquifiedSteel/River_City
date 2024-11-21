@@ -63,6 +63,7 @@ function AdminDashboard() {
   const history = useHistory();
 
   useEffect(() => {
+    document.title = "Admin Dashboard";
     const fetchApplications = async () => {
       try {
         const response = await axios.get("/api/application");

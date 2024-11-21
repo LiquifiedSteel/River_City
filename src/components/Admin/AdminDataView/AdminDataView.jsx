@@ -63,6 +63,7 @@ const AdminDataView = () => {
   const requestID = new URLSearchParams(location.search).get("requestID");
 
   useEffect(() => {
+    document.title = "View Request Data";
     const fetchRequest = async () => {
       try {
         const response = await axios.get(`/api/application/${requestID}`);

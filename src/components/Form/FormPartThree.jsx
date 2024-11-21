@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
@@ -61,6 +61,10 @@ const FormPartThree = () => {
   const formPartThree = useSelector((state) => state.form.FormPartThree);
 
   const [formValues, setFormValues] = useState(formPartThree);
+
+  useEffect(() => {
+    document.title = "Rental Request Form";
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

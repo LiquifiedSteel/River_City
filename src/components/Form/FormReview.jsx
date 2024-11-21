@@ -5,7 +5,7 @@ import { submitForm } from "../../redux/reducers/form.reducer";
 import { useHistory } from "react-router-dom";
 import { css } from "@emotion/react";
 import jsPDF from "jspdf";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const containerStyle = css`
   max-width: 900px;
   margin: 40px auto;
@@ -79,6 +79,10 @@ const ReviewPage = () => {
   const formState = useSelector((state) => state.form);
   const [heading, setHeading] = useState("Review Your Submission");
   const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    document.title = "Rental Request Review";
+  }, []);
 
   const handleSubmit = () => {
     dispatch(

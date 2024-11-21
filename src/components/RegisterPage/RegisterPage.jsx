@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
+import React, {useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import RegisterForm from "../RegisterForm/RegisterForm";
 import { css } from "@emotion/react";
@@ -38,6 +38,10 @@ const buttonStyle = css`
 
 const RegisterPage = () => {
   const history = useHistory();
+
+  useEffect(() => {
+    document.title = "Register";
+  }, []);
 
   return (
     <div css={pageStyle}>
