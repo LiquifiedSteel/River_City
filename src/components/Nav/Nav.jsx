@@ -9,7 +9,7 @@ const navBarStyle = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #205831; 
+  background-color: #205831;
   padding: 10px 20px;
   color: #ffffff;
   position: sticky;
@@ -25,7 +25,7 @@ const navTitleStyle = css`
   color: #ffffff;
 
   &:hover {
-    color: #d1e8d3; 
+    color: #d1e8d3;
   }
 `;
 
@@ -43,7 +43,7 @@ const linkStyle = css`
   transition: background-color 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #1a4a29; 
+    background-color: #1a4a29;
     color: #d1e8d3;
   }
 `;
@@ -54,7 +54,7 @@ const Nav = () => {
   return (
     <div css={navBarStyle}>
       <Link to="/home" css={navTitleStyle}>
-        Prime Solo Project
+        WFPS
       </Link>
       <div css={navLinksContainer}>
         {/* If no user is logged in, show these links */}
