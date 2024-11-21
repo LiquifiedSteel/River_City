@@ -27,6 +27,7 @@ import FormPartTwo from "../Form/FormPartTwo";
 import FormPartThree from "../Form/FormPartThree";
 import FormReview from "../Form/FormReview";
 import FormSubmissionSuccess from "../Form/FormSubmissionSuccess"
+import AdminProtectedRoute from "../AdminProtectedRoute/AdminProtectedRoute";
 
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -109,13 +110,15 @@ function App() {
               <LandingPage />
             )}
           </Route>
-          <Route
-            // shows AdminDashboard
-            exact
-            path="/admin-dashboard"
-          >
-            <AdminDashboard />
-          </Route>
+
+          <AdminProtectedRoute
+              // shows AdminDashboard
+              exact
+              path="/admin-dashboard"
+            >
+              <AdminDashboard />
+          </AdminProtectedRoute>
+          
           <Route exact path="/form-part-one">
             <FormPartOne />
           </Route>
@@ -131,13 +134,13 @@ function App() {
             <FormReview />
           </Route>
 
-          <Route exact path="/admin-data-view">
+          <AdminProtectedRoute exact path="/admin-data-view">
             <AdminDataView />
-          </Route>
+          </AdminProtectedRoute>
 
-          <Route exact path="/admin-form-editor">
+          <AdminProtectedRoute exact path="/admin-form-editor">
             <AdminFormEditor />
-          </Route>
+          </AdminProtectedRoute>
 
           <Route exact path="/submission-success">
             <FormSubmissionSuccess />
