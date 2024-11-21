@@ -8,9 +8,9 @@ import jsPDF from "jspdf";
 import { useState } from "react";
 const containerStyle = css`
   max-width: 900px;
-  margin: 0 auto;
+  margin: 40px auto;
   padding: 20px;
-  background: #f8f9fa;
+  background: #205831;
   border: 1px solid #dee2e6;
   border-radius: 8px;
 `;
@@ -64,7 +64,11 @@ const ReviewPage = () => {
   };
 
   const generatePdfContent = (doc) => {
-    const request = { ...formState.FormPartOne, ...formState.FormPartTwo, ...formState.FormPartThree };
+    const request = {
+      ...formState.FormPartOne,
+      ...formState.FormPartTwo,
+      ...formState.FormPartThree,
+    };
     let yPosition = 10;
     const lineHeight = 10;
 
