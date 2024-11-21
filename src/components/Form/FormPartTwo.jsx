@@ -27,6 +27,31 @@ const descriptionStyle = css`
   color: #6c757d;
 `;
 
+const buttonStyle = css`
+  background-color: #ad9143;
+  color: #252525;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  width: auto;
+  max-width: 200px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: #8c7634;
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5);
+  }
+`;
+
 const FormPartTwo = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -227,15 +252,17 @@ const FormPartTwo = () => {
         <div className="d-flex justify-content-between">
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn"
             onClick={handleBack}
+            css={buttonStyle}
           >
             Back
           </button>
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn"
             onClick={handleNext}
+            css={buttonStyle}
           >
             Next
           </button>

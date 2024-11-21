@@ -24,6 +24,9 @@ const cardStyle = css`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
+const headerStyle = css`
+color: white`;
+
 const sectionTitleStyle = css`
   font-size: 1.5rem;
   font-weight: bold;
@@ -43,6 +46,31 @@ const buttonGroupStyle = css`
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
+`;
+
+const buttonStyle = css`
+  background-color: #ad9143;
+  color: #252525;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  width: auto;
+  max-width: 200px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: #8c7634;
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5);
+  }
 `;
 
 const ReviewPage = () => {
@@ -137,7 +165,7 @@ const ReviewPage = () => {
 
   return (
     <div css={containerStyle} className="shadow">
-      <h2 className="text-center mb-4">Review Your Submission</h2>
+      <h2 className="text-center mb-4" css={headerStyle}>Review Your Submission</h2>
 
       {/* Part One */}
       <div css={cardStyle}>
@@ -255,22 +283,25 @@ const ReviewPage = () => {
       <div css={buttonGroupStyle}>
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn"
           onClick={() => history.push("/form-part-three")}
+          css={buttonStyle}
         >
           Back
         </button>
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn"
           onClick={handleDownload}
+          css={buttonStyle}
         >
           Download PDF
         </button>
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn"
           onClick={handleSubmit}
+          css={buttonStyle}
         >
           Submit
         </button>
