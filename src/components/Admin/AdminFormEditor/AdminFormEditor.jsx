@@ -106,6 +106,7 @@ const AdminFormEditor = () => {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
+    document.title = "Editing Request";
     const fetchRequest = async () => {
       try {
         const response = await axios.get(`/api/application/${requestID}`);

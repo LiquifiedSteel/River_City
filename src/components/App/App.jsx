@@ -61,8 +61,8 @@ function App() {
           <Route exact path="/login">
             {user.id ? (
               // If the user is already logged in,
-              // redirect to the /user page
-              <Redirect to="/user" />
+              // redirect to the /form-part-one page
+              <Redirect to="/form-part-one" />
             ) : (
               // Otherwise, show the login page
               <LoginPage />
@@ -72,8 +72,8 @@ function App() {
           <Route exact path="/registration">
             {user.id ? (
               // If the user is already logged in,
-              // redirect them to the /user page
-              <Redirect to="/user" />
+              // redirect them to the /form-part-one page
+              <Redirect to="/form-part-one" />
             ) : (
               // Otherwise, show the registration page
               <RegisterPage />
@@ -83,8 +83,8 @@ function App() {
           <Route exact path="/home">
             {user.id ? (
               // If the user is already logged in,
-              // redirect them to the /user page
-              <Redirect to="/user" />
+              // redirect them to the /form-part-one page
+              <Redirect to="/form-part-one" />
             ) : (
               // Otherwise, show the Landing page
               <LandingPage />

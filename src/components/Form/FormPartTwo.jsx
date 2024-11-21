@@ -59,6 +59,10 @@ const FormPartTwo = () => {
   const [teamPdf, setTeamPdf] = useState("");
   const [formValues, setFormValues] = useState(formPartTwo);
 
+  useEffect(() => {
+    document.title = "Rental Request Form";
+  }, []);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name === "WF_students") {
