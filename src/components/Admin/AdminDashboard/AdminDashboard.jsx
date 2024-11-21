@@ -17,9 +17,10 @@ const tableStyle = css`
   margin-top: 20px;
 
   th {
-    background-color: #f1f1f1;
+    background-color: #205831;
     font-weight: bold;
     text-align: center;
+    color: #ffffff;
   }
 
   td {

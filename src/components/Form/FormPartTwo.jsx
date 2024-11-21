@@ -9,11 +9,12 @@ import axios from "axios";
 
 const formContainerStyle = css`
   max-width: 900px;
-  margin: 0 auto;
+  margin: 40px auto;
   padding: 20px;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: #205831;
   border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #f8f8f8;
 `;
 
 const labelStyle = css`
@@ -36,29 +37,34 @@ const FormPartTwo = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name === "WF_students") {
-      let elements = document.querySelectorAll('.hide85');
-      for(let element of elements) {
+      let elements = document.querySelectorAll(".hide85");
+      for (let element of elements) {
         element.classList.toggle("hide85True");
       }
     }
-    setFormValues({ ...formValues, [name]: type === "checkbox" ? checked : value, });
+    setFormValues({
+      ...formValues,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
   const handleNext = () => {
     const dateFromTimestamp = new Date().getTime(); // grabs the timestamp for right now
     const startDay = new Date(formValues.start_date).getTime(); // grabs the timestamp for the chosen start_date
 
-    if (dateFromTimestamp < (startDay-432000000)) {
+    if (dateFromTimestamp < startDay - 432000000) {
       if (formValues.end_date < formValues.start_date) {
         alert("The end date of your event cannot be before the start date.");
         return;
       } else {
-        const updatedValues = { ...formValues, team_pdf: teamPdf, };
+        const updatedValues = { ...formValues, team_pdf: teamPdf };
         dispatch(updateFormPartTwo(updatedValues));
         history.push("/form-part-three");
       }
     } else {
-      alert("The Start Date of the event must be 5 or more days after the date you are submitting this request.");
+      alert(
+        "The Start Date of the event must be 5 or more days after the date you are submitting this request."
+      );
       return;
     }
   };
@@ -116,6 +122,7 @@ const FormPartTwo = () => {
         </div>
 
         <div className="mb-3">
+
           <label css={labelStyle}>Start Date for Your Rental *</label>
           <input
             type="date"
@@ -126,7 +133,8 @@ const FormPartTwo = () => {
             required
           />
           <small css={descriptionStyle}>
-            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in MM/DD/YYYY format).
+            Example: September 15 to December 20 or March 15-May 14 (Must
+            contain a date in MM/DD/YYYY format).
           </small>
         </div>
 
@@ -141,7 +149,8 @@ const FormPartTwo = () => {
             required
           />
           <small css={descriptionStyle}>
-            Example: September 15 to December 20 or March 15-May 14 (Must contain a date in MM/DD/YYYY format).
+            Example: September 15 to December 20 or March 15-May 14 (Must
+            contain a date in MM/DD/YYYY format).
           </small>
         </div>
 
@@ -155,7 +164,8 @@ const FormPartTwo = () => {
             onChange={handleChange}
           />
           <small css={descriptionStyle}>
-            Submit when requesting specific dates or additional date details are needed.
+            Submit when requesting specific dates or additional date details are
+            needed.
           </small>
         </div>
 
@@ -171,10 +181,11 @@ const FormPartTwo = () => {
             onChange={handleChange}
           />
           <small css={descriptionStyle}>
-            An event comprising at least 85% of WFPS students is eligible for a student discount.
+            An event comprising at least 85% of WFPS students is eligible for a
+            student discount.
           </small>
         </div>
-        
+
         <div className="mb-3 hide85 hide85True">
           <label css={labelStyle}>Grade Level *</label>
           <input
@@ -185,12 +196,12 @@ const FormPartTwo = () => {
             onChange={handleChange}
           />
         </div>
-    
+
         <div className="mb-3 hide85 hide85True">
           <label css={labelStyle}>
             Team Roster (Provide Student Name and School) *
           </label>
-    
+
           {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
           <p className="userTextColor">
             File to upload:{" "}
@@ -198,7 +209,7 @@ const FormPartTwo = () => {
               Pick File
             </button>
           </p>
-    
+
           {teamPdf && (
             <p className="text-success mt-2">
               Uploaded:{" "}
@@ -208,7 +219,8 @@ const FormPartTwo = () => {
             </p>
           )}
           <small css={descriptionStyle}>
-            A student discount is available if a roster meeting the requirements is provided.
+            A student discount is available if a roster meeting the requirements
+            is provided.
           </small>
         </div>
 

@@ -11,11 +11,12 @@ import { css } from "@emotion/react";
 
 const formContainerStyle = css`
   max-width: 900px;
-  margin: 0 auto;
+  margin: 40px auto;
   padding: 20px;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: #205831;
   border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #f8f8f8;
 `;
 
 const labelStyle = css`

@@ -16,7 +16,7 @@ const containerStyle = css`
 
 const cardStyle = css`
   max-width: 600px;
-  background: #ffffff;
+  background: #205831;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -26,13 +26,13 @@ const cardStyle = css`
 const headingStyle = css`
   font-size: 2rem;
   font-weight: bold;
-  color: #2c3e50;
+  color: #ffffff;
   margin-bottom: 20px;
 `;
 
 const textStyle = css`
   font-size: 1rem;
-  color: #34495e;
+  color: #ffffff;
   margin-bottom: 30px;
 `;
 
