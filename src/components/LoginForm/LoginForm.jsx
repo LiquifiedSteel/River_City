@@ -96,6 +96,13 @@ const LoginForm = () => {
     }
   };
 
+  const handleGuest = () => {
+      dispatch({
+        type: "LOGIN",
+        payload: { username:"guest", password:"pass" },
+      });
+  }
+
   return (
     <form css={formStyle} onSubmit={login}>
       <h2 css={headingStyle}>Login</h2>
@@ -126,6 +133,9 @@ const LoginForm = () => {
           css={inputStyle}
         />
       </div>
+
+      <button type="button" onClick={handleGuest}>Sign-In as Guest</button>
+
       <button type="submit" css={buttonStyle}>
         Log In
       </button>

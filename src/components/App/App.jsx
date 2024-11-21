@@ -27,6 +27,7 @@ import FormPartTwo from "../Form/FormPartTwo";
 import FormPartThree from "../Form/FormPartThree";
 import FormReview from "../Form/FormReview";
 import FormSubmissionSuccess from "../Form/FormSubmissionSuccess"
+import AdminProtectedRoute from "../AdminProtectedRoute/AdminProtectedRoute";
 
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -56,26 +57,6 @@ function App() {
           >
             <AboutPage />
           </Route>
-
-          {/* For protected routes, the view could show one of several things on the same route.
-            Visiting localhost:5173/user will show the UserPage if the user is logged in.
-            If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
-            Even though it seems like they are different pages, the user is always on localhost:5173/user */}
-          <ProtectedRoute
-            // logged in shows UserPage else shows LoginPage
-            exact
-            path="/user"
-          >
-            <UserPage />
-          </ProtectedRoute>
-
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/info"
-          >
-            <InfoPage />
-          </ProtectedRoute>
 
           <Route exact path="/login">
             {user.id ? (
@@ -109,39 +90,47 @@ function App() {
               <LandingPage />
             )}
           </Route>
-          <Route
-            // shows AdminDashboard
-            exact
-            path="/admin-dashboard"
-          >
-            <AdminDashboard />
-          </Route>
-          <Route exact path="/form-part-one">
+
+          <AdminProtectedRoute
+              // shows AdminDashboard
+              exact
+              path="/admin-dashboard"
+            >
+              <AdminDashboard />
+          </AdminProtectedRoute>
+
+          {/* For protected routes, the view could show one of several things on the same route.
+            Visiting localhost:5173/form-part-one will show the first form page if the user is logged in.
+            If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
+            Even though it seems like they are different pages, the user is always on localhost:5173/user */}
+          
+          <ProtectedRoute exact path="/form-part-one">
             <FormPartOne />
-          </Route>
-          <Route exact path="/form-part-two">
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/form-part-two">
             <FormPartTwo />
-          </Route>
+          </ProtectedRoute>
 
-          <Route exact path="/form-part-three">
+          <ProtectedRoute exact path="/form-part-three">
             <FormPartThree />
-          </Route>
+          </ProtectedRoute>
 
-          <Route exact path="/form-review">
+          <ProtectedRoute exact path="/form-review">
             <FormReview />
-          </Route>
+          </ProtectedRoute>
 
-          <Route exact path="/admin-data-view">
-            <AdminDataView />
-          </Route>
-
-          <Route exact path="/admin-form-editor">
-            <AdminFormEditor />
-          </Route>
-
-          <Route exact path="/submission-success">
+          <ProtectedRoute exact path="/submission-success">
             <FormSubmissionSuccess />
-          </Route>
+          </ProtectedRoute>
+
+          <AdminProtectedRoute exact path="/admin-data-view">
+            <AdminDataView />
+          </AdminProtectedRoute>
+
+          <AdminProtectedRoute exact path="/admin-form-editor">
+            <AdminFormEditor />
+          </AdminProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
