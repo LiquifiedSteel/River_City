@@ -50,6 +50,7 @@ const buttonStyle = css`
   width: 100%;
   background-color: #205831;
   color: white;
+  margin-bottom: 8px;
   font-weight: bold;
   border: none;
   border-radius: 4px;
@@ -134,7 +135,7 @@ const LoginForm = () => {
         />
       </div>
 
-      <button type="button" onClick={handleGuest}>Sign-In as Guest</button>
+      <button type="button" css={buttonStyle} onClick={handleGuest}>Sign-In as Guest</button>
 
       <button type="submit" css={buttonStyle}>
         Log In
