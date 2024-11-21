@@ -365,6 +365,28 @@ const FormPartOne = () => {
         </div>
 
         <div className="mb-3">
+          <label css={labelStyle}>Preferred Days *</label>
+          <select
+            name="preferred_days"
+            value={formValues.preferred_days}
+            className="form-select"
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Preferred Days</option>
+            <option value="Monday/Thursdays">Monday/Thursdays</option>
+            <option value="Tuesday/Fridays">Tuesday/Fridays</option>
+            <option value="Mondays">Mondays</option>
+            <option value="Tuesdays">Tuesdays</option>
+            <option value="Thursdays">Thursdays</option>
+            <option value="Fridays">Fridays</option>
+          </select>
+          <small css={descriptionStyle}>
+            Requests for twice-weekly practices and meetings will be reserved on Mon/Thur or Tue/Fri.
+          </small>
+        </div>
+
+        <div className="mb-3">
           <label css={labelStyle}>Priority for Event Scheduling *</label>
           <select
             name="priority"

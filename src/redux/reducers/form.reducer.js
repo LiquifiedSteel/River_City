@@ -13,12 +13,12 @@ const initialState = {
     preferred_location_primary: 0, // random two schools for testing
     preferred_location_secondary: 0, // random two schools for testing
     preferred_space: [], // Gymnasium, Commons, Library / Media Center, Locker Room, Turf Field
+    preferred_days: "", // Monday/ Thursdays, Tuesday/ Fridays, Mondays, Tuesdays, Thursdays, Fridays
     priority: "", // might change to an integer based on what functionality we choose to do Preferred Time, Preferred Days, Preferred Location
   },
   FormPartTwo: {
     event_description: "", //
     expected_attendance: "",
-    preferred_days: "", // Monday/ Thursdays, Tuesday/ Fridays, Mondays, Tuesdays, Thursdays, Fridays
     start_date: "", // Will be a date
     end_date: "", // Will be a date
     additional_dates: "", // text field
