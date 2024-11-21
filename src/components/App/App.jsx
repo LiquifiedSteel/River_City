@@ -58,26 +58,6 @@ function App() {
             <AboutPage />
           </Route>
 
-          {/* For protected routes, the view could show one of several things on the same route.
-            Visiting localhost:5173/user will show the UserPage if the user is logged in.
-            If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
-            Even though it seems like they are different pages, the user is always on localhost:5173/user */}
-          <ProtectedRoute
-            // logged in shows UserPage else shows LoginPage
-            exact
-            path="/user"
-          >
-            <UserPage />
-          </ProtectedRoute>
-
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/info"
-          >
-            <InfoPage />
-          </ProtectedRoute>
-
           <Route exact path="/login">
             {user.id ? (
               // If the user is already logged in,
@@ -118,21 +98,31 @@ function App() {
             >
               <AdminDashboard />
           </AdminProtectedRoute>
+
+          {/* For protected routes, the view could show one of several things on the same route.
+            Visiting localhost:5173/form-part-one will show the first form page if the user is logged in.
+            If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
+            Even though it seems like they are different pages, the user is always on localhost:5173/user */}
           
-          <Route exact path="/form-part-one">
+          <ProtectedRoute exact path="/form-part-one">
             <FormPartOne />
-          </Route>
-          <Route exact path="/form-part-two">
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/form-part-two">
             <FormPartTwo />
-          </Route>
+          </ProtectedRoute>
 
-          <Route exact path="/form-part-three">
+          <ProtectedRoute exact path="/form-part-three">
             <FormPartThree />
-          </Route>
+          </ProtectedRoute>
 
-          <Route exact path="/form-review">
+          <ProtectedRoute exact path="/form-review">
             <FormReview />
-          </Route>
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/submission-success">
+            <FormSubmissionSuccess />
+          </ProtectedRoute>
 
           <AdminProtectedRoute exact path="/admin-data-view">
             <AdminDataView />
@@ -141,10 +131,6 @@ function App() {
           <AdminProtectedRoute exact path="/admin-form-editor">
             <AdminFormEditor />
           </AdminProtectedRoute>
-
-          <Route exact path="/submission-success">
-            <FormSubmissionSuccess />
-          </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>

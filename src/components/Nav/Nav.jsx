@@ -70,10 +70,11 @@ const Nav = () => {
             <LogOutButton className="navLink" />
           </>
         )}
-
-        <Link to="/admin-dashboard" css={linkStyle}>
-          Admin Dashboard
-        </Link>
+        {user.isAdmin &&
+          <Link to="/admin-dashboard" css={linkStyle}>
+            Admin Dashboard
+          </Link>
+        }
         <Link to="/form-part-one" css={linkStyle}>
           Form Part One
         </Link>
