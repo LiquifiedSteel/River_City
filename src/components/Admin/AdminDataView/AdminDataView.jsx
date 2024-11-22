@@ -84,19 +84,21 @@ const AdminDataView = () => {
   const generatePdfContent = (doc) => {
     let yPosition = 10;
     const lineHeight = 10;
+    const leftMargin = 10;
 
-    doc.text(heading, 10, yPosition);
-    yPosition += lineHeight;
+    doc.setFontSize(16);
+    doc.text("West Fargo Public Schools", leftMargin, yPosition);
+    yPosition += lineHeight * 2;
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Rental Application Summary", leftMargin, yPosition);
+    yPosition += lineHeight * 1.5;
 
     const fields = [
       ["Team/Organization/Event", request.team_org_event],
       ["Title with Team/Organization/Event", request.title_w_team_org_event],
-      [
-        "Coach/Contact Name",
-        `${request.coach_contact_first_name || ""} ${
-          request.coach_contact_last_name || ""
-        }`,
-      ],
+      ["Coach/Contact Name", `${request.coach_contact_first_name || ""} ${request.coach_contact_last_name || ""}`],
       ["Coach/Contact Email", request.coach_contact_email],
       ["Coach/Contact Phone", request.coach_contact_phone],
       ["Website", request.website],
@@ -114,10 +116,7 @@ const AdminDataView = () => {
       ["West Fargo Students?", request.wf_students ? "Yes" : "No"],
       ["Grade Level", request.grade_level],
       ["Team Roster", request.team_pdf],
-      [
-        "Renter Name",
-        `${request.renter_first_name || ""} ${request.renter_last_name || ""}`,
-      ],
+      ["Renter Name", `${request.renter_first_name || ""} ${request.renter_last_name || ""}`],
       ["Renter Address", request.renter_street_address],
       ["Renter City", request.renter_city],
       ["Renter State", request.renter_state],
@@ -126,28 +125,31 @@ const AdminDataView = () => {
       ["Renter Email", request.renter_email],
       ["Special Requests", request.special_requests],
       ["Rented Previously", request.rented_previously ? "Yes" : "No"],
-      [
-        "Respectful Use of Space Agreement",
-        request.agree_to_respectful_use_of_space ? "Yes" : "No",
-      ],
-      [
-        "Invoice Payment Agreement",
-        request.agree_to_invoice_payment_process ? "Yes" : "No",
-      ],
+      ["Respectful Use of Space Agreement", request.agree_to_respectful_use_of_space ? "Yes" : "No"],
+      ["Invoice Payment Agreement", request.agree_to_invoice_payment_process ? "Yes" : "No"],
     ];
 
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
     fields.forEach(([label, value]) => {
-      doc.text(`${label}: ${value || "N/A"}`, 10, yPosition);
-      yPosition += lineHeight;
+      if (value && value !== "N/A" && value !== undefined) {
+        doc.text(`${label}:`, leftMargin, yPosition);
+        doc.setFont("helvetica", "bold");
+        doc.text(`${value}`, leftMargin + 80, yPosition, { align: "left" });
+        doc.setFont("helvetica", "normal");
+        yPosition += lineHeight;
+
+        if (yPosition > 280) {
+          doc.addPage();
+          yPosition = 10;
+        }
+      }
     });
   };
 
   const handleDownload = () => {
     const doc = new jsPDF();
-    doc.text(heading, 10, 10);
-    Object.entries(request).forEach(([key, value], index) => {
-      doc.text( `${key.replace(/_/g, " ")}: ${value || "N/A"}`, 10, 20 + index * 10 );
-    });
+    generatePdfContent(doc);
     doc.save("AdminDataView.pdf");
   };
 
