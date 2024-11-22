@@ -60,7 +60,6 @@ router.get("/export", async (req, res) => {
 
     worksheet.eachRow((row, rowNumber) => {
       row.eachCell((cell, colNumber) => {
-        console.log(cell.value.charAt(cell.value.length - 1));
         if (cell.value.charAt(cell.value.length - 1) === 'l') {
           // Set the background color to yellow for priority "location"
           cell.style.fill = {
@@ -68,20 +67,20 @@ router.get("/export", async (req, res) => {
             pattern: 'solid',
             fgColor: { argb: 'fffef2cb' }  // Yellow
           };
-        // } else if (cell.value[-1] === 'd') {
-        //   // Set the background color to yellow for priority "day"
-        //   cell.style.fill = {
-        //     type: 'pattern',
-        //     pattern: 'solid',
-        //     fgColor: { argb: 'FFFFFF00' }  // Yellow
-        //   };
-        // } else if (cell.value[-1] === 't') {
-        //   // Set the background color to red for priority "time"
-        //   cell.style.fill = {
-        //     type: 'pattern',
-        //     pattern: 'solid',
-        //     fgColor: { argb: 'FFFF0000' }  // Red
-        //   };
+        } else if (cell.value.charAt(cell.value.length - 1) === 'd') {
+          // Set the background color to green for priority "day"
+          cell.style.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'ffe2efd9' }  // green
+          };
+        } else if (cell.value.charAt(cell.value.length - 1) === 't') {
+          // Set the background color to blue for priority "time"
+          cell.style.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'ffdeeaf6' }  // blue
+          };
         }
       });
     });
