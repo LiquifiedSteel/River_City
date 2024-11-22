@@ -61,7 +61,7 @@ const AdminDataView = () => {
   const [locations, setLocations] = useState([]);
   const location = useLocation();
   const requestID = new URLSearchParams(location.search).get("requestID");
-
+ 
   useEffect(() => {
     document.title = "View Request Data";
     const fetchRequest = async () => {
@@ -82,20 +82,34 @@ const AdminDataView = () => {
     fetchRequest();
   }, [requestID]);
 
-  const generatePdfContent = (doc) => {
+  const generatePdfContent = (doc, request, locations) => {
     let yPosition = 10;
     const lineHeight = 10;
     const leftMargin = 10;
+  
+    const primaryLocation = locations.find(
+      (loc) => loc.id === request.preferred_location_primary
+    )?.name_of_Location;
+  
+    const secondaryLocation = locations.find(
+      (loc) => loc.id === request.preferred_location_secondary
+    )?.name_of_Location;
+  
+    const preferredSpace = Array.isArray(request.preferred_space)
+      ? request.preferred_space.join(", ")
+      : request.preferred_space;
 
+      console.log(preferredSpace)
+  
     doc.setFontSize(16);
     doc.text("West Fargo Public Schools", leftMargin, yPosition);
     yPosition += lineHeight * 2;
-
+  
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
     doc.text("Rental Application Summary", leftMargin, yPosition);
     yPosition += lineHeight * 1.5;
-
+  
     const fields = [
       ["Team/Organization/Event", request.team_org_event],
       ["Title with Team/Organization/Event", request.title_w_team_org_event],
@@ -105,8 +119,9 @@ const AdminDataView = () => {
       ["Website", request.website],
       ["Event Type", request.event_type],
       ["Preferred Time", request.preferred_time],
-      ["Preferred Location", request.preferred_location_primary],
-      ["Preferred Space", request.preferred_space],
+      ["Preferred Location (Primary)", primaryLocation],
+      ["Preferred Location (Secondary)", secondaryLocation],
+      ["Preferred Space", preferredSpace],
       ["Priority", request.priority],
       ["Event Description", request.event_description],
       ["Expected Attendance", request.expected_attendance],
@@ -129,7 +144,7 @@ const AdminDataView = () => {
       ["Respectful Use of Space Agreement", request.agree_to_respectful_use_of_space ? "Yes" : "No"],
       ["Invoice Payment Agreement", request.agree_to_invoice_payment_process ? "Yes" : "No"],
     ];
-
+  
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     fields.forEach(([label, value]) => {
@@ -139,7 +154,7 @@ const AdminDataView = () => {
         doc.text(`${value}`, leftMargin + 80, yPosition, { align: "left" });
         doc.setFont("helvetica", "normal");
         yPosition += lineHeight;
-
+  
         if (yPosition > 280) {
           doc.addPage();
           yPosition = 10;
@@ -147,10 +162,10 @@ const AdminDataView = () => {
       }
     });
   };
-
+  
   const handleDownload = () => {
     const doc = new jsPDF();
-    generatePdfContent(doc);
+    generatePdfContent(doc, request, locations);;
     doc.save("AdminDataView.pdf");
   };
 
@@ -222,16 +237,14 @@ const AdminDataView = () => {
       </Card>
 
       <Card css={cardStyle}>
-        <h3 css={sectionTitleStyle}>Location Preferences</h3>
-        <Row>
-          {renderField("Preferred Location (Primary)", primaryLocation)}
-          {renderField("Preferred Location (Secondary)", secondaryLocation)}
-          {renderField(
-            "Preferred Space",
-            request.preferred_space?.slice(2, -2)
-          )}
-        </Row>
-      </Card>
+  <h3 css={sectionTitleStyle}>Location Preferences</h3>
+  <Row>
+    {renderField("Preferred Location (Primary)", primaryLocation)}
+    {renderField("Preferred Location (Secondary)", secondaryLocation)}
+  </Row>
+</Card>
+
+
 
       <Card css={cardStyle}>
         <h3 css={sectionTitleStyle}>Renter Details</h3>

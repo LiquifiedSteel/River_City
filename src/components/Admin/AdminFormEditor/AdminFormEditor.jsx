@@ -134,6 +134,7 @@ const AdminFormEditor = () => {
 
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
+    console.log(name, value, checked)
     setFormValues({
       ...formValues,
       [name]: checked
