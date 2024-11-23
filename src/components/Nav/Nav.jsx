@@ -53,8 +53,8 @@ const Nav = () => {
 
   return (
     <div css={navBarStyle}>
-      <Link to="/form-part-one" css={navTitleStyle}>
-        WFPS
+      <Link to="/home" css={navTitleStyle}>
+        West Fargo Public Schools
       </Link>
       <div css={navLinksContainer}>
         {/* If no user is logged in, show these links */}
@@ -76,19 +76,7 @@ const Nav = () => {
           </Link>
         }
         <Link to="/form-part-one" css={linkStyle}>
-          Form Part One
-        </Link>
-        <Link to="/form-part-two" css={linkStyle}>
-          Form Part Two
-        </Link>
-        <Link to="/form-part-three" css={linkStyle}>
-          Form Part Three
-        </Link>
-        <Link to="/form-review" css={linkStyle}>
-          Form Review
-        </Link>
-        <Link to="/submission-success" css={linkStyle}>
-          Form Success
+          Monday - Friday Rental Application
         </Link>
       </div>
     </div>
