@@ -187,7 +187,7 @@ const FormPartOne = () => {
 
         <div className="mb-3">
           <label css={labelStyle}>
-            Title with Team/Organization/Event
+            Coach/Contact's title within Team/Organization/Event
           </label>
           <input
             type="text"
