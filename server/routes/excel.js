@@ -196,12 +196,14 @@ router.get("/export", async (req, res) => {
       locations.push(location);
     }
     let midSch = 0
-    if(colNum === 1 || colNum === 2 || colNum === 3) {
-      midSch = 1;
-    } else if (colNum === 4 || colNum === 5) {
-      midSch = 2;
-    } else if (colNum === 6 || colNum === 7 || colNum === 8) {
-      midSch = 3;
+    if (rowNum > 19) {
+      if(colNum === 1 || colNum === 2 || colNum === 3) {
+        midSch = 1;
+      } else if (colNum === 4 || colNum === 5) {
+        midSch = 2;
+      } else if (colNum === 6 || colNum === 7 || colNum === 8) {
+        midSch = 3;
+      }
     }
 
     for (let i=1; i<=9; i++) {
@@ -209,9 +211,6 @@ router.get("/export", async (req, res) => {
       availableOptions = data.filter((val) => val.excel !== 'used'); // first, filter out any requests that have been used
       availableOptions = availableOptions.filter((val) => val.preferred_space.includes("Gymnasium")); // second we filter out any requests that don't occur in a gymnasium
       
-      if(rowNum === 5 && colNum === 1) {
-        console.log(availableOptions, i);
-      }
 
       if(i === 1 || i === 4 || i === 7) {
         // filtering based on prioritizing location
@@ -224,42 +223,23 @@ router.get("/export", async (req, res) => {
           availableOptions = availableOptions.filter((val) => val.preferred_location_primary === locations[locations.length - midSch].id || val.preferred_location_secondary === locations[locations.length - midSch].id);
         }
 
-        if(rowNum === 5 && colNum === 1) {
-          console.log(availableOptions, i);
-        }
-
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id && availableOptions[0].preferred_time === time && availableOptions[0].preferred_days === day) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) l`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_time === time);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id && availableOptions[0].preferred_time === time && availableOptions[0].preferred_days === day) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) l`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_days === day);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id && availableOptions[0].preferred_time === time && availableOptions[0].preferred_days === day) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) l`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day)) {return reply};
         };
 
         // here we check what the oldest request within the given parameters is
@@ -285,24 +265,14 @@ router.get("/export", async (req, res) => {
         availableOptions = availableOptions.filter((val) => val.preferred_days === day);
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id && availableOptions[0].preferred_time === time && (availableOptions[0].preferred_location_primary === locations[colNum-1].id || availableOptions[0].preferred_location_secondary === locations[colNum-1].id || availableOptions[0].preferred_location_primary === locations[locations.length - midSch].id || availableOptions[0].preferred_location_secondary === locations[locations.length - midSch].id)) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) d`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_time === time);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id  && availableOptions[0].preferred_time === time && (availableOptions[0].preferred_location_primary === locations[colNum-1].id || availableOptions[0].preferred_location_secondary === locations[colNum-1].id || availableOptions[0].preferred_location_primary === locations[locations.length - midSch].id || availableOptions[0].preferred_location_secondary === locations[locations.length - midSch].id)) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) d`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day)) {return reply};
         };
 
         if (rowNum < 19) {
@@ -313,12 +283,7 @@ router.get("/export", async (req, res) => {
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id  && availableOptions[0].preferred_time === time && (availableOptions[0].preferred_location_primary === locations[colNum-1].id || availableOptions[0].preferred_location_secondary === locations[colNum-1].id || availableOptions[0].preferred_location_primary === locations[locations.length - midSch].id || availableOptions[0].preferred_location_secondary === locations[locations.length - midSch].id)) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) d`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day)) {return reply};
         };
 
         // here we check what the oldest request within the given parameters is
@@ -330,9 +295,19 @@ router.get("/export", async (req, res) => {
             }
           }
           for (let request of data) {
-            if(oldest === request.id && availableOptions[0].preferred_time === time && (availableOptions[0].preferred_location_primary === locations[colNum-1].id || availableOptions[0].preferred_location_secondary === locations[colNum-1].id || availableOptions[0].preferred_location_primary === locations[locations.length - midSch].id || availableOptions[0].preferred_location_secondary === locations[locations.length - midSch].id)) {
-              request.excel = 'used';
-              return `${request.team_org_event} (${request.coach_contact_first_name} ${request.coach_contact_last_name[0]}) d`;
+            if(rowNum < 19) {
+              if(oldest === request.id) {
+                if(request.preferred_time === time && (request.preferred_location_primary === locations[colNum-1].id || request.preferred_location_secondary === locations[colNum-1].id )) {
+                  request.excel = 'used';
+                  return `${request.team_org_event} (${request.coach_contact_first_name} ${request.coach_contact_last_name[0]}) d`;
+                }
+              }
+            } else if (rowNum > 19) {
+              if(oldest === request.id) {
+                if(request.preferred_time === time && (request.preferred_location_primary === locations[locations.length - midSch].id || request.preferred_location_secondary === locations[locations.length - midSch].id) )
+                request.excel = 'used';
+                return `${request.team_org_event} (${request.coach_contact_first_name} ${request.coach_contact_last_name[0]}) d`;
+              }
             }
           }
         }
@@ -345,24 +320,14 @@ router.get("/export", async (req, res) => {
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id && availableOptions[0].preferred_days === day && (availableOptions[0].preferred_location_primary === locations[colNum-1].id || availableOptions[0].preferred_location_secondary === locations[colNum-1].id || availableOptions[0].preferred_location_primary === locations[locations.length - midSch].id || availableOptions[0].preferred_location_secondary === locations[locations.length - midSch].id)) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) t`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_days === day);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id && availableOptions[0].preferred_days === day && (availableOptions[0].preferred_location_primary === locations[colNum-1].id || availableOptions[0].preferred_location_secondary === locations[colNum-1].id || availableOptions[0].preferred_location_primary === locations[locations.length - midSch].id || availableOptions[0].preferred_location_secondary === locations[locations.length - midSch].id)) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) t`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day)) {return reply};
         };
 
         if (rowNum < 19) {
@@ -373,12 +338,7 @@ router.get("/export", async (req, res) => {
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          for (let request of data) {
-            if(availableOptions[0].id === request.id && availableOptions[0].preferred_days === day && (availableOptions[0].preferred_location_primary === locations[colNum-1].id || availableOptions[0].preferred_location_secondary === locations[colNum-1].id || availableOptions[0].preferred_location_primary === locations[locations.length - midSch].id || availableOptions[0].preferred_location_secondary === locations[locations.length - midSch].id)) {
-              request.excel = 'used';
-              return `${availableOptions[0].team_org_event} (${availableOptions[0].coach_contact_first_name} ${availableOptions[0].coach_contact_last_name[0]}) t`;
-            }
-          }
+          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day)) {return reply};
         };
 
         // here we check what the oldest request within the given parameters is
@@ -398,6 +358,46 @@ router.get("/export", async (req, res) => {
         }
       }
     }
+  }
+
+  function checkForOne(availableOption, data, type, time, colNum, locations, midSch, day) {
+    if (type == 'Days') {
+      for (let request of data) {
+        if(rowNum < 19) {
+          if(availableOption.id === request.id  && availableOption.preferred_time === time && (availableOption.preferred_location_primary === locations[colNum-1].id || availableOption.preferred_location_secondary === locations[colNum-1].id)) {
+            request.excel = 'used';
+            return `${availableOption.team_org_event} (${availableOption.coach_contact_first_name} ${availableOption.coach_contact_last_name[0]}) d`;
+          }
+        } else if (rowNum > 19) {
+          if(availableOption.id === request.id && availableOption.preferred_time === time && (availableOption.preferred_location_primary === locations[locations.length - midSch].id || availableOption.preferred_location_secondary === locations[locations.length - midSch].id) ) {
+            request.excel = 'used';
+            return `${availableOption.team_org_event} (${availableOption.coach_contact_first_name} ${availableOption.coach_contact_last_name[0]}) d`;
+          }
+        }
+      }
+    } else if (type === 'Time') {
+      for (let request of data) {
+        if(rowNum < 19) {
+          if(availableOption.id === request.id && availableOption.preferred_days === day && (availableOption.preferred_location_primary === locations[colNum-1].id || availableOption.preferred_location_secondary === locations[colNum-1].id)) {
+            request.excel = 'used';
+            return `${availableOption.team_org_event} (${availableOption.coach_contact_first_name} ${availableOption.coach_contact_last_name[0]}) t`;
+          }
+        } else if (rowNum > 19) {
+          if(availableOption.id === request.id && availableOption.preferred_days === day && (availableOption.preferred_location_primary === locations[locations.length - midSch].id || availableOption.preferred_location_secondary === locations[locations.length - midSch].id)) {
+            request.excel = 'used';
+            return `${availableOption.team_org_event} (${availableOption.coach_contact_first_name} ${availableOption.coach_contact_last_name[0]}) t`;
+          }
+        }
+      }
+    } else if (type === 'Location') {
+      for (let request of data) {
+        if(availableOption.id === request.id && availableOption.preferred_time === time && availableOption.preferred_days === day) {
+          request.excel = 'used';
+          return `${availableOption.team_org_event} (${availableOption.coach_contact_first_name} ${availableOption.coach_contact_last_name[0]}) t`;
+        }
+      }
+    }
+    return false;
   }
 });
 
