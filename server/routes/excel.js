@@ -35,12 +35,25 @@ router.get("/export", async (req, res) => {
       { header: "Willow Park ES", key: "col15", width: 20 },
     ];
 
-    // requestData.forEach((request) => {
-    //   worksheet.addRow(request);
-    // });
-
     for (let i=1; i<39; i++) {
       prepareData(i, requestData, worksheet, locationsRows);
+    }
+
+    worksheet.addRow({ col0: ''});
+    worksheet.addRow({ col0: ''});
+    worksheet.addRow({ col0: 'Requests that had too many conflicts, or simply struggled to get fit into the schedule:', col1: "Preferred Day(s) of the week", col2: "Preferred start time", col3: "Preferred location (primary)", col4: "Preferred location (secondary)", col5: "What the user wanted prioritized"});
+    let leftovers = requestData.filter((request) => request.excel === 'unused');
+    for (const leftover of leftovers) {
+      let location1 = '';
+      let location2 = '';
+      for (const location of locationsRows) {
+        if (location.id === leftover.preferred_location_primary) {
+          location1 = location.name_of_Location
+        } else if (location.id === leftover.preferred_location_secondary) {
+          location2 = location.name_of_Location;
+        }
+      }
+      worksheet.addRow({ col0: `${leftover.team_org_event} (${leftover.coach_contact_first_name} ${leftover.coach_contact_last_name[0]}) d`, col1: leftover.preferred_days, col2: leftover.preferred_time, col3: location1, col4: location2, col5: leftover.priority});
     }
 
     worksheet.views = [{ state: 'frozen', ySplit: 1 }];
@@ -56,6 +69,18 @@ router.get("/export", async (req, res) => {
     worksheet.getRow(15).font = { bold: true };
     worksheet.getRow(15).eachCell((cell, colNumber) => { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffd8d8d8' } }});
     worksheet.getRow(19).eachCell((cell, colNumber) => { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF000000' } }});
+    worksheet.getRow(22).font = { bold: true };
+    worksheet.getRow(22).eachCell((cell, colNumber) => { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffd8d8d8' } }});
+    worksheet.getRow(25).font = { bold: true };
+    worksheet.getRow(25).eachCell((cell, colNumber) => { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffd8d8d8' } }});
+    worksheet.getRow(28).font = { bold: true };
+    worksheet.getRow(28).eachCell((cell, colNumber) => { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffd8d8d8' } }});
+    worksheet.getRow(31).font = { bold: true };
+    worksheet.getRow(31).eachCell((cell, colNumber) => { cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffd8d8d8' } }});
+    worksheet.getCell('A36').style.fill = {type: 'pattern', pattern: 'solid', fgColor: { argb: 'fffef2cb' }};
+    worksheet.getCell('A37').style.fill = {type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffdeeaf6' }};
+    worksheet.getCell('A38').style.fill = {type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffe2efd9' }};
+    worksheet.getCell('A39').style.fill = {type: 'pattern', pattern: 'solid', fgColor: { argb: 'fff9b9ed' }};
 
 
 
@@ -86,12 +111,27 @@ router.get("/export", async (req, res) => {
       });
     });
 
+    // Define the border style (all borders)
+    const borderStyle = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+
+    // Iterate through all rows and cells, and apply borders
+    worksheet.eachRow((row, rowIndex) => {
+      row.eachCell((cell, colIndex) => {
+        cell.border = borderStyle; // Apply the border to each cell
+      });
+    });
+
 
 
     const buffer = await workbook.xlsx.writeBuffer();
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="Requests_Data.xlsx"'
+      'attachment; filename="Gym_Schedule.xlsx"'
     );
     res.setHeader(
       "Content-Type",
@@ -168,10 +208,10 @@ router.get("/export", async (req, res) => {
     } else if (row === 18) {
       worksheet.addRow({ col0: '', col1: '', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '', col11: '', col12: '', col13: '', col14: '', col15: ''});
     } else if (row === 19) {
-      worksheet.addRow({ col1: 'Cheney Middle School North Court', col2: 'Cheney Middle School Middle Court', col3: 'Cheney Middle School South Court', col4: 'Heritage Middle School Court 1', col5: 'Heritage Middle School Court 2', col6: 'Liberty Middle School Court 1', col7: 'Liberty Middle School Court 2', col8: 'Liberty Middle School Court 3 (AUX)' });
-    } 
-    
-    else if (row === 21) {
+      worksheet.addRow({ col1: 'CMS North Court', col2: 'CMS Middle Court', col3: 'CMS South Court', col4: 'HMS Court 1', col5: 'HMS Court 2', col6: 'LMS Court 1', col7: 'LMS Court 2', col8: 'LMS Court 3 (AUX)' });
+    } else if (row === 20) {
+      worksheet.addRow({ col1: 'only 2 official stand for volleyball @ Cheney'});
+    } else if (row === 21) {
       worksheet.addRow({ col0: 'Monday', col1: '', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '', col11: '', col12: '', col13: '', col14: '', col15: ''});
     } else if (row === 22) {
       let day = 'Mondays';
@@ -181,6 +221,48 @@ router.get("/export", async (req, res) => {
       let day = 'Mondays';
       let time = '9:00 PM';
       worksheet.addRow({ col0: '9:00PM - 10:00PM', col1: prioritize(data, 1, row, locations, time, day), col2: prioritize(data, 2, row, locations, time, day), col3: prioritize(data, 3, row, locations, time, day), col4: prioritize(data, 4, row, locations, time, day), col5: prioritize(data, 5, row, locations, time, day), col6: prioritize(data, 6, row, locations, time, day), col7: prioritize(data, 7, row, locations, time, day), col8: prioritize(data, 8, row, locations, time, day) });
+    } else if (row === 24) {
+      worksheet.addRow({ col0: 'Tuesday', col1: '', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '', col11: '', col12: '', col13: '', col14: '', col15: ''});
+    } else if (row === 25) {
+      let day = 'Tuesdays';
+      let time = '8:00 PM';
+      worksheet.addRow({ col0: '8:00PM - 9:00PM', col1: prioritize(data, 1, row, locations, time, day), col2: prioritize(data, 2, row, locations, time, day), col3: prioritize(data, 3, row, locations, time, day), col4: prioritize(data, 4, row, locations, time, day), col5: prioritize(data, 5, row, locations, time, day), col6: prioritize(data, 6, row, locations, time, day), col7: prioritize(data, 7, row, locations, time, day), col8: prioritize(data, 8, row, locations, time, day) });
+    } else if (row === 26) {
+      let day = 'Tuesdays';
+      let time = '9:00 PM';
+      worksheet.addRow({ col0: '9:00PM - 10:00PM', col1: prioritize(data, 1, row, locations, time, day), col2: prioritize(data, 2, row, locations, time, day), col3: prioritize(data, 3, row, locations, time, day), col4: prioritize(data, 4, row, locations, time, day), col5: prioritize(data, 5, row, locations, time, day), col6: prioritize(data, 6, row, locations, time, day), col7: prioritize(data, 7, row, locations, time, day), col8: prioritize(data, 8, row, locations, time, day) });
+    } else if (row === 27) {
+      worksheet.addRow({ col0: 'Thursday', col1: '', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '', col11: '', col12: '', col13: '', col14: '', col15: ''});
+    } else if (row === 28) {
+      let day = 'Thursdays';
+      let time = '8:00 PM';
+      worksheet.addRow({ col0: '8:00PM - 9:00PM', col1: prioritize(data, 1, row, locations, time, day), col2: prioritize(data, 2, row, locations, time, day), col3: prioritize(data, 3, row, locations, time, day), col4: prioritize(data, 4, row, locations, time, day), col5: prioritize(data, 5, row, locations, time, day), col6: prioritize(data, 6, row, locations, time, day), col7: prioritize(data, 7, row, locations, time, day), col8: prioritize(data, 8, row, locations, time, day) });
+    } else if (row === 29) {
+      let day = 'Thursdays';
+      let time = '9:00 PM';
+      worksheet.addRow({ col0: '9:00PM - 10:00PM', col1: prioritize(data, 1, row, locations, time, day), col2: prioritize(data, 2, row, locations, time, day), col3: prioritize(data, 3, row, locations, time, day), col4: prioritize(data, 4, row, locations, time, day), col5: prioritize(data, 5, row, locations, time, day), col6: prioritize(data, 6, row, locations, time, day), col7: prioritize(data, 7, row, locations, time, day), col8: prioritize(data, 8, row, locations, time, day) });
+    } else if (row === 30) {
+      worksheet.addRow({ col0: 'Friday', col1: '', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '', col11: '', col12: '', col13: '', col14: '', col15: ''});
+    } else if (row === 31) {
+      let day = 'Fridays';
+      let time = '8:00 PM';
+      worksheet.addRow({ col0: '8:00PM - 9:00PM', col1: prioritize(data, 1, row, locations, time, day), col2: prioritize(data, 2, row, locations, time, day), col3: prioritize(data, 3, row, locations, time, day), col4: prioritize(data, 4, row, locations, time, day), col5: prioritize(data, 5, row, locations, time, day), col6: prioritize(data, 6, row, locations, time, day), col7: prioritize(data, 7, row, locations, time, day), col8: prioritize(data, 8, row, locations, time, day) });
+    } else if (row === 32) {
+      let day = 'Fridays';
+      let time = '9:00 PM';
+      worksheet.addRow({ col0: '9:00PM - 10:00PM', col1: prioritize(data, 1, row, locations, time, day), col2: prioritize(data, 2, row, locations, time, day), col3: prioritize(data, 3, row, locations, time, day), col4: prioritize(data, 4, row, locations, time, day), col5: prioritize(data, 5, row, locations, time, day), col6: prioritize(data, 6, row, locations, time, day), col7: prioritize(data, 7, row, locations, time, day), col8: prioritize(data, 8, row, locations, time, day) });
+    } else if (row === 33) {
+      worksheet.addRow({ col0: ''});
+    } else if (row === 34) {
+      worksheet.addRow({ col0: ''});
+    } else if (row === 35) {
+      worksheet.addRow({ col0: '', col1: 'Location'});
+    } else if (row === 36) {
+      worksheet.addRow({ col0: '', col1: 'Time'});
+    } else if (row === 37) {
+      worksheet.addRow({ col0: '', col1: 'Days'});
+    } else if (row === 38) {
+      worksheet.addRow({ col0: '', col1: 'Volt Volleyball'});
     }
     return;
   };
@@ -225,21 +307,21 @@ router.get("/export", async (req, res) => {
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_time === time);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_days === day);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Location', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         // here we check what the oldest request within the given parameters is
@@ -265,14 +347,14 @@ router.get("/export", async (req, res) => {
         availableOptions = availableOptions.filter((val) => val.preferred_days === day);
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_time === time);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         if (rowNum < 19) {
@@ -283,7 +365,7 @@ router.get("/export", async (req, res) => {
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Days', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         // here we check what the oldest request within the given parameters is
@@ -320,14 +402,14 @@ router.get("/export", async (req, res) => {
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         availableOptions = availableOptions.filter((val) => val.preferred_days === day);
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         if (rowNum < 19) {
@@ -338,7 +420,7 @@ router.get("/export", async (req, res) => {
 
         // check if there is only one option left
         if(availableOptions.length === 1) {
-          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day)) {return reply};
+          if(reply = checkForOne(availableOptions[0], data, 'Time', time, colNum, locations, midSch, day, rowNum)) {return reply};
         };
 
         // here we check what the oldest request within the given parameters is
@@ -360,7 +442,7 @@ router.get("/export", async (req, res) => {
     }
   }
 
-  function checkForOne(availableOption, data, type, time, colNum, locations, midSch, day) {
+  function checkForOne(availableOption, data, type, time, colNum, locations, midSch, day, rowNum) {
     if (type == 'Days') {
       for (let request of data) {
         if(rowNum < 19) {
@@ -393,7 +475,7 @@ router.get("/export", async (req, res) => {
       for (let request of data) {
         if(availableOption.id === request.id && availableOption.preferred_time === time && availableOption.preferred_days === day) {
           request.excel = 'used';
-          return `${availableOption.team_org_event} (${availableOption.coach_contact_first_name} ${availableOption.coach_contact_last_name[0]}) t`;
+          return `${availableOption.team_org_event} (${availableOption.coach_contact_first_name} ${availableOption.coach_contact_last_name[0]}) l`;
         }
       }
     }
