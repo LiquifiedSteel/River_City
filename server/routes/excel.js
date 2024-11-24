@@ -8,10 +8,8 @@ router.get("/export", async (req, res) => {
     const queryText = `SELECT * FROM "Requests" ORDER BY "id" ASC`;
     let { rows: requestData } = await pool.query(queryText);
 
-
     requestData = requestData.filter((data) => {
-      // Convert data.end_date to a Date object
-      const endDate = new Date(data.end_date);
+      const endDate = new Date(data.end_date); // Convert data.end_date to a Date object
       const currentDate = new Date(); // Get the current date and time
       
       // Compare the end_date to the current date
@@ -105,76 +103,280 @@ router.get("/export", async (req, res) => {
 
   //===================================================Seperator Between Sheets=============================================================
     let collection = []
-    for (let i=1; i <= 12; i++) {
-      if (i === 1){
+    for (let i=0; i < 12; i++) {
+      if (i === 0){
         mon = 'Jan'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '01' || request.end_date.slice(5, 7) === '01');
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for January 1st of the year of the startDate or endDate
+          const januaryFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Jan 1st of startDate year
+          const januaryFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Jan 1st of endDate year
+        
+          // Check if startDate or endDate is in January
+          const isStartInJanuary = startDate.getMonth() === i;
+          const isEndInJanuary = endDate.getMonth() === i;
+        
+          // Check if January is between start and end dates
+          const isJanuaryBetween = (januaryFirstStartYear >= startDate && januaryFirstStartYear <= endDate) || 
+                                   (januaryFirstEndYear >= startDate && januaryFirstEndYear <= endDate);
+        
+          return isStartInJanuary || isEndInJanuary || isJanuaryBetween;
+        });
+        if (collection.length > 0) {
+          buildGymSheet(collection, mon);
+        }
+      } else if (i === 1){
+        mon = 'Feb'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for February 1st of the year of the startDate or endDate
+          const februaryFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Feb 1st of startDate year
+          const februaryFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Feb 1st of endDate year
+        
+          // Check if startDate or endDate is in February
+          const isStartInFebruary = startDate.getMonth() === i;
+          const isEndInFebruary = endDate.getMonth() === i;
+        
+          // Check if February is between start and end dates
+          const isFebruaryBetween = (februaryFirstStartYear >= startDate && februaryFirstStartYear <= endDate) || 
+                                   (februaryFirstEndYear >= startDate && februaryFirstEndYear <= endDate);
+        
+          return isStartInFebruary || isEndInFebruary || isFebruaryBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 2){
-        mon = 'Feb'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '02' || request.end_date.slice(5, 7) === '02');
+        mon = 'Mar'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for March 1st of the year of the startDate or endDate
+          const marchFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Mar 1st of startDate year
+          const marchFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Mar 1st of endDate year
+        
+          // Check if startDate or endDate is in March
+          const isStartInMarch = startDate.getMonth() === i;
+          const isEndInMarch = endDate.getMonth() === i;
+        
+          // Check if March is between start and end dates
+          const isMarchBetween = (marchFirstStartYear >= startDate && marchFirstStartYear <= endDate) || 
+                                   (marchFirstEndYear >= startDate && marchFirstEndYear <= endDate);
+        
+          return isStartInMarch || isEndInMarch || isMarchBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 3){
-        mon = 'Mar'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '03' || request.end_date.slice(5, 7) === '03');
+        mon = 'Apr'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for April 1st of the year of the startDate or endDate
+          const aprilFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Apr 1st of startDate year
+          const aprilFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Apr 1st of endDate year
+        
+          // Check if startDate or endDate is in April
+          const isStartInApril = startDate.getMonth() === i;
+          const isEndInApril = endDate.getMonth() === i;
+        
+          // Check if April is between start and end dates
+          const isAprilBetween = (aprilFirstStartYear >= startDate && aprilFirstStartYear <= endDate) || 
+                                   (aprilFirstEndYear >= startDate && aprilFirstEndYear <= endDate);
+        
+          return isStartInApril || isEndInApril || isAprilBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 4){
-        mon = 'Apr'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '04' || request.end_date.slice(5, 7) === '04');
+        mon = 'May'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for May 1st of the year of the startDate or endDate
+          const mayFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // May 1st of startDate year
+          const mayFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // May 1st of endDate year
+        
+          // Check if startDate or endDate is in May
+          const isStartInMay = startDate.getMonth() === i;
+          const isEndInMay = endDate.getMonth() === i;
+        
+          // Check if May is between start and end dates
+          const isMayBetween = (mayFirstStartYear >= startDate && mayFirstStartYear <= endDate) || 
+                                   (mayFirstEndYear >= startDate && mayFirstEndYear <= endDate);
+        
+          return isStartInMay || isEndInMay || isMayBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 5){
-        mon = 'May'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '05' || request.end_date.slice(5, 7) === '05');
+        mon = 'Jun'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for June 1st of the year of the startDate or endDate
+          const juneFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Jun 1st of startDate year
+          const juneFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Jun 1st of endDate year
+        
+          // Check if startDate or endDate is in June
+          const isStartInJune = startDate.getMonth() === i;
+          const isEndInJune = endDate.getMonth() === i;
+        
+          // Check if June is between start and end dates
+          const isJuneBetween = (juneFirstStartYear >= startDate && juneFirstStartYear <= endDate) || 
+                                   (juneFirstEndYear >= startDate && juneFirstEndYear <= endDate);
+        
+          return isStartInJune || isEndInJune || isJuneBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 6){
-        mon = 'Jun'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '06' || request.end_date.slice(5, 7) === '06');
+        mon = 'Jul'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for July 1st of the year of the startDate or endDate
+          const julyFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Jul 1st of startDate year
+          const julyFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Jul 1st of endDate year
+        
+          // Check if startDate or endDate is in July
+          const isStartInJuly = startDate.getMonth() === i;
+          const isEndInJuly = endDate.getMonth() === i;
+        
+          // Check if July is between start and end dates
+          const isJulyBetween = (julyFirstStartYear >= startDate && julyFirstStartYear <= endDate) || 
+                                   (julyFirstEndYear >= startDate && julyFirstEndYear <= endDate);
+        
+          return isStartInJuly || isEndInJuly || isJulyBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 7){
-        mon = 'Jul'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '07' || request.end_date.slice(5, 7) === '07');
+        mon = 'Aug'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for August 1st of the year of the startDate or endDate
+          const augustFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Aug 1st of startDate year
+          const augustFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Aug 1st of endDate year
+        
+          // Check if startDate or endDate is in August
+          const isStartInAugust = startDate.getMonth() === i;
+          const isEndInAugust = endDate.getMonth() === i;
+        
+          // Check if August is between start and end dates
+          const isAugustBetween = (augustFirstStartYear >= startDate && augustFirstStartYear <= endDate) || 
+                                   (augustFirstEndYear >= startDate && augustFirstEndYear <= endDate);
+        
+          return isStartInAugust || isEndInAugust || isAugustBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 8){
-        mon = 'Aug'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '08' || request.end_date.slice(5, 7) === '08');
+        mon = 'Sep'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for September 1st of the year of the startDate or endDate
+          const septemberFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Sep 1st of startDate year
+          const septemberFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Sep 1st of endDate year
+        
+          // Check if startDate or endDate is in September
+          const isStartInSeptember = startDate.getMonth() === i;
+          const isEndInSeptember = endDate.getMonth() === i;
+        
+          // Check if September is between start and end dates
+          const isSeptemberBetween = (septemberFirstStartYear >= startDate && septemberFirstStartYear <= endDate) || 
+                                   (septemberFirstEndYear >= startDate && septemberFirstEndYear <= endDate);
+        
+          return isStartInSeptember || isEndInSeptember || isSeptemberBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 9){
-        mon = 'Sep'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '09' || request.end_date.slice(5, 7) === '09');
+        mon = 'Oct'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for October 1st of the year of the startDate or endDate
+          const octoberFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Oct 1st of startDate year
+          const octoberFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Oct 1st of endDate year
+        
+          // Check if startDate or endDate is in October
+          const isStartInOctober = startDate.getMonth() === i;
+          const isEndInOctober = endDate.getMonth() === i;
+        
+          // Check if October is between start and end dates
+          const isOctoberBetween = (octoberFirstStartYear >= startDate && octoberFirstStartYear <= endDate) || 
+                                   (octoberFirstEndYear >= startDate && octoberFirstEndYear <= endDate);
+        
+          return isStartInOctober || isEndInOctober || isOctoberBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 10){
-        mon = 'Oct'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '10' || request.end_date.slice(5, 7) === '10');
+        mon = 'Nov'
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for November 1st of the year of the startDate or endDate
+          const novemberFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Nov 1st of startDate year
+          const novemberFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Nov 1st of endDate year
+        
+          // Check if startDate or endDate is in November
+          const isStartInNovember = startDate.getMonth() === i;
+          const isEndInNovember = endDate.getMonth() === i;
+        
+          // Check if November is between start and end dates
+          const isNovemberBetween = (novemberFirstStartYear >= startDate && novemberFirstStartYear <= endDate) || 
+                                   (novemberFirstEndYear >= startDate && novemberFirstEndYear <= endDate);
+        
+          return isStartInNovember || isEndInNovember || isNovemberBetween;
+        });
         if (collection.length > 0) {
           buildGymSheet(collection, mon);
         }
       } else if (i === 11){
-        mon = 'Nov'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '11' || request.end_date.slice(5, 7) === '11');
-        if (collection.length > 0) {
-          buildGymSheet(collection, mon);
-        }
-      } else if (i === 12){
         mon = 'Dec'
-        collection = requestData.filter((request) => request.start_date.slice(5, 7) === '12' || request.end_date.slice(5, 7) === '12');
+        collection = requestData.filter((request) => {
+          const startDate = new Date(request.start_date);
+          const endDate = new Date(request.end_date);
+        
+          // Create a date for December 1st of the year of the startDate or endDate
+          const decemberFirstStartYear = new Date(startDate.getFullYear(), i, 1);  // Dec 1st of startDate year
+          const decemberFirstEndYear = new Date(endDate.getFullYear(), i, 1);  // Dec 1st of endDate year
+        
+          // Check if startDate or endDate is in December
+          const isStartInDecember = startDate.getMonth() === i;
+          const isEndInDecember = endDate.getMonth() === i;
+        
+          // Check if December is between start and end dates
+          const isDecemberBetween = (decemberFirstStartYear >= startDate && decemberFirstStartYear <= endDate) || 
+                                   (decemberFirstEndYear >= startDate && decemberFirstEndYear <= endDate);
+        
+          return isStartInDecember || isEndInDecember || isDecemberBetween;
+        });
         for(let item of collection) {
           if(item.excel === 'used') {
             item.excel = "unused";
@@ -258,7 +460,6 @@ router.get("/export", async (req, res) => {
       worksheet.getCell('A39').style.fill = {type: 'pattern', pattern: 'solid', fgColor: { argb: 'fff9b9ed' }};
 
 
-
       worksheet.eachRow((row, rowNumber) => {
         row.eachCell((cell, colNumber) => {
           if (cell.value.charAt(cell.value.length - 1) === 'l' && cell.value.charAt(cell.value.length - 2) === ' ') {
@@ -316,7 +517,6 @@ router.get("/export", async (req, res) => {
     console.error("Error exporting data to Excel:", error);
     res.status(500).send("Failed to export data to Excel");
   }
-
 
 
 
