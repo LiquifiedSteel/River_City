@@ -206,6 +206,10 @@ const AdminDataView = () => {
     (loc) => loc.id === request.preferred_location_secondary
   )?.name_of_Location;
 
+  const preferredSpace = Array.isArray(request.preferred_space)
+  ? request.preferred_space.join(", ")
+  : request.preferred_space;
+
   return (
     <Container fluid>
       <h2 css={headingStyle}>{heading}</h2>
@@ -240,6 +244,7 @@ const AdminDataView = () => {
   <Row>
     {renderField("Preferred Location (Primary)", primaryLocation)}
     {renderField("Preferred Location (Secondary)", secondaryLocation)}
+    {renderField("Preferred Space", preferredSpace)}
   </Row>
 </Card>
 
