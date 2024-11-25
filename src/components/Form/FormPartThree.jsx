@@ -26,7 +26,7 @@ const labelStyle = css`
 
 const descriptionStyle = css`
   font-size: 0.9rem;
-  color: #6c757d;
+  color: #E6E6E6;
 `;
 
 const buttonStyle = css`
