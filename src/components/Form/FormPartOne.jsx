@@ -23,7 +23,7 @@ const labelStyle = css`
 
 const descriptionStyle = css`
   font-size: 0.9rem;
-  color: #eeeeee;
+  color: #E6E6E6;
 `;
 
 const infoTextStyle = css`

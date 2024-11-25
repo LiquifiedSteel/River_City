@@ -24,7 +24,11 @@ const labelStyle = css`
 
 const descriptionStyle = css`
   font-size: 0.9rem;
-  color: #6c757d;
+  color: #E6E6E6;
+`;
+
+const checkBox = css`
+  margin-right: 4px;
 `;
 
 const buttonStyle = css`
@@ -203,11 +207,13 @@ const FormPartTwo = () => {
             Are 85% of Your Participants West Fargo Students?
           </label>
           <input
+          id="checkbox"
             type="checkbox"
             name="WF_students"
             checked={formValues.WF_students}
             className="form-check-input ms-2"
             onChange={handleChange}
+            css={checkBox}
           />
           <small css={descriptionStyle}>
             An event comprising at least 85% of WFPS students is eligible for a
