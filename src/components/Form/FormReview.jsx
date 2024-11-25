@@ -160,7 +160,6 @@ const ReviewPage = () => {
       ["Preferred Location", request.preferred_location_primary],
       ["Preferred Space", request.preferred_space],
       ["Priority", request.priority],
-      ["Event Description", request.event_description],
       ["Expected Attendance", request.expected_attendance],
       ["Preferred Days", request.preferred_days],
       ["Start Date", request.start_date],
@@ -169,17 +168,13 @@ const ReviewPage = () => {
       ["West Fargo Students?", request.wf_students ? "Yes" : "No"],
       ["Grade Level", request.grade_level],
       ["Team Roster", request.team_pdf],
-      [
-        "Renter Name",
-        `${request.renter_first_name || ""} ${request.renter_last_name || ""}`,
-      ],
+      ["Renter Name", `${request.renter_first_name || ""} ${request.renter_last_name || ""}`],
       ["Renter Address", request.renter_street_address],
       ["Renter City", request.renter_city],
       ["Renter State", request.renter_state],
       ["Renter ZIP", request.renter_zip],
       ["Renter Phone", request.renter_phone],
       ["Renter Email", request.renter_email],
-      ["Special Requests", request.special_requests],
       ["Rented Previously", request.rented_previously ? "Yes" : "No"],
       [
         "Respectful Use of Space Agreement",
@@ -265,10 +260,6 @@ const ReviewPage = () => {
       {/* Part Two */}
       <div css={cardStyle}>
         <h3 css={sectionTitleStyle}>Part Two: Event Details</h3>
-        <div css={fieldStyle}>
-          <span>Event Description:</span>{" "}
-          {formState.FormPartTwo.eventDescription}
-        </div>
         <div css={fieldStyle}>
           <span>Expected Attendance:</span>{" "}
           {formState.FormPartTwo.expected_attendance}
