@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Container, Table } from "react-bootstrap";
+import { Container, Table, Card } from "react-bootstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { css } from "@emotion/react";
 import { jsPDF } from "jspdf";
@@ -187,10 +187,62 @@ function AdminDashboard() {
     doc.save("AdminDataView.pdf");
   };
 
+  const calculateStats = (request) => {
+    const totalRequests = request.length;
+
+    const locationUsage = request.reduce((acc, req) => {
+      acc[req.preferred_location_primary] =
+        (acc[req.preferred_location_primary] || 0) + 1;
+      return acc;
+    }, {});
+
+    const mostRentedLocationId = Object.keys(locationUsage).reduce((a, b) =>
+      locationUsage[a] > locationUsage[b] ? a : b
+    );
+
+    const mostRentedLocation = locations.find(
+      (loc) => loc.id === parseInt(mostRentedLocationId)
+    )?.name_of_Location;
+
+    const spaceUsage = request.reduce((acc, req) => {
+      const spaces = req.preferred_space.split(", ");
+      spaces.forEach((space) => {
+        acc[space] = (acc[space] || 0) + 1;
+      });
+      return acc;
+    }, {});
+
+    const mostPopularSpace = Object.keys(spaceUsage).reduce((a, b) =>
+      spaceUsage[a] > spaceUsage[b] ? a : b
+    );
+
+    const totalAttendance = request.reduce((sum, req) => {
+      return sum + (parseInt(req.expected_attendance) || 0);
+    }, 0);
+
+    const averageAttendance =
+      totalRequests > 0 ? (totalAttendance / totalRequests).toFixed(2) : 0;
+
+    return {
+      totalRequests,
+      mostRentedLocation: mostRentedLocation || "N/A",
+      mostPopularSpace: mostPopularSpace || "N/A",
+      averageAttendance,
+    };
+  };
+
+  // const stats = calculateStats();
+
+  const renderField = (label, value) => (
+    <Col xs={12} md={6} className="mb-3">
+      <span css={labelStyle}>{label}: </span>
+      <span css={fieldValueStyle}>{value || "N/A"}</span>
+    </Col>
+  );
+
   return (
     <>
       <Container>
-        <h1 css={headerStyle}>Welcome, {user.username}</h1>
         <h2 css={headerStyle}>Admin Dashboard</h2>
         <Table striped bordered hover css={tableStyle}>
           <thead>
@@ -244,6 +296,15 @@ function AdminDashboard() {
             ))}
           </tbody>
         </Table>
+        {/* <Card css={statsCardStyle}>
+        <h3 css={sectionTitleStyle}>Statistics</h3>
+        <Row>
+          {renderField("Total Requests", stats.totalRequests)}
+          {renderField("Most Rented Location", stats.mostRentedLocation)}
+          {renderField("Most Popular Space", stats.mostPopularSpace)}
+          {renderField("Average Attendance", stats.averageAttendance)}
+        </Row>
+      </Card> */}
         <div className="d-flex justify-content-center mt-4">
           <ExportExcelButton />
         </div>
