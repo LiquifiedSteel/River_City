@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { submitForm } from "../../redux/reducers/form.reducer";
 import { useHistory } from "react-router-dom";
 import { css } from "@emotion/react";
+import axios from "axios";
 import jsPDF from "jspdf";
 import { useState, useEffect } from "react";
 const containerStyle = css`
@@ -79,9 +81,22 @@ const ReviewPage = () => {
   const formState = useSelector((state) => state.form);
   const [heading, setHeading] = useState("Review Your Submission");
   const [locations, setLocations] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
-    document.title = "Rental Request Review";
+    document.title = "Review Request";
+  
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get(`/api/application/locations`);
+        setLocations(response.data);
+        console.log("Fetched Locations:", response.data);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+  
+    fetchLocations();
   }, []);
 
   const handleSubmit = () => {
@@ -94,6 +109,27 @@ const ReviewPage = () => {
     );
     history.push("/submission-success");
   };
+
+  const getLocationName = (locations, locationId) => {
+    if (!locationId) return "N/A"; 
+    const location = locations.find((loc) => loc.id === parseInt(locationId, 10));
+    return location ? location.name_of_Location : "N/A";
+  };
+
+  const primaryLocation = getLocationName(
+    locations,
+    formState.FormPartOne?.preferred_location_primary
+  );
+
+  const secondaryLocation = getLocationName(
+    locations,
+    formState.FormPartOne?.preferred_location_secondary
+  );
+
+  console.log("Primary Location ID:", formState.FormPartOne?.preferred_location_primary);
+  console.log("Secondary Location ID:", formState.FormPartOne?.preferred_location_secondary);
+  console.log("Primary Location Name:", primaryLocation);
+  console.log("Secondary Location Name:", secondaryLocation);
 
   const generatePdfContent = (doc) => {
     const request = {
@@ -167,6 +203,10 @@ const ReviewPage = () => {
     doc.save("AdminDataView.pdf");
   };
 
+  console.log(locations, formState)
+
+ 
+
   return (
     <div css={containerStyle} className="shadow">
       <h2 className="text-center mb-4" css={headerStyle}>Review Your Submission</h2>
@@ -207,11 +247,11 @@ const ReviewPage = () => {
         </div>
         <div css={fieldStyle}>
           <span>Primary Location:</span>{" "}
-          {formState.FormPartOne.preferred_location_primary}
+          {primaryLocation}
         </div>
         <div css={fieldStyle}>
           <span>Secondary Location:</span>{" "}
-          {formState.FormPartOne.preferred_location_secondary}
+          {secondaryLocation}
         </div>
         <div css={fieldStyle}>
           <span>Preferred Space:</span>{" "}
