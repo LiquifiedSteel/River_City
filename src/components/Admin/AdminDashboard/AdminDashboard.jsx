@@ -6,6 +6,8 @@ import { Container, Table, Card } from "react-bootstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { css } from "@emotion/react";
 import { jsPDF } from "jspdf";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 import ExportExcelButton from "../../ExcelExport/ExcelExport";
 
@@ -253,9 +255,6 @@ function AdminDashboard() {
     <>
       <Container>
         <h1 css={headerStyle}>Admin Dashboard</h1>
-        <h5 css={infoStyle}>View more information to see all data in that request.</h5>
-        <h5 css={infoStyle}>Click the edit button to update request details like location or date.</h5>
-        <h5 css={infoStyle}>Download as a PDF if you need to send the information for that request to someone else.</h5>
         <Table striped bordered hover css={tableStyle}>
           <thead>
             <tr>
@@ -280,47 +279,80 @@ function AdminDashboard() {
                 <td>{app.coach_contact_email}</td>
                 <td>{app.event_type}</td>
                 <td>
-                  <button
-                    css={customButtonStyle}
-                    className="view"
-                    onClick={() =>
-                      history.push(`/admin-data-view?requestID=${app.id}`)
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>Click to view full details of this request.</Tooltip>
                     }
                   >
-                    View
-                  </button>
+                    <button
+                      css={customButtonStyle}
+                      className="view"
+                      onClick={() =>
+                        history.push(`/admin-data-view?requestID=${app.id}`)
+                      }
+                    >
+                      View
+                    </button>
+                  </OverlayTrigger>
                 </td>
                 <td>
-                  <button
-                    css={customButtonStyle}
-                    className="edit"
-                    onClick={() =>
-                      history.push(`/admin-form-editor?requestID=${app.id}`)
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>
+                        Click to edit the details of this request.
+                      </Tooltip>
                     }
                   >
-                    Edit
-                  </button>
+                    <button
+                      css={customButtonStyle}
+                      className="edit"
+                      onClick={() =>
+                        history.push(`/admin-form-editor?requestID=${app.id}`)
+                      }
+                    >
+                      Edit
+                    </button>
+                  </OverlayTrigger>
                 </td>
-                <td><button css={buttonStyle} onClick={() => handleDownload(app)} className="mx-2">
-                  Download PDF
-                </button></td>
+                <td>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>
+                        Download this request as a PDF for sharing or records.
+                      </Tooltip>
+                    }
+                  >
+                    <button
+                      css={buttonStyle}
+                      onClick={() => handleDownload(app)}
+                      className="mx-2"
+                    >
+                      Download PDF
+                    </button>
+                  </OverlayTrigger>
+                </td>
               </tr>
             ))}
           </tbody>
         </Table>
-        {/* <Card css={statsCardStyle}>
-        <h3 css={sectionTitleStyle}>Statistics</h3>
-        <Row>
-          {renderField("Total Requests", stats.totalRequests)}
-          {renderField("Most Rented Location", stats.mostRentedLocation)}
-          {renderField("Most Popular Space", stats.mostPopularSpace)}
-          {renderField("Average Attendance", stats.averageAttendance)}
-        </Row>
-      </Card> */}
-        <h6 css={infoStyle}>Download an Excel file with data on all requests, including a sheet for each month's schedule, prioritized events, and related data.</h6>
         <div className="d-flex justify-content-center mt-4">
-          <ExportExcelButton />
-        </div>
+  <OverlayTrigger
+    placement="top"
+    overlay={
+      <Tooltip>
+        Export all request data as an Excel file for easier analysis and
+        sharing.
+      </Tooltip>
+    }
+  >
+    <div>
+      <ExportExcelButton />
+    </div>
+  </OverlayTrigger>
+</div>
       </Container>
     </>
   );
