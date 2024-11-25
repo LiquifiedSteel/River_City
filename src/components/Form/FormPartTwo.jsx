@@ -133,15 +133,6 @@ const FormPartTwo = () => {
       <h2 className="text-center mb-4">Event Details</h2>
 
       <form onSubmit={handleNext}>
-        <div className="mb-3">
-          <label css={labelStyle}>Event Description</label>
-          <textarea
-            name="event_description"
-            value={formValues.event_description}
-            className="form-control"
-            onChange={handleChange}
-          />
-        </div>
 
         <div className="mb-3">
           <label css={labelStyle}>Expected Attendance</label>
