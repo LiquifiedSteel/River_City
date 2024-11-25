@@ -283,8 +283,9 @@ const AdminFormEditor = () => {
             <option value="">Select Event Type</option>
             <option value="Basketball">Basketball</option>
             <option value="Volleyball">Volleyball</option>
+            <option value="Scouts">Scouts</option>
             <option value="Dance">Dance</option>
-            <option value="Others">Others</option>
+            <option value="Other">Other</option>
           </select>
 
           <label css={labelStyle}>Preferred Start Time</label>
