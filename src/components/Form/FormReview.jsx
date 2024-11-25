@@ -160,7 +160,6 @@ const ReviewPage = () => {
       ["Preferred Location", request.preferred_location_primary],
       ["Preferred Space", request.preferred_space],
       ["Priority", request.priority],
-      ["Event Description", request.event_description],
       ["Expected Attendance", request.expected_attendance],
       ["Preferred Days", request.preferred_days],
       ["Start Date", request.start_date],
@@ -265,10 +264,6 @@ const ReviewPage = () => {
       {/* Part Two */}
       <div css={cardStyle}>
         <h3 css={sectionTitleStyle}>Part Two: Event Details</h3>
-        <div css={fieldStyle}>
-          <span>Event Description:</span>{" "}
-          {formState.FormPartTwo.eventDescription}
-        </div>
         <div css={fieldStyle}>
           <span>Expected Attendance:</span>{" "}
           {formState.FormPartTwo.expected_attendance}
