@@ -16,6 +16,15 @@ const headerStyle = css`
   font-size: 2rem;
 `;
 
+const infoStyle = css`
+  margin: 20px 5vw;
+  font-size: 1rem;
+  background-color: lightgray;
+  color: black;
+  padding: 1rem;
+  border-radius: 8px;
+`;
+
 const tableStyle = css`
   margin-top: 20px;
 
@@ -190,8 +199,10 @@ function AdminDashboard() {
   return (
     <>
       <Container>
-        <h1 css={headerStyle}>Welcome, {user.username}</h1>
-        <h2 css={headerStyle}>Admin Dashboard</h2>
+        <h1 css={headerStyle}>Admin Dashboard</h1>
+        <h5 css={infoStyle}>View more information to see all data in that request.</h5>
+        <h5 css={infoStyle}>Click the edit button to update request details like location or date.</h5>
+        <h5 css={infoStyle}>Download as a PDF if you need to send the information for that request to someone else.</h5>
         <Table striped bordered hover css={tableStyle}>
           <thead>
             <tr>
@@ -201,7 +212,7 @@ function AdminDashboard() {
               <th>Email</th>
               <th>Event Type</th>
               <th>More Information</th>
-              <th>Actions</th>
+              <th>Edit</th>
               <th>Download</th>
             </tr>
           </thead>
@@ -244,6 +255,7 @@ function AdminDashboard() {
             ))}
           </tbody>
         </Table>
+        <h6 css={infoStyle}>Download an Excel file with data on all requests, including a sheet for each month's schedule, prioritized events, and related data.</h6>
         <div className="d-flex justify-content-center mt-4">
           <ExportExcelButton />
         </div>
