@@ -5,6 +5,7 @@ import axios from "axios";
 import { jsPDF } from "jspdf";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { css } from "@emotion/react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const headingStyle = css`
   text-align: center;
@@ -12,6 +13,34 @@ const headingStyle = css`
   font-weight: bold;
   font-size: 2.5rem;
   color: #2c3e50;
+`;
+
+const customButtonStyle = css`
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.view {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+
+  &.view:hover {
+    background-color: #138496;
+  }
+
+  &.edit {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  &.edit:hover {
+    background-color: #e0a800;
+  }
 `;
 
 const cardStyle = css`
@@ -59,10 +88,13 @@ const AdminDataView = () => {
   const [request, setRequest] = useState({});
   const [locations, setLocations] = useState([]);
   const location = useLocation();
+  const history = useHistory();
   const requestID = new URLSearchParams(location.search).get("requestID");
  
   useEffect(() => {
     document.title = "View Request Data";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     const fetchRequest = async () => {
       try {
         const response = await axios.get(`/api/application/${requestID}`);
@@ -122,7 +154,6 @@ const AdminDataView = () => {
       ["Preferred Location (Secondary)", secondaryLocation],
       ["Preferred Space", preferredSpace],
       ["Priority", request.priority],
-      ["Event Description", request.event_description],
       ["Expected Attendance", request.expected_attendance],
       ["Preferred Days", request.preferred_days],
       ["Start Date", request.start_date],
@@ -138,7 +169,6 @@ const AdminDataView = () => {
       ["Renter ZIP", request.renter_zip],
       ["Renter Phone", request.renter_phone],
       ["Renter Email", request.renter_email],
-      ["Special Requests", request.special_requests],
       ["Rented Previously", request.rented_previously ? "Yes" : "No"],
       ["Respectful Use of Space Agreement", request.agree_to_respectful_use_of_space ? "Yes" : "No"],
       ["Invoice Payment Agreement", request.agree_to_invoice_payment_process ? "Yes" : "No"],
@@ -268,12 +298,24 @@ const AdminDataView = () => {
       </Card>
 
       <div className="d-flex justify-content-center mt-4">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => history.push(`/admin-dashboard`)}
+          css={buttonStyle}
+        >
+          Back
+        </button>
         <button css={buttonStyle} onClick={handleDownload} className="mx-2">
           Download PDF
         </button>
-        {/* <button css={buttonStyle} onClick={handleSendByEmail} className="mx-2">
-          Send by Email
-        </button> */}
+        <button
+          css={customButtonStyle}
+          className="edit"
+          onClick={() => history.push(`/admin-form-editor?requestID=${requestID}`)}
+        >
+          Edit
+        </button>
       </div>
     </Container>
   );

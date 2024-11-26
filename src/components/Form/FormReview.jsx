@@ -85,6 +85,7 @@ const ReviewPage = () => {
 
   useEffect(() => {
     document.title = "Review Request";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   
     const fetchLocations = async () => {
       try {
@@ -168,17 +169,13 @@ const ReviewPage = () => {
       ["West Fargo Students?", request.wf_students ? "Yes" : "No"],
       ["Grade Level", request.grade_level],
       ["Team Roster", request.team_pdf],
-      [
-        "Renter Name",
-        `${request.renter_first_name || ""} ${request.renter_last_name || ""}`,
-      ],
+      ["Renter Name", `${request.renter_first_name || ""} ${request.renter_last_name || ""}`],
       ["Renter Address", request.renter_street_address],
       ["Renter City", request.renter_city],
       ["Renter State", request.renter_state],
       ["Renter ZIP", request.renter_zip],
       ["Renter Phone", request.renter_phone],
       ["Renter Email", request.renter_email],
-      ["Special Requests", request.special_requests],
       ["Rented Previously", request.rented_previously ? "Yes" : "No"],
       [
         "Respectful Use of Space Agreement",
