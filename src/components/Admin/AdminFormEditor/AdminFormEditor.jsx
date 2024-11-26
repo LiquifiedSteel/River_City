@@ -107,6 +107,8 @@ const AdminFormEditor = () => {
 
   useEffect(() => {
     document.title = "Editing Request";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     const fetchRequest = async () => {
       try {
         const response = await axios.get(`/api/application/${requestID}`);

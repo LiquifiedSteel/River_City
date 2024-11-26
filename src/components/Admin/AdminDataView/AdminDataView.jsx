@@ -93,6 +93,8 @@ const AdminDataView = () => {
  
   useEffect(() => {
     document.title = "View Request Data";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     const fetchRequest = async () => {
       try {
         const response = await axios.get(`/api/application/${requestID}`);

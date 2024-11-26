@@ -64,6 +64,7 @@ const FormPartThree = () => {
 
   useEffect(() => {
     document.title = "Rental Request Form";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handleChange = (e) => {

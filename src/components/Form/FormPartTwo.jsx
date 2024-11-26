@@ -65,6 +65,13 @@ const FormPartTwo = () => {
 
   useEffect(() => {
     document.title = "Rental Request Form";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    if(formPartTwo.team_pdf) {
+      console.log("running", formPartTwo.team_pdf)
+      setTeamPdf(formPartTwo.teamPdf);
+    }
+    console.log(teamPdf);
   }, []);
 
   const handleChange = (e) => {
@@ -230,14 +237,22 @@ const FormPartTwo = () => {
                 </button>
               </p>
 
-              {teamPdf && (
+              {teamPdf ? 
                 <p className="text-success mt-2">
                   Uploaded:{" "}
                   <a href={teamPdf} target="_blank" rel="noopener noreferrer">
                     View File
                   </a>
                 </p>
-              )}
+                :
+                formPartTwo.team_pdf && 
+                  <p className="text-success mt-2">
+                    Uploaded:{" "}
+                    <a href={formPartTwo.team_pdf} target="_blank" rel="noopener noreferrer">
+                      View File
+                    </a>
+                  </p>
+              }
               <small css={descriptionStyle}>
                 A student discount is available if a roster meeting the requirements
                 is provided.
@@ -246,17 +261,6 @@ const FormPartTwo = () => {
           </>
           :
           <>
-            <div className="mb-3 hide85 hide85True">
-              <label css={labelStyle}>Grade Level *</label>
-              <input
-                type="text"
-                name="grade_level"
-                value={formValues.grade_level}
-                className="form-control"
-                onChange={handleChange}
-              />
-            </div>
-
             <div className="mb-3 hide85 hide85True">
               <label css={labelStyle}>
                 Team Roster (Provide Student Name and School) *
@@ -269,19 +273,6 @@ const FormPartTwo = () => {
                   Pick File
                 </button>
               </p>
-
-              {teamPdf && (
-                <p className="text-success mt-2">
-                  Uploaded:{" "}
-                  <a href={teamPdf} target="_blank" rel="noopener noreferrer">
-                    View File
-                  </a>
-                </p>
-              )}
-              <small css={descriptionStyle}>
-                A student discount is available if a roster meeting the requirements
-                is provided.
-              </small>
             </div>
           </>
         }

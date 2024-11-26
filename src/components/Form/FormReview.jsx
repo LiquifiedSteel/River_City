@@ -85,6 +85,7 @@ const ReviewPage = () => {
 
   useEffect(() => {
     document.title = "Review Request";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   
     const fetchLocations = async () => {
       try {

@@ -57,6 +57,7 @@ const SuccessPage = () => {
 
   useEffect(() => {
     document.title = "Submission Success";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handleRedirect = () => {
