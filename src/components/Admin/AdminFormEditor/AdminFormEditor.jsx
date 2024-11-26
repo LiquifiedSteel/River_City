@@ -108,7 +108,7 @@ const AdminFormEditor = () => {
   useEffect(() => {
     document.title = "Editing Request";
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
+
     const fetchRequest = async () => {
       try {
         const response = await axios.get(`/api/application/${requestID}`);
@@ -345,6 +345,21 @@ const AdminFormEditor = () => {
             onChange={handleChange}
             css={inputStyle}
           />
+
+          <label css={labelStyle}>Day(s) of the Week</label>
+          <select
+            name="preferred_days"
+            value={formValues.preferred_days || ""}
+            onChange={handleChange}
+            css={selectStyle}
+          >
+            <option value="Monday/Thursdays">Monday/Thursdays</option>
+            <option value="Tuesday/Fridays">Tuesday/Fridays</option>
+            <option value="Mondays">Mondays</option>
+            <option value="Tuesdays">Tuesdays</option>
+            <option value="Thursdays">Thursdays</option>
+            <option value="Fridays">Fridays</option>
+          </select>
         </div>
 
         {/* Location */}
