@@ -7,127 +7,158 @@ import { updateFormPartTwo } from "../../redux/reducers/form.reducer";
 import { css } from "@emotion/react";
 import axios from "axios";
 
+// ===============================================
+// ====== EMOTION STYLES FOR FORM COMPONENTS ======
+// ===============================================
+
+// === FORM CONTAINER ===
+// Styles for the main form container, defining layout, background color, and visual appearance.
 const formContainerStyle = css`
   max-width: 900px;
   margin: 40px auto;
   padding: 20px;
-  background: #205831;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: #f8f8f8;
+  background: #205831; // Dark green background for contrast
+  border-radius: 8px; // Rounded corners for modern design
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // Subtle shadow for depth
+  color: #f8f8f8; // Light text for readability
 `;
 
+// === FORM LABELS ===
+// Styles for form labels to ensure they are prominent and readable.
 const labelStyle = css`
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-weight: 600; // Bold font for emphasis
+  margin-bottom: 5px; // Space between label and input
 `;
 
+// === FORM DESCRIPTIONS ===
+// Styles for additional form descriptions or helper text.
 const descriptionStyle = css`
-  font-size: 0.9rem;
-  color: #E6E6E6;
+  font-size: 0.9rem; // Slightly smaller font for secondary text
+  color: #E6E6E6; // Subtle gray color to differentiate from primary text
 `;
 
+// === CHECKBOX ===
+// Specific styles for checkboxes to enhance spacing and alignment.
 const checkBox = css`
-  margin-right: 4px;
+  margin-right: 4px; // Space between checkbox and label
 `;
 
+// === BUTTON STYLE ===
+// Styles for buttons, including hover and focus states for better UX.
 const buttonStyle = css`
-  background-color: #ad9143;
-  color: #252525;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  text-align: center;
-  cursor: pointer;
-  width: auto;
-  max-width: 200px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #ad9143; // Gold-like background for standout appearance
+  color: #252525; // Dark text for good contrast
+  font-weight: bold; // Emphasized text for actions
+  border: none; // Removes default border for cleaner design
+  border-radius: 4px; // Smooth rounded corners
+  padding: 8px 16px; // Comfortable click area
+  font-size: 0.9rem; // Medium font size for readability
+  text-align: center; // Center text alignment
+  cursor: pointer; // Indicates interactivity
+  width: auto; // Dynamic width based on content
+  max-width: 200px; // Limit button size
+  transition: background-color 0.3s ease, transform 0.2s ease; // Smooth transitions
 
   &:hover {
-    background-color: #8c7634;
-    transform: translateY(-2px);
+    background-color: #8c7634; // Darker shade for hover effect
+    transform: translateY(-2px); // Subtle lift for hover feedback
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5);
+    outline: none; // Removes browser default outline
+    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5); // Glow effect for focus
   }
 `;
 
+// ===============================================
+// ====== FORM PART TWO COMPONENT LOGIC ======
+// ===============================================
 const FormPartTwo = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const formPartTwo = useSelector((state) => state.form.FormPartTwo);
-  const [teamPdf, setTeamPdf] = useState("");
-  const [formValues, setFormValues] = useState(formPartTwo);
+  // ====== HOOKS ======
+  const dispatch = useDispatch(); // Redux dispatch for updating form state
+  const history = useHistory(); // React Router history for navigation
+  const formPartTwo = useSelector((state) => state.form.FormPartTwo); // Redux state for form part two
+  const [teamPdf, setTeamPdf] = useState(""); // Stores the uploaded team PDF URL
+  const [formValues, setFormValues] = useState(formPartTwo); // Local state for form values
 
+  // ====== MOUNTING EFFECT ======
   useEffect(() => {
-    document.title = "Rental Request Form";
+    document.title = "Rental Request Form"; // Updates the document title when the component mounts
   }, []);
 
+  // ====== EVENT HANDLERS ======
+
+  // Handles input changes for text, select, and checkbox fields
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    // Toggles visibility for specific elements if the "WF_students" checkbox is toggled
     if (name === "WF_students") {
       let elements = document.querySelectorAll(".hide85");
       for (let element of elements) {
         element.classList.toggle("hide85True");
       }
     }
+
+    // Updates form values dynamically
     setFormValues({
       ...formValues,
       [name]: type === "checkbox" ? checked : value,
     });
   };
 
+  // Validates and proceeds to the next form step
   const handleNext = () => {
-    const dateFromTimestamp = new Date().getTime(); // grabs the timestamp for right now
-    const startDay = new Date(formValues.start_date).getTime(); // grabs the timestamp for the chosen start_date
+    const dateFromTimestamp = new Date().getTime(); // Current timestamp
+    const startDay = new Date(formValues.start_date).getTime(); // Start date timestamp
 
+    // Ensure the start date is at least 5 days from the current date
     if (dateFromTimestamp < startDay - 432000000) {
       if (formValues.end_date < formValues.start_date) {
-        alert("The end date of your event cannot be before the start date.");
+        alert("The end date of your event cannot be before the start date."); // Validation for date range
         return;
       } else {
-        const updatedValues = { ...formValues, team_pdf: teamPdf };
-        dispatch(updateFormPartTwo(updatedValues));
-        history.push("/form-part-three");
+        const updatedValues = { ...formValues, team_pdf: teamPdf }; // Append PDF URL to form data
+        dispatch(updateFormPartTwo(updatedValues)); // Dispatch updated form data to Redux
+        history.push("/form-part-three"); // Navigate to the next form part
       }
     } else {
       alert(
         "The Start Date of the event must be 5 or more days after the date you are submitting this request."
-      );
+      ); // Validation for start date timing
       return;
     }
   };
 
+  // Navigates back to the first form part
   const handleBack = () => {
-    history.push("/form-part-one");
+    history.push("/form-part-one"); // Navigate back to the previous step
   };
 
+  // Opens the Cloudinary widget for file upload
   const openWidget = (setter) => {
     if (window.cloudinary) {
       window.cloudinary
         .createUploadWidget(
           {
-            sources: ["local"],
-            cloudName: import.meta.env.VITE_CLOUDINARY_NAME,
-            uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+            sources: ["local"], // Restricts sources to local uploads
+            cloudName: import.meta.env.VITE_CLOUDINARY_NAME, // Cloudinary account name
+            uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET, // Upload preset for configuration
           },
           (error, result) => {
             if (!error && result && result.event === "success") {
-              setTeamPdf(result.info.secure_url);
-              console.log(result);
+              setTeamPdf(result.info.secure_url); // Save uploaded file URL
+              console.log(result); // Log the result for debugging
             }
           }
         )
-        .open();
+        .open(); // Open the widget
     } else {
-      console.error("Cloudinary widget is not loaded.");
+      console.error("Cloudinary widget is not loaded."); // Error handling for missing Cloudinary library
     }
   };
 
+  // ====== COMPONENT RETURN ======
   return (
     <div css={formContainerStyle} className="shadow">
       <h2 className="text-center mb-4">Event Details</h2>

@@ -9,87 +9,113 @@ import {
 import ReCAPTCHA from "react-google-recaptcha";
 import { css } from "@emotion/react";
 
+// ===============================================
+// ====== EMOTION STYLES FOR FORM COMPONENTS ======
+// ===============================================
+
+// === FORM CONTAINER ===
+// Defines layout and appearance for the main form container.
 const formContainerStyle = css`
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #205831;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: #f8f8f8;
+  max-width: 900px; // Restricts the container width to 900px
+  margin: 40px auto; // Centers the container with top/bottom margin
+  padding: 20px; // Inner spacing for content
+  background: #205831; // Green background for a clean, professional look
+  border-radius: 8px; // Rounded corners for modern UI
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // Subtle shadow for depth
+  color: #f8f8f8; // Light text for readability
 `;
 
+// === FORM LABELS ===
+// Styles for form labels to make them prominent and readable.
 const labelStyle = css`
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-weight: 600; // Bold font weight for emphasis
+  margin-bottom: 5px; // Space between the label and the input field
 `;
 
+// === FORM DESCRIPTIONS ===
+// Styles for additional helper text or descriptions in the form.
 const descriptionStyle = css`
-  font-size: 0.9rem;
-  color: #E6E6E6;
+  font-size: 0.9rem; // Slightly smaller font size for secondary text
+  color: #E6E6E6; // Soft gray color to distinguish from primary text
 `;
 
+// === BUTTON STYLE ===
+// Styles for buttons, including hover and focus effects.
 const buttonStyle = css`
-  background-color: #ad9143;
-  color: #252525;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  text-align: center;
-  cursor: pointer;
-  width: auto;
-  max-width: 200px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #ad9143; // Warm gold color for visibility
+  color: #252525; // Dark text for contrast
+  font-weight: bold; // Bold text for emphasis
+  border: none; // Removes default button border
+  border-radius: 4px; // Rounded corners for a smoother look
+  padding: 8px 16px; // Comfortable click area
+  font-size: 0.9rem; // Medium font size for readability
+  text-align: center; // Center-aligned button text
+  cursor: pointer; // Pointer cursor for interactivity
+  width: auto; // Dynamic width based on content
+  max-width: 200px; // Restricts button size
+  transition: background-color 0.3s ease, transform 0.2s ease; // Smooth transition effects
 
   &:hover {
-    background-color: #8c7634;
-    transform: translateY(-2px);
+    background-color: #8c7634; // Darker gold shade for hover effect
+    transform: translateY(-2px); // Subtle lift effect on hover
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5);
+    outline: none; // Removes browser default focus outline
+    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5); // Glow effect for focus
   }
 `;
 
+// ===============================================
+// ====== FORM PART THREE COMPONENT LOGIC ========
+// ===============================================
 const FormPartThree = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const [recaptchaValue, setRecaptchaValue] = useState(null);
-  const formPartThree = useSelector((state) => state.form.FormPartThree);
+  // ====== HOOKS ======
+  const dispatch = useDispatch(); // Redux dispatch to update form state
+  const history = useHistory(); // React Router history for navigation
+  const [recaptchaValue, setRecaptchaValue] = useState(null); // State for storing reCAPTCHA value
+  const formPartThree = useSelector((state) => state.form.FormPartThree); // Redux state for form part three
 
-  const [formValues, setFormValues] = useState(formPartThree);
+  const [formValues, setFormValues] = useState(formPartThree); // Local state for form values
 
+  // ====== MOUNTING EFFECT ======
   useEffect(() => {
-    document.title = "Rental Request Form";
+    document.title = "Rental Request Form"; // Set the document title on component mount
   }, []);
 
+  // ====== EVENT HANDLERS ======
+
+  // Handles input changes for text, select, and checkbox fields
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    // Dynamically updates form values based on input type
     const updatedValues = {
       ...formValues,
       [name]: type === "checkbox" ? checked : value,
     };
 
-    setFormValues(updatedValues);
-
-    dispatch(updateFormPartThree(updatedValues));
+    setFormValues(updatedValues); // Update local form state
+    dispatch(updateFormPartThree(updatedValues)); // Sync updated values to Redux
   };
 
+  // Navigates back to the second form part
   const handleBack = () => {
-    history.push("/form-part-two");
+    history.push("/form-part-two"); // Redirects to Form Part Two
   };
 
+  // Validates reCAPTCHA and proceeds to the next step
   const handleEnter = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevents default form submission
+
+    // Ensures reCAPTCHA is completed
     if (!recaptchaValue) {
-      alert("Please complete the reCAPTCHA");
+      alert("Please complete the reCAPTCHA"); // Alert for missing reCAPTCHA
       return;
     }
+
     try {
+      // Send reCAPTCHA token for server-side verification
       const response = await fetch("/api/application/verify-recaptcha", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -99,20 +125,22 @@ const FormPartThree = () => {
       const result = await response.json();
 
       if (result.success) {
-        history.push("/form-review");
+        history.push("/form-review"); // Navigate to form review on success
       } else {
-        alert("reCAPTCHA verification failed.");
+        alert("reCAPTCHA verification failed."); // Alert for verification failure
       }
     } catch (error) {
-      console.error("Error during reCAPTCHA verification:", error);
-      alert("Failed Recaptcha");
+      console.error("Error during reCAPTCHA verification:", error); // Log any errors
+      alert("Failed Recaptcha"); // Alert for unexpected errors
     }
   };
 
+  // Updates reCAPTCHA value when it changes
   const handleRecaptchaChange = (value) => {
-    setRecaptchaValue(value);
+    setRecaptchaValue(value); // Store reCAPTCHA value in state
   };
 
+  // ====== COMPONENT RETURN ======
   return (
     <div css={formContainerStyle} className="shadow">
       <h2 className="text-center mb-4">Additional Information</h2>

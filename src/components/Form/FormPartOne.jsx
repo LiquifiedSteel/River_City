@@ -6,101 +6,106 @@ import { updateFormPartOne } from "../../redux/reducers/form.reducer";
 import axios from "axios";
 import { css } from "@emotion/react";
 
-// ============================
-// ====== EMOTION STYLES ======
-// ============================
+// ===============================================
+// ====== EMOTION STYLES FOR FORM COMPONENTS ======
+// ===============================================
 
-
-// === FROM CONTAINER ===
-
+// === FORM CONTAINER ===
+// Styles for the outer form container, providing structure and aesthetic.
 const formContainerStyle = css`
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #205831; 
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: #f8f8f8; 
+  max-width: 900px; // Maximum width of the container
+  margin: 40px auto; // Centered on the page with vertical spacing
+  padding: 20px; // Padding for internal content spacing
+  background: #205831; // Deep green background for contrast
+  border-radius: 8px; // Smooth rounded corners
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // Subtle shadow for depth
+  color: #f8f8f8; // Light text color for readability
 `;
 
 // === FORM LABELS ===
+// Styles for form labels to ensure they stand out and are easy to read.
 const labelStyle = css`
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-weight: 600; // Bold text for emphasis
+  margin-bottom: 5px; // Space between the label and the input
 `;
 
 // === FORM DESCRIPTIONS ===
+// Styles for helper text or descriptions accompanying form fields.
 const descriptionStyle = css`
-  font-size: 0.9rem;
-  color: #E6E6E6;
+  font-size: 0.9rem; // Smaller font for secondary information
+  color: #E6E6E6; // Light gray for a subdued appearance
 `;
 
 // === INFO TEXT ===
+// Styles for informational paragraphs within the form.
 const infoTextStyle = css`
-  margin-bottom: 15px;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: #eeeeee;
+  margin-bottom: 15px; // Space between text blocks
+  font-size: 0.85rem; // Smaller, secondary font size
+  line-height: 1.5; // Line height for better readability
+  color: #eeeeee; // Very light gray for subtle contrast
 `;
 
 // === BUTTON CONTAINER ===
+// Styles for the container that holds buttons, ensuring proper alignment.
 const buttonContainerStyle = css`
-  display: flex;
-  justify-content: flex-start;
-  margin: 10px 0;
+  display: flex; // Aligns items in a row
+  justify-content: flex-start; // Aligns buttons to the left
+  margin: 10px 0; // Vertical spacing for the container
 `;
 
 // === BUTTON STYLE ===
+// Styles for buttons, including hover and focus states for better UX.
 const buttonStyle = css`
-  background-color: #ad9143;
-  color: #252525;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  text-align: center;
-  cursor: pointer;
-  width: auto;
-  max-width: 200px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #ad9143; // Warm gold color for visibility
+  color: #252525; // Dark text for readability
+  font-weight: bold; // Bold text for emphasis
+  border: none; // Removes default button border
+  border-radius: 4px; // Smooth, rounded corners
+  padding: 8px 16px; // Comfortable click area
+  font-size: 0.9rem; // Medium font size for readability
+  text-align: center; // Center-aligned text
+  cursor: pointer; // Pointer cursor for interactivity
+  width: auto; // Adapts width to content
+  max-width: 200px; // Limits button size
+  transition: background-color 0.3s ease, transform 0.2s ease; // Smooth transition effects
 
   &:hover {
-    background-color: #8c7634;
-    transform: translateY(-2px);
+    background-color: #8c7634; // Darker shade for hover effect
+    transform: translateY(-2px); // Subtle lift effect
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5);
+    outline: none; // Removes default outline
+    box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5); // Glow effect for focus
   }
 `;
+
 // ===============================================
 // ====== DISPATCH TO REDUX FIRST FORM PART ======
 // ===============================================
 const FormPartOne = () => {
   // ====== HOOKS ======
-  const dispatch = useDispatch(); // Redux dispatch for updating state
+  const dispatch = useDispatch(); // Redux dispatch for state updates
   const history = useHistory(); // React Router history for navigation
-  const formPartOne = useSelector((state) => state.form.FormPartOne); // Selecting initial form data from Redux
+  const formPartOne = useSelector((state) => state.form.FormPartOne); // Fetches initial form data from Redux
 
   // ====== STATE VARIABLES ======
-  const [location1, setLocation1] = useState(null); // Selected first location ID
-  const [location2, setLocation2] = useState(null); // Selected second location ID
-  const [locations, setLocations] = useState([]); // List of available locations
-  const [formValues, setFormValues] = useState(formPartOne); // Form input values, initialized from Redux state
+  const [location1, setLocation1] = useState(null); // Tracks primary location selection
+  const [location2, setLocation2] = useState(null); // Tracks secondary location selection
+  const [locations, setLocations] = useState([]); // Stores available locations fetched from API
+  const [formValues, setFormValues] = useState(formPartOne); // Tracks form field values, initialized from Redux state
 
   // ====== MOUNTING USE-EFFECT ======
   useEffect(() => {
-    document.title = "Rental Request Form"; // Update document title on mount
+    document.title = "Rental Request Form"; // Sets page title when the component mounts
 
-    // Fetch locations from API and set them in state
+    // Fetches location options from the API
     const fetchLocations = async () => {
       try {
         const response = await axios.get(`/api/application/locations`);
-        setLocations(response.data);
+        setLocations(response.data); // Updates state with fetched locations
       } catch (error) {
-        console.error("Error fetching locations:", error); // Log error if API call fails
+        console.error("Error fetching locations:", error); // Logs error if API call fails
       }
     };
 
@@ -109,49 +114,50 @@ const FormPartOne = () => {
 
   // ====== EVENT HANDLERS ======
 
-  // Handle text input changes for form fields
+  // Handles text input changes for form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value }); // Update formValues state dynamically
+    setFormValues({ ...formValues, [name]: value }); // Updates state dynamically based on field name
   };
 
-  // Handle checkbox group changes for multi-select fields
+  // Handles checkbox input changes for multi-select fields
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
     setFormValues({
       ...formValues,
       [name]: checked
-        ? [...(formValues[name] || []), value] // Add value to array if checked
-        : formValues[name].filter((v) => v !== value), // Remove value from array if unchecked
+        ? [...(formValues[name] || []), value] // Adds checked value to the array
+        : formValues[name].filter((v) => v !== value), // Removes unchecked value from the array
     });
   };
 
-  // Handle location1 selection changes
+  // Updates state with the selected primary location
   const handleLocation1 = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value }); // Update formValues with selected location
-    setLocation1(Number(value)); // Store numeric ID for first location
+    setFormValues({ ...formValues, [name]: value }); // Updates form values
+    setLocation1(Number(value)); // Sets primary location ID
   };
 
-  // Handle location2 selection changes
+  // Updates state with the selected secondary location
   const handleLocation2 = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value }); // Update formValues with selected location
-    setLocation2(Number(value)); // Store numeric ID for second location
+    setFormValues({ ...formValues, [name]: value }); // Updates form values
+    setLocation2(Number(value)); // Sets secondary location ID
   };
 
-  // Handle "Next" button click for form submission and navigation
+  // Handles "Next" button click, validating inputs and navigating to the next form part
   const handleNext = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); // Prevents default form submission
 
-    // Validate that at least one preferred space is selected
+    // Validates that at least one preferred space is selected
     if (formValues.preferred_space.length !== 0) {
-      dispatch(updateFormPartOne(formValues)); // Dispatch form values to Redux
-      history.push("/form-part-two"); // Navigate to the next form part
+      dispatch(updateFormPartOne(formValues)); // Dispatches form data to Redux
+      history.push("/form-part-two"); // Navigates to the next form part
     } else {
-      alert("Please choose one or more preferred types of spaces."); // Show validation alert
+      alert("Please choose one or more preferred types of spaces."); // Alerts user if validation fails
     }
   };
+
 
   // ====== COMPONENT RETURN ======
   return (
