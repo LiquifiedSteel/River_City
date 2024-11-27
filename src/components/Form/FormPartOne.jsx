@@ -6,6 +6,13 @@ import { updateFormPartOne } from "../../redux/reducers/form.reducer";
 import axios from "axios";
 import { css } from "@emotion/react";
 
+// ============================
+// ====== EMOTION STYLES ======
+// ============================
+
+
+// === FROM CONTAINER ===
+
 const formContainerStyle = css`
   max-width: 900px;
   margin: 40px auto;
@@ -16,16 +23,19 @@ const formContainerStyle = css`
   color: #f8f8f8; 
 `;
 
+// === FORM LABELS ===
 const labelStyle = css`
   font-weight: 600;
   margin-bottom: 5px;
 `;
 
+// === FORM DESCRIPTIONS ===
 const descriptionStyle = css`
   font-size: 0.9rem;
   color: #E6E6E6;
 `;
 
+// === INFO TEXT ===
 const infoTextStyle = css`
   margin-bottom: 15px;
   font-size: 0.85rem;
@@ -33,12 +43,14 @@ const infoTextStyle = css`
   color: #eeeeee;
 `;
 
+// === BUTTON CONTAINER ===
 const buttonContainerStyle = css`
   display: flex;
   justify-content: flex-start;
   margin: 10px 0;
 `;
 
+// === BUTTON STYLE ===
 const buttonStyle = css`
   background-color: #ad9143;
   color: #252525;
@@ -63,70 +75,85 @@ const buttonStyle = css`
     box-shadow: 0px 0px 5px rgba(173, 145, 67, 0.5);
   }
 `;
-
-
-
+// ===============================================
+// ====== DISPATCH TO REDUX FIRST FORM PART ======
+// ===============================================
 const FormPartOne = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const formPartOne = useSelector((state) => state.form.FormPartOne);
+  // ====== HOOKS ======
+  const dispatch = useDispatch(); // Redux dispatch for updating state
+  const history = useHistory(); // React Router history for navigation
+  const formPartOne = useSelector((state) => state.form.FormPartOne); // Selecting initial form data from Redux
 
-  const [location1, setLocation1] = useState(null);
-  const [location2, setLocation2] = useState(null);
-  const [locations, setLocations] = useState([]);
-  const [formValues, setFormValues] = useState(formPartOne);
+  // ====== STATE VARIABLES ======
+  const [location1, setLocation1] = useState(null); // Selected first location ID
+  const [location2, setLocation2] = useState(null); // Selected second location ID
+  const [locations, setLocations] = useState([]); // List of available locations
+  const [formValues, setFormValues] = useState(formPartOne); // Form input values, initialized from Redux state
 
+  // ====== MOUNTING USE-EFFECT ======
   useEffect(() => {
-    document.title = "Rental Request Form";
+    document.title = "Rental Request Form"; // Update document title on mount
+
+    // Fetch locations from API and set them in state
     const fetchLocations = async () => {
       try {
         const response = await axios.get(`/api/application/locations`);
         setLocations(response.data);
       } catch (error) {
-        console.error("Error fetching locations:", error);
+        console.error("Error fetching locations:", error); // Log error if API call fails
       }
     };
 
     fetchLocations();
   }, []);
 
+  // ====== EVENT HANDLERS ======
+
+  // Handle text input changes for form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues({ ...formValues, [name]: value }); // Update formValues state dynamically
   };
 
+  // Handle checkbox group changes for multi-select fields
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
     setFormValues({
       ...formValues,
       [name]: checked
-        ? [...(formValues[name] || []), value]
-        : formValues[name].filter((v) => v !== value),
+        ? [...(formValues[name] || []), value] // Add value to array if checked
+        : formValues[name].filter((v) => v !== value), // Remove value from array if unchecked
     });
   };
 
+  // Handle location1 selection changes
   const handleLocation1 = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
-    setLocation1(Number(value));
+    setFormValues({ ...formValues, [name]: value }); // Update formValues with selected location
+    setLocation1(Number(value)); // Store numeric ID for first location
   };
 
+  // Handle location2 selection changes
   const handleLocation2 = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
-    setLocation2(Number(value));
+    setFormValues({ ...formValues, [name]: value }); // Update formValues with selected location
+    setLocation2(Number(value)); // Store numeric ID for second location
   };
 
+  // Handle "Next" button click for form submission and navigation
   const handleNext = (e) => {
-    e.preventDefault();
-    if(formValues.preferred_space.length !== 0) {
-      dispatch(updateFormPartOne(formValues));
-      history.push("/form-part-two");
+    e.preventDefault(); // Prevent default form submission behavior
+
+    // Validate that at least one preferred space is selected
+    if (formValues.preferred_space.length !== 0) {
+      dispatch(updateFormPartOne(formValues)); // Dispatch form values to Redux
+      history.push("/form-part-two"); // Navigate to the next form part
     } else {
-      alert("Please choose one or more preferred types of spaces.");
+      alert("Please choose one or more preferred types of spaces."); // Show validation alert
     }
   };
 
+  // ====== COMPONENT RETURN ======
   return (
     <div css={formContainerStyle} className="shadow">
       <h2 className="text-center mb-4">Applicant Information</h2>
