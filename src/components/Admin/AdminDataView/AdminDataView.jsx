@@ -258,7 +258,6 @@ const AdminDataView = () => {
       <Card css={cardStyle}>
         <h3 css={sectionTitleStyle}>Event Details</h3>
         <Row>
-          {renderField("Event Description", request.event_description)}
           {renderField("Event Type", request.event_type)}
           {renderField("Preferred Timeframe", request.preferred_time)}
           {renderField("Expected Attendance",`${request.expected_attendance || "0"} people`)}
