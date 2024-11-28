@@ -1,9 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from "react"; // React for UI, useState/useEffect for state management
-import {
-  useLocation,
-  useHistory,
-} from "react-router-dom/cjs/react-router-dom.min"; // Import useHistory for navigation and useLocation for getting URL query parameters
+import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom.min"; // Import useHistory for navigation and useLocation for getting URL query parameters
 import axios from "axios"; // Axios for making API requests
 import moment from "moment";
 import { css } from "@emotion/react"; // Emotion library for writing CSS-in-JS styles
@@ -156,6 +153,7 @@ const AdminFormEditor = () => {
   // Handler for checkboxes representing multiple values (e.g., preferred spaces)
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
+    console.log(name, value, checked)
     setFormValues({
       ...formValues,
       [name]: checked
@@ -204,7 +202,61 @@ const AdminFormEditor = () => {
         {/* Applicant Details Section */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Applicant Information</h2>
+
           {/* Input fields for applicant details */}
+          <label css={labelStyle}>Coach's First Name</label>
+          <input
+            type="text"
+            name="coach_contact_first_name"
+            value={formValues.coach_contact_first_name || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Coach's Last Name</label>
+          <input
+            type="text"
+            name="coach_contact_last_name"
+            value={formValues.coach_contact_last_name || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Renter's First Name</label>
+          <input
+            type="text"
+            name="renter_first_name"
+            value={formValues.renter_first_name || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Renter's Last Name</label>
+          <input
+            type="text"
+            name="renter_last_name"
+            value={formValues.renter_last_name || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Organization Name</label>
+          <input
+            type="text"
+            name="team_org_event"
+            value={formValues.team_org_event || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Title</label>
+          <input
+            type="text"
+            name="title_w_team_org_event"
+            value={formValues.title_w_team_org_event || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
         </div>
 
         {/* Event Details Section */}
@@ -340,13 +392,94 @@ const AdminFormEditor = () => {
         {/* Location Preferences */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Location Preferences</h2>
+
           {/* Dropdowns for primary and secondary locations */}
+          <label css={labelStyle}>Primary Location</label>
+          <select
+            name="preferred_location_primary"
+            value={formValues.preferred_location_primary || ""}
+            onChange={handleLocation1}
+            css={selectStyle}
+          >
+            <option value="">Select Primary Location</option>
+            {locations.filter((location) => Number(location.id) !== location2).map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.name_of_Location}
+              </option>
+            ))}
+          </select>
+
+          <label css={labelStyle}>Secondary Location</label>
+          <select
+            name="preferred_location_secondary"
+            value={formValues.preferred_location_secondary || ""}
+            onChange={handleLocation2}
+            css={selectStyle}
+          >
+            <option value="">Select Secondary Location</option>
+            {locations.filter((location) => Number(location.id) !== location1).map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.name_of_Location}
+              </option>
+            ))}
+          </select>
+
+          <label css={labelStyle}>Preferred Space</label>
+          <div>
+            {["Gymnasium", "Commons", "Library / Media Center", "Locker Room", "Turf Field"].map(
+              (space) => (
+                <label key={space} className="me-3">
+                  <input
+                    type="checkbox"
+                    name="preferred_space"
+                    value={space}
+                    checked={formValues.preferred_space?.includes(space) || false}
+                    onChange={handleCheckboxChange}
+                    className="me-2"
+                  />
+                  {space}
+                </label>
+              )
+            )}
+          </div>
         </div>
 
         {/* Additional Information */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Additional Information</h2>
+
           {/* Checkbox and file upload options */}
+          <div css={checkboxContainer}>
+            <input
+              type="checkbox"
+              name="WF_students"
+              checked={!!formValues.WF_students}
+              onChange={handleChange}
+            />
+            <label>Is the team or group made up of 85% or more WF Students?</label>
+          </div>
+
+          {formValues.WF_students && (
+            <>
+              <label css={labelStyle}>Grade Level</label>
+              <input
+                type="text"
+                name="grade_level"
+                value={formValues.grade_level || ""}
+                onChange={handleChange}
+                css={inputStyle}
+              />
+
+              <label css={labelStyle}>Upload Team PDF</label>
+              <input
+                type="file"
+                name="team_pdf"
+                onChange={handleFileUpload}
+                css={inputStyle}
+              />
+              <span>Currently: {formValues.team_pdf || "No file uploaded"}</span>
+            </>
+          )}
         </div>
 
         {/* Buttons */}
