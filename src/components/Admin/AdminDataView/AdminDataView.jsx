@@ -55,6 +55,7 @@ const cardStyle = css`
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 `;
+
 /* Styling for section titles inside cards */
 const sectionTitleStyle = css`
   font-size: 1.8rem;
@@ -62,15 +63,18 @@ const sectionTitleStyle = css`
   margin-bottom: 15px;
   color: #34495e;
 `;
+
 /* Styling for labels displayed beside field values */
 const labelStyle = css`
   font-weight: bold;
   color: #2c3e50;
 `;
+
 /* Styling for field values (data from API) */
 const fieldValueStyle = css`
   color: #34495e;
 `;
+
 /* Styling for the PDF download button */
 const buttonStyle = css`
   background-color: #3498db;
@@ -156,8 +160,15 @@ const AdminDataView = () => {
     // Array of fields to be added to the PDF
     const fields = [
       ["Team/Organization/Event", request.team_org_event],
-      ["Primary Location", primaryLocation],
-      ["Secondary Location", secondaryLocation],
+      ["Title with Team/Organization/Event", request.title_w_team_org_event],
+      ["Coach/Contact Name", `${request.coach_contact_first_name || ""} ${request.coach_contact_last_name || ""}`],
+      ["Coach/Contact Email", request.coach_contact_email],
+      ["Coach/Contact Phone", request.coach_contact_phone],
+      ["Website", request.website],
+      ["Event Type", request.event_type],
+      ["Preferred Time", request.preferred_time],
+      ["Preferred Location (Primary)", primaryLocation],
+      ["Preferred Location (Secondary)", secondaryLocation],
       ["Preferred Space", preferredSpace],
       ["Priority", request.priority],
       ["Expected Attendance", request.expected_attendance],
@@ -176,8 +187,6 @@ const AdminDataView = () => {
       ["Renter Phone", request.renter_phone],
       ["Renter Email", request.renter_email],
       ["Rented Previously", request.rented_previously ? "Yes" : "No"],
-      ["Respectful Use of Space Agreement", request.agree_to_respectful_use_of_space ? "Yes" : "No"],
-      ["Invoice Payment Agreement", request.agree_to_invoice_payment_process ? "Yes" : "No"],
     ];
 
     // Add fields dynamically to the PDF
@@ -215,6 +224,18 @@ const AdminDataView = () => {
     </Col>
   );
 
+  const primaryLocation = locations.find(
+    (loc) => loc.id === request.preferred_location_primary
+  )?.name_of_Location;
+
+  const secondaryLocation = locations.find(
+    (loc) => loc.id === request.preferred_location_secondary
+  )?.name_of_Location;
+
+  const preferredSpace = Array.isArray(request.preferred_space)
+  ? request.preferred_space.join(", ")
+  : request.preferred_space;
+
   // JSX returned for rendering the component
   return (
     <Container fluid>
@@ -223,9 +244,14 @@ const AdminDataView = () => {
         <h3 css={sectionTitleStyle}>Team / Event Details</h3>
         <Row>
           {renderField("Team / Organization / Event", request.team_org_event)}
-          {/* Add more fields as needed */}
+          {renderField("Title with Team / Organization / Event", request.title_w_team_org_event)}
+          {renderField("Coach's Name",`${request.coach_contact_first_name || ""} ${request.coach_contact_last_name || ""}`)}
+          {renderField("Coach's Email", request.coach_contact_email)}
+          {renderField("Coach's Phone", request.coach_contact_phone)}
+          {renderField("Website", request.website)}
         </Row>
       </Card>
+
       <Card css={cardStyle}>
         <h3 css={sectionTitleStyle}>Event Details</h3>
         <Row>
@@ -262,6 +288,7 @@ const AdminDataView = () => {
           {/* Add more fields as needed */}
         </Row>
       </Card>
+
       {/* Download button */}
       <div className="d-flex justify-content-center mt-4">
         <button
