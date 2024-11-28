@@ -1,110 +1,142 @@
-# Prime Client Project - Starting Repo
+# West Fargo Public Schools Facility Rental Application
 
-This version uses React, Redux, Express, Passport, and PostgreSQL (a full list of dependencies can be found in `package.json`).
+This application serves as the modernized rental platform for the West Fargo Public Schools (WFPS), replacing outdated systems with a user-friendly interface. It simplifies the rental request process for customers while providing robust administrative tools for managing requests. The application is mobile-friendly and supports administrators with data export and editing capabilities.
 
-We **STRONGLY** recommend following these instructions carefully. It's a lot, and will take some time to set up, but your life will be much easier this way in the long run.
+---
 
-## Use the Template for This Repository (Don't Clone)
+## Features
 
-- Don't Fork or Clone. Instead, click the `Use this Template` button, and make a copy to your personal account. Make the project `PUBLIC`!
+### Core Features
+- **Multi-Page Rental Application Form**: Users can submit requests to rent school facilities with real-time validation.
+- **Admin Dashboard**:
+  - View and manage submitted requests.
+  - Search, filter, and edit requests.
+  - Export data to Excel.
+- **Mobile-Friendly Design**: Ensures usability on both desktop and mobile devices.
+- **Captcha Protection**: Blocks spam requests.
+- **Cloudinary Integration**: Stores uploaded documents (e.g., liability insurance).
+- **Excel Export**: Enables exporting requests for administrative use.
+
+### Technologies Used
+- **Frontend**: React, Redux, Bootstrap, Emotion
+- **Backend**: Node.js, Express
+- **Database**: PostgreSQL
+- **Utilities**: ExcelJS, Cloudinary, Captcha
+- **Hosting**: Fly.io
+
+---
 
 ## Prerequisites
 
-Before you get started, make sure you have the following software installed on your computer:
+Ensure the following tools are installed on your system:
+- **Node.js** (version 14 or above)
+- **PostgreSQL** (version 12 or above)
+- **Visual Studio Code (VSCode)** or any preferred IDE
 
-- [Node.js](https://nodejs.org/en)
-- [PostgreSQL](https://www.postgresql.org)
-- [Nodemon](https://nodemon.io)
+---
 
-## Development Setup Instructions
+## Installation Instructions
 
-- Run `npm install`.
-  - Be sure to take stock of `package.json` to see which dependencies you'll need to add.
-- Create a `.env` file at the root of the project and paste this line into the file:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/wfps-rental-app.git
+   cd wfps-rental-app
+Install dependencies:
 
-```plaintext
-SERVER_SESSION_SECRET=superDuperSecret
+```bash
+npm install
 ```
 
-While you're in your new `.env` file, take the time to replace `superDuperSecret` with some long random string like `25POUbVtx6RKVNWszd9ERB9Bb6` to keep your application secure. Here's a site that can help you: [Password Generator Plus](https://passwordsgenerator.net). If you don't do this step, create a secret with less than eight characters, or leave it as `superDuperSecret`, you will get a warning.
+Configure .env file: Create a .env file in the root directory with the following values:
 
-- Start postgres if not running already by using opening up the [Postgres.app](https://postgresapp.com), or if using [Homebrew](https://brew.sh) you can use the command `brew services start postgresql`.
-- Run `npm run server` to start the server.
-- Run `npm run client` to start the client.
-- Navigate to `localhost:5173`.
+```
+DATABASE_URL=your_postgres_connection_string
+CLOUDINARY_URL=your_cloudinary_url
+SESSION_SECRET=your_session_secret
+CAPTCHA_SITE_KEY=your_recaptcha_site_key
+CAPTCHA_SECRET_KEY=your_recaptcha_secret_key
+```
 
-## Debugging
+### Set up the PostgreSQL database:
 
-To debug, you will need to run the client-side separately from the server. Start the client by running the command `npm run client`. Start the debugging server by selecting the Debug button.
+Create the database using your PostgreSQL client.
 
-![VSCode Toolbar](documentation/images/vscode-toolbar.png)
+## Start the application:
 
-Then make sure `Launch Program` is selected from the dropdown, then click the green play arrow.
+### Run the front-end:
 
-![VSCode Debug Bar](documentation/images/vscode-debug-bar.png)
+```
+npm run client
+```
 
-## Testing Routes with Postman
+### Run the server/backend:
 
-To use Postman with this repo, you will need to set up requests in Postman to register a user and login a user at a minimum.
+```
+npm run server
+```
+### Access the application:
 
-Keep in mind that once you using the login route, Postman will manage your session cookie for you just like a browser, ensuring it is sent with each subsequent request. If you delete the `localhost` cookie in Postman, it will effectively log you out.
+Frontend: [http://localhost:5173](http://localhost:5173/)
 
-1. Run `npm run server` to start the server.
-2. Import the sample routes JSON file [v2](./PostmanPrimeSoloRoutesv2.json) by clicking `Import` in Postman. Select the file.
-3. Click `Collections` and `Send` the following three calls in order:
-   1. `POST /api/user/register` registers a new user, see body to change username/password.
-   2. `POST /api/user/login` will login a user, see body to change username/password.
-   3. `GET /api/user` will get user information, by default it's not very much.
+Backend: http://localhost:5001
 
-After running the login route above, you can try any other route you've created that requires a logged in user!
+## Project Structure
 
-## Production Build
+### Frontend:
 
-Before pushing to Heroku, run `npm run build` in terminal. This will create a build folder that contains the code Heroku will be pointed at. You can test this build by typing `npm start`. Keep in mind that `npm start` will let you preview the production build but will **not** auto update.
+**Built with React and Redux, styled with Bootstrap and Emotion.**
+Located in /src.
 
-- Start postgres if not running already by using opening up the [Postgres.app](https://postgresapp.com), or if using [Homebrew](https://brew.sh) you can use the command `brew services start postgresql`.
-- Run `npm start`.
-- Navigate to `localhost:5173`.
+### Backend:
 
-## Lay of the Land
+**Built with Express and connected to PostgreSQL.**
+API endpoints handle form submission, data retrieval, and Excel export.
 
-There are a few videos linked below that show a walkthrough the client and sever setup to help acclimatize to the boilerplate. Please take some time to watch the videos in order to get a better understanding of what the boilerplate is like.
+### Database:
 
-- [Initial Set](https://vimeo.com/453297271)
-- [Server Walkthrough](https://vimeo.com/453297212)
-- [Client Walkthrough](https://vimeo.com/453297124)
+**Stores user-submitted data, admin credentials, and location availability.**
 
-Directory Structure:
+### Hosting:
 
-- `src/` contains the React application.
-- `public/` contains static assets for the client-side.
-- `build/` after you build the project, contains the transpiled code from `src/` and `public/` that will be viewed on the production site.
-- `server/` contains the Express App.
+**Deployed on Fly.io**
 
-This code is also heavily commented. We recommend reading through the comments, getting a lay of the land, and becoming comfortable with how the code works before you start making too many changes. If you're wondering where to start, consider reading through component file comments in the following order:
+## Usage
 
-- src/components
-  - App/App
-  - Footer/Footer
-  - Nav/Nav
-  - AboutPage/AboutPage
-  - InfoPage/InfoPage
-  - UserPage/UserPage
-  - LoginPage/LoginPage
-  - RegisterPage/RegisterPage
-  - LogOutButton/LogOutButton
-  - ProtectedRoute/ProtectedRoute
+### Users
 
-## Deployment
+Navigate to the public-facing form (via WFPS website iframe or direct link).
+Fill out the rental application with event details.
+Submit the form and receive a confirmation.
 
-1. Create a new Heroku project.
-1. Link the Heroku project to the project GitHub Repo.
-1. Create an Heroku Postgres database.
-1. Connect to the Heroku Postgres database from Postico.
-1. Create the necessary tables.
-1. Add an environment variable for `SERVER_SESSION_SECRET` with a nice random string for security.
-1. In the deploy section, select manual deploy.
+### Admins
 
-## Update Documentation
+Log in via the admin portal.
+Access the dashboard to view submitted forms.
+Edit or view forms as needed.
+Export filtered data to Excel or PDF.
 
-Customize this ReadMe and the code comments in this project to read less like a starter repo and more like a project. Here is an example: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2.
+## Scope Overview
+
+### Objectives
+
+**To streamline the facility rental process by:**
+
+- Reducing manual entry for admin staff.
+- Providing users with a straightforward submission process.
+- Integrating seamlessly with existing WFPS workflows.
+
+### Deliverables
+
+- User-friendly, mobile-first design.
+- Secure admin tools for managing submissions.
+
+**For a detailed scope, refer to the Scope Document.**
+
+## Contact
+
+*For questions or issues, reach out to the project maintainers:*
+
+- *Alex R.*
+- *Papa Dienou F.*
+- *Jacob M.*
+
