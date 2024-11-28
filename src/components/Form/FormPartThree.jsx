@@ -81,6 +81,7 @@ const FormPartThree = () => {
   // ====== MOUNTING EFFECT ======
   useEffect(() => {
     document.title = "Rental Request Form"; // Set the document title on component mount
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   // ====== EVENT HANDLERS ======
@@ -305,9 +306,10 @@ const FormPartThree = () => {
         <div className="mb-4">
           <h4>Invoice Agreement</h4>
           <p className={descriptionStyle}>
-            Invoices must be paid in full at least 24 hours before the start of
-            your rental period. Special accommodations for cash or check
-            payments must be arranged in advance.
+          Invoices will be issued within one business day of receiving your signed electronic rental contract and the invoice will
+          be available to view in your online client portal. Payment must be submitted in full via credit card on your online
+          client portal at least 24 hours prior to the start of your rental contract. If you need to pay via cash or check,
+          special accommodation must be prearranged with the facility at least 48 hours prior to the start of your rental contract.
           </p>
           <div className="form-check">
             <input

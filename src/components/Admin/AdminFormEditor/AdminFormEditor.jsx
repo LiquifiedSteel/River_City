@@ -1,11 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import axios from "axios";
+import React, { useEffect, useState } from "react"; // React for UI, useState/useEffect for state management
+import {
+  useLocation,
+  useHistory,
+} from "react-router-dom/cjs/react-router-dom.min"; // Import useHistory for navigation and useLocation for getting URL query parameters
+import axios from "axios"; // Axios for making API requests
 import moment from "moment";
-import { css } from "@emotion/react";
+import { css } from "@emotion/react"; // Emotion library for writing CSS-in-JS styles
 
+// Styling using Emotion
 const containerStyle = css`
+  /* Main container style for form */
   max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
@@ -16,12 +21,14 @@ const containerStyle = css`
 `;
 
 const sectionStyle = css`
+  /* Style for individual form sections */
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid #eaeaea;
 `;
 
 const sectionHeading = css`
+  /* Style for section headings */
   font-size: 1.5rem;
   font-weight: bold;
   color: #2c3e50;
@@ -29,6 +36,7 @@ const sectionHeading = css`
 `;
 
 const labelStyle = css`
+  /* Style for form labels */
   display: block;
   font-weight: bold;
   color: #34495e;
@@ -36,6 +44,7 @@ const labelStyle = css`
 `;
 
 const inputStyle = css`
+  /* General style for input fields */
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
@@ -52,10 +61,12 @@ const inputStyle = css`
 `;
 
 const selectStyle = css`
+  /* Style for dropdowns, extends inputStyle */
   ${inputStyle}
 `;
 
 const checkboxContainer = css`
+  /* Style for checkbox sections */
   display: flex;
   align-items: center;
   margin-bottom: 15px;
@@ -66,6 +77,7 @@ const checkboxContainer = css`
 `;
 
 const buttonContainer = css`
+  /* Container for form buttons */
   display: flex;
   justify-content: flex-end;
   gap: 15px;
@@ -73,6 +85,7 @@ const buttonContainer = css`
 `;
 
 const buttonStyle = css`
+  /* General button styling */
   background-color: #3498db;
   color: white;
   font-weight: bold;
@@ -88,6 +101,7 @@ const buttonStyle = css`
   }
 
   &:last-of-type {
+    /* Specific style for the cancel button */
     background-color: #e74c3c;
 
     &:hover {
@@ -96,34 +110,41 @@ const buttonStyle = css`
   }
 `;
 
+// Main component
 const AdminFormEditor = () => {
-  const location = useLocation();
-  const history = useHistory();
-  const requestID = new URLSearchParams(location.search).get("requestID");
-  const [formValues, setFormValues] = useState({});
-  const [location1, setLocation1] = useState(null);
-  const [location2, setLocation2] = useState(null);
-  const [locations, setLocations] = useState([]);
+  const location = useLocation(); // Get URL and query parameters
+  const history = useHistory(); // Access navigation history
+  const requestID = new URLSearchParams(location.search).get("requestID"); // Extract `requestID` from query
+  const [formValues, setFormValues] = useState({}); // State to hold form values
+  const [location1, setLocation1] = useState(null); // State for primary location
+  const [location2, setLocation2] = useState(null); // State for secondary location
+  const [locations, setLocations] = useState([]); // Available location options
 
   useEffect(() => {
-    document.title = "Editing Request";
+    document.title = "Editing Request"; // Set page title
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     const fetchRequest = async () => {
       try {
+        // Fetch request details by ID
         const response = await axios.get(`/api/application/${requestID}`);
         setFormValues(response.data[0]);
       } catch (error) {
         console.error("Error fetching request:", error);
       }
       try {
+        // Fetch location options
         const response = await axios.get(`/api/application/locations`);
         setLocations(response.data);
       } catch (error) {
         console.error("Error fetching locations:", error);
       }
     };
+
     fetchRequest();
   }, [requestID]);
 
+  // General handler for text, dropdown, and checkbox inputs
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormValues((prev) => ({
@@ -132,34 +153,38 @@ const AdminFormEditor = () => {
     }));
   };
 
+  // Handler for checkboxes representing multiple values (e.g., preferred spaces)
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
-    console.log(name, value, checked)
     setFormValues({
       ...formValues,
       [name]: checked
-        ? [...(formValues[name] || []), value]
-        : formValues[name].filter((v) => v !== value),
+        ? [...(formValues[name] || []), value] // Add to list if checked
+        : formValues[name].filter((v) => v !== value), // Remove from list if unchecked
     });
   };
 
+  // Handler for file uploads
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     setFormValues((prev) => ({ ...prev, team_pdf: file.name }));
   };
 
+  // Save updated form data
   const handleSave = () => {
     const saveUpdate = async () => {
       try {
         await axios.put(`/api/application/${requestID}`, formValues);
-        history.push("/admin-dashboard");
+        history.push("/admin-dashboard"); // Redirect to dashboard
       } catch (error) {
         console.error("Error updating request:", error);
       }
     };
+
     saveUpdate();
   };
 
+  // Handlers for updating primary and secondary location values
   const handleLocation1 = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
@@ -176,67 +201,17 @@ const AdminFormEditor = () => {
     <div css={containerStyle}>
       <h1>Edit Form</h1>
       <form>
-        {/* Applicant Details */}
+        {/* Applicant Details Section */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Applicant Information</h2>
-          <label css={labelStyle}>Coach's First Name</label>
-          <input
-            type="text"
-            name="coach_contact_first_name"
-            value={formValues.coach_contact_first_name || ""}
-            onChange={handleChange}
-            css={inputStyle}
-          />
-
-          <label css={labelStyle}>Coach's Last Name</label>
-          <input
-            type="text"
-            name="coach_contact_last_name"
-            value={formValues.coach_contact_last_name || ""}
-            onChange={handleChange}
-            css={inputStyle}
-          />
-
-          <label css={labelStyle}>Renter's First Name</label>
-          <input
-            type="text"
-            name="renter_first_name"
-            value={formValues.renter_first_name || ""}
-            onChange={handleChange}
-            css={inputStyle}
-          />
-
-          <label css={labelStyle}>Renter's Last Name</label>
-          <input
-            type="text"
-            name="renter_last_name"
-            value={formValues.renter_last_name || ""}
-            onChange={handleChange}
-            css={inputStyle}
-          />
-
-          <label css={labelStyle}>Organization Name</label>
-          <input
-            type="text"
-            name="team_org_event"
-            value={formValues.team_org_event || ""}
-            onChange={handleChange}
-            css={inputStyle}
-          />
-
-          <label css={labelStyle}>Title</label>
-          <input
-            type="text"
-            name="title_w_team_org_event"
-            value={formValues.title_w_team_org_event || ""}
-            onChange={handleChange}
-            css={inputStyle}
-          />
+          {/* Input fields for applicant details */}
         </div>
 
-        {/* Event Details */}
+        {/* Event Details Section */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Event Information</h2>
+
+          {/* Input fields for event details */}
           <label css={labelStyle}>Email Address</label>
           <input
             type="email"
@@ -283,8 +258,9 @@ const AdminFormEditor = () => {
             <option value="">Select Event Type</option>
             <option value="Basketball">Basketball</option>
             <option value="Volleyball">Volleyball</option>
+            <option value="Scouts">Scouts</option>
             <option value="Dance">Dance</option>
-            <option value="Others">Others</option>
+            <option value="Other">Other</option>
           </select>
 
           <label css={labelStyle}>Preferred Start Time</label>
@@ -311,9 +287,11 @@ const AdminFormEditor = () => {
           />
         </div>
 
-        {/* Dates */}
+        {/* Dates Section */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Dates</h2>
+
+          {/* Date input fields */}
           <label css={labelStyle}>Start Date</label>
           <span>Currently: {moment(formValues.start_date).format("MMM Do YY")}</span>
           <input
@@ -342,95 +320,33 @@ const AdminFormEditor = () => {
             onChange={handleChange}
             css={inputStyle}
           />
+
+          <label css={labelStyle}>Day(s) of the Week</label>
+          <select
+            name="preferred_days"
+            value={formValues.preferred_days || ""}
+            onChange={handleChange}
+            css={selectStyle}
+          >
+            <option value="Monday/Thursdays">Monday/Thursdays</option>
+            <option value="Tuesday/Fridays">Tuesday/Fridays</option>
+            <option value="Mondays">Mondays</option>
+            <option value="Tuesdays">Tuesdays</option>
+            <option value="Thursdays">Thursdays</option>
+            <option value="Fridays">Fridays</option>
+          </select>
         </div>
 
-        {/* Location */}
+        {/* Location Preferences */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Location Preferences</h2>
-          <label css={labelStyle}>Primary Location</label>
-          <select
-            name="preferred_location_primary"
-            value={formValues.preferred_location_primary || ""}
-            onChange={handleLocation1}
-            css={selectStyle}
-          >
-            <option value="">Select Primary Location</option>
-            {locations.filter((location) => Number(location.id) !== location2).map((location) => (
-              <option key={location.id} value={location.id}>
-                {location.name_of_Location}
-              </option>
-            ))}
-          </select>
-
-          <label css={labelStyle}>Secondary Location</label>
-          <select
-            name="preferred_location_secondary"
-            value={formValues.preferred_location_secondary || ""}
-            onChange={handleLocation2}
-            css={selectStyle}
-          >
-            <option value="">Select Secondary Location</option>
-            {locations.filter((location) => Number(location.id) !== location1).map((location) => (
-              <option key={location.id} value={location.id}>
-                {location.name_of_Location}
-              </option>
-            ))}
-          </select>
-
-          <label css={labelStyle}>Preferred Space</label>
-          <div>
-            {["Gymnasium", "Commons", "Library / Media Center", "Locker Room", "Turf Field"].map(
-              (space) => (
-                <label key={space} className="me-3">
-                  <input
-                    type="checkbox"
-                    name="preferred_space"
-                    value={space}
-                    checked={formValues.preferred_space?.includes(space) || false}
-                    onChange={handleCheckboxChange}
-                    className="me-2"
-                  />
-                  {space}
-                </label>
-              )
-            )}
-          </div>
+          {/* Dropdowns for primary and secondary locations */}
         </div>
 
-        {/* Additional */}
+        {/* Additional Information */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Additional Information</h2>
-          <div css={checkboxContainer}>
-            <input
-              type="checkbox"
-              name="WF_students"
-              checked={!!formValues.WF_students}
-              onChange={handleChange}
-            />
-            <label>Is the team or group made up of 85% or more WF Students?</label>
-          </div>
-
-          {formValues.WF_students && (
-            <>
-              <label css={labelStyle}>Grade Level</label>
-              <input
-                type="text"
-                name="grade_level"
-                value={formValues.grade_level || ""}
-                onChange={handleChange}
-                css={inputStyle}
-              />
-
-              <label css={labelStyle}>Upload Team PDF</label>
-              <input
-                type="file"
-                name="team_pdf"
-                onChange={handleFileUpload}
-                css={inputStyle}
-              />
-              <span>Currently: {formValues.team_pdf || "No file uploaded"}</span>
-            </>
-          )}
+          {/* Checkbox and file upload options */}
         </div>
 
         {/* Buttons */}

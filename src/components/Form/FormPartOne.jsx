@@ -98,6 +98,7 @@ const FormPartOne = () => {
   // ====== MOUNTING USE-EFFECT ======
   useEffect(() => {
     document.title = "Rental Request Form"; // Sets page title when the component mounts
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Fetches location options from the API
     const fetchLocations = async () => {

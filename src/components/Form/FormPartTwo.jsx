@@ -84,6 +84,13 @@ const FormPartTwo = () => {
   // ====== MOUNTING EFFECT ======
   useEffect(() => {
     document.title = "Rental Request Form"; // Updates the document title when the component mounts
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    if(formPartTwo.team_pdf) {
+      console.log("running", formPartTwo.team_pdf)
+      setTeamPdf(formPartTwo.teamPdf);
+    }
+    console.log(teamPdf);
   }, []);
 
   // ====== EVENT HANDLERS ======
@@ -91,15 +98,6 @@ const FormPartTwo = () => {
   // Handles input changes for text, select, and checkbox fields
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
-    // Toggles visibility for specific elements if the "WF_students" checkbox is toggled
-    if (name === "WF_students") {
-      let elements = document.querySelectorAll(".hide85");
-      for (let element of elements) {
-        element.classList.toggle("hide85True");
-      }
-    }
-
     // Updates form values dynamically
     setFormValues({
       ...formValues,
@@ -164,7 +162,6 @@ const FormPartTwo = () => {
       <h2 className="text-center mb-4">Event Details</h2>
 
       <form onSubmit={handleNext}>
-
         <div className="mb-3">
           <label css={labelStyle}>Expected Attendance</label>
           <input
@@ -242,44 +239,71 @@ const FormPartTwo = () => {
             student discount.
           </small>
         </div>
+        {formValues.WF_students ? 
+          <>
+            <div className="mb-3 hide85">
+              <label css={labelStyle}>Grade Level *</label>
+              <input
+                type="text"
+                name="grade_level"
+                value={formValues.grade_level}
+                className="form-control"
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="mb-3 hide85 hide85True">
-          <label css={labelStyle}>Grade Level *</label>
-          <input
-            type="text"
-            name="grade_level"
-            value={formValues.grade_level}
-            className="form-control"
-            onChange={handleChange}
-          />
-        </div>
+            <div className="mb-3 hide85">
+              <label css={labelStyle}>
+                Team Roster (Provide Student Name and School) *
+              </label>
 
-        <div className="mb-3 hide85 hide85True">
-          <label css={labelStyle}>
-            Team Roster (Provide Student Name and School) *
-          </label>
+              {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
+              <p className="userTextColor">
+                File to upload:{" "}
+                <button type="button" onClick={openWidget}>
+                  Pick File
+                </button>
+              </p>
 
-          {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
-          <p className="userTextColor">
-            File to upload:{" "}
-            <button type="button" onClick={openWidget}>
-              Pick File
-            </button>
-          </p>
+              {teamPdf ? 
+                <p className="text-success mt-2">
+                  Uploaded:{" "}
+                  <a href={teamPdf} target="_blank" rel="noopener noreferrer">
+                    View File
+                  </a>
+                </p>
+                :
+                formPartTwo.team_pdf && 
+                  <p className="text-success mt-2">
+                    Uploaded:{" "}
+                    <a href={formPartTwo.team_pdf} target="_blank" rel="noopener noreferrer">
+                      View File
+                    </a>
+                  </p>
+              }
+              <small css={descriptionStyle}>
+                A student discount is available if a roster meeting the requirements
+                is provided.
+              </small>
+            </div>
+          </>
+          :
+          <>
+            <div className="mb-3 hide85 hide85True">
+              <label css={labelStyle}>
+                Team Roster (Provide Student Name and School) *
+              </label>
 
-          {teamPdf && (
-            <p className="text-success mt-2">
-              Uploaded:{" "}
-              <a href={teamPdf} target="_blank" rel="noopener noreferrer">
-                View File
-              </a>
-            </p>
-          )}
-          <small css={descriptionStyle}>
-            A student discount is available if a roster meeting the requirements
-            is provided.
-          </small>
-        </div>
+              {useScript("https://widget.cloudinary.com/v2.0/global/all.js")}
+              <p className="userTextColor">
+                File to upload:{" "}
+                <button type="button" onClick={openWidget}>
+                  Pick File
+                </button>
+              </p>
+            </div>
+          </>
+        }
 
         <div className="d-flex justify-content-between">
           <button
