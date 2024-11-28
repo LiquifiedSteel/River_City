@@ -57,6 +57,7 @@ const SuccessPage = () => {
 
   useEffect(() => {
     document.title = "Submission Success";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handleRedirect = () => {
@@ -72,7 +73,7 @@ const SuccessPage = () => {
           and is being processed. We'll get back to you shortly!
         </p>
         <button css={buttonStyle} onClick={handleRedirect}>
-          Go to Dashboard
+          Return to Home
         </button>
       </div>
     </div>

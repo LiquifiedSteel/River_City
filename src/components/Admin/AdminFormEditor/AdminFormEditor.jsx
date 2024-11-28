@@ -122,6 +122,7 @@ const AdminFormEditor = () => {
 
   useEffect(() => {
     document.title = "Editing Request"; // Set page title
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const fetchRequest = async () => {
       try {
@@ -209,13 +210,131 @@ const AdminFormEditor = () => {
         {/* Event Details Section */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Event Information</h2>
+
           {/* Input fields for event details */}
+          <label css={labelStyle}>Email Address</label>
+          <input
+            type="email"
+            name="coach_contact_email"
+            value={formValues.coach_contact_email || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Phone Number</label>
+          <input
+            type="tel"
+            name="coach_contact_phone"
+            value={formValues.coach_contact_phone || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Mailing Address</label>
+          <input
+            type="text"
+            name="renter_street_address"
+            value={formValues.renter_street_address || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Website</label>
+          <input
+            type="url"
+            name="website"
+            value={formValues.website || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Event Type</label>
+          <select
+            name="event_type"
+            value={formValues.event_type || ""}
+            onChange={handleChange}
+            css={selectStyle}
+          >
+            <option value="">Select Event Type</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Volleyball">Volleyball</option>
+            <option value="Scouts">Scouts</option>
+            <option value="Dance">Dance</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <label css={labelStyle}>Preferred Start Time</label>
+          <select
+            name="preferred_time"
+            value={formValues.preferred_time || ""}
+            onChange={handleChange}
+            css={selectStyle}
+          >
+            <option value="">Select Start Time</option>
+            <option value="6:00 PM">6:00 PM - 7:00 PM</option>
+            <option value="7:00 PM">7:00 PM - 8:00 PM</option>
+            <option value="8:00 PM">8:00 PM - 9:00 PM</option>
+            <option value="9:00 PM">9:00 PM - 10:00 PM</option>
+          </select>
+
+          <label css={labelStyle}>Expected Attendance</label>
+          <input
+            type="number"
+            name="expected_attendance"
+            value={formValues.expected_attendance || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
         </div>
 
         {/* Dates Section */}
         <div css={sectionStyle}>
           <h2 css={sectionHeading}>Dates</h2>
+
           {/* Date input fields */}
+          <label css={labelStyle}>Start Date</label>
+          <span>Currently: {moment(formValues.start_date).format("MMM Do YY")}</span>
+          <input
+            type="date"
+            name="start_date"
+            value={formValues.start_date || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>End Date</label>
+          <span>Currently: {moment(formValues.end_date).format("MMM Do YY")}</span>
+          <input
+            type="date"
+            name="end_date"
+            value={formValues.end_date || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Additional Dates</label>
+          <input
+            type="text"
+            name="additional_dates"
+            value={formValues.additional_dates || ""}
+            onChange={handleChange}
+            css={inputStyle}
+          />
+
+          <label css={labelStyle}>Day(s) of the Week</label>
+          <select
+            name="preferred_days"
+            value={formValues.preferred_days || ""}
+            onChange={handleChange}
+            css={selectStyle}
+          >
+            <option value="Monday/Thursdays">Monday/Thursdays</option>
+            <option value="Tuesday/Fridays">Tuesday/Fridays</option>
+            <option value="Mondays">Mondays</option>
+            <option value="Tuesdays">Tuesdays</option>
+            <option value="Thursdays">Thursdays</option>
+            <option value="Fridays">Fridays</option>
+          </select>
         </div>
 
         {/* Location Preferences */}

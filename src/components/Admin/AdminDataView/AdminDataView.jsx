@@ -6,6 +6,7 @@ import axios from "axios"; // Axios for making API requests
 import { jsPDF } from "jspdf"; // jsPDF for generating downloadable PDF files
 import { Container, Row, Col, Button, Card } from "react-bootstrap"; // React-Bootstrap components for layout and styling
 import { css } from "@emotion/react"; // Emotion library for writing CSS-in-JS styles
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 // Define reusable CSS-in-JS styles using Emotion
 /* Styling for the main heading at the top of the page */
@@ -16,6 +17,35 @@ const headingStyle = css`
   font-size: 2.5rem;
   color: #2c3e50;
 `;
+
+const customButtonStyle = css`
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.view {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+
+  &.view:hover {
+    background-color: #138496;
+  }
+
+  &.edit {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  &.edit:hover {
+    background-color: #e0a800;
+  }
+`;
+
 /* Styling for each card (grouped section) displayed on the page */
 const cardStyle = css`
   margin-top: 20px;
@@ -64,12 +94,14 @@ const AdminDataView = () => {
   const [request, setRequest] = useState({}); // Holds the details of a specific application request
   const [locations, setLocations] = useState([]); // Holds location data for dropdown or display
   const location = useLocation(); // React Router's hook to access the current URL
+  const history = useHistory();
   const requestID = new URLSearchParams(location.search).get("requestID"); // Extracts the "requestID" query parameter from the URL
 
   // useEffect: Executes once when the component is mounted
   useEffect(() => {
     document.title = "View Request Data"; // Dynamically sets the browser tab title
-
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     // Function to fetch data for a specific request
     const fetchRequest = async () => {
       try {
@@ -127,7 +159,25 @@ const AdminDataView = () => {
       ["Primary Location", primaryLocation],
       ["Secondary Location", secondaryLocation],
       ["Preferred Space", preferredSpace],
-      ["Special Requests", request.special_requests],
+      ["Priority", request.priority],
+      ["Expected Attendance", request.expected_attendance],
+      ["Preferred Days", request.preferred_days],
+      ["Start Date", request.start_date],
+      ["End Date", request.end_date],
+      ["Additional Dates", request.additional_dates],
+      ["West Fargo Students?", request.wf_students ? "Yes" : "No"],
+      ["Grade Level", request.grade_level],
+      ["Team Roster", request.team_pdf],
+      ["Renter Name", `${request.renter_first_name || ""} ${request.renter_last_name || ""}`],
+      ["Renter Address", request.renter_street_address],
+      ["Renter City", request.renter_city],
+      ["Renter State", request.renter_state],
+      ["Renter ZIP", request.renter_zip],
+      ["Renter Phone", request.renter_phone],
+      ["Renter Email", request.renter_email],
+      ["Rented Previously", request.rented_previously ? "Yes" : "No"],
+      ["Respectful Use of Space Agreement", request.agree_to_respectful_use_of_space ? "Yes" : "No"],
+      ["Invoice Payment Agreement", request.agree_to_invoice_payment_process ? "Yes" : "No"],
     ];
 
     // Add fields dynamically to the PDF
@@ -185,8 +235,24 @@ const AdminDataView = () => {
       </Card>
       {/* Download button */}
       <div className="d-flex justify-content-center mt-4">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => history.push(`/admin-dashboard`)}
+          css={buttonStyle}
+        >
+          Back
+        </button>
         <button css={buttonStyle} onClick={handleDownload} className="mx-2">
           Download PDF
+        </button>
+
+        <button
+          css={customButtonStyle}
+          className="edit"
+          onClick={() => history.push(`/admin-form-editor?requestID=${requestID}`)}
+        >
+          Edit
         </button>
       </div>
     </Container>

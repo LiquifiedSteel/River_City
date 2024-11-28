@@ -78,6 +78,8 @@ const FormPartOne = () => {
 
   useEffect(() => {
     document.title = "Rental Request Form";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     const fetchLocations = async () => {
       try {
         const response = await axios.get(`/api/application/locations`);

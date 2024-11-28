@@ -102,6 +102,7 @@ function AdminDashboard() {
   // useEffect to fetch data on component mount
   useEffect(() => {
     document.title = "Admin Dashboard"; // Set the document title
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Async function to fetch applications and locations
     const fetchApplications = async () => {
