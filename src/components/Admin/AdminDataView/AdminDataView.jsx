@@ -229,7 +229,36 @@ const AdminDataView = () => {
       <Card css={cardStyle}>
         <h3 css={sectionTitleStyle}>Event Details</h3>
         <Row>
-          {renderField("Event Description", request.event_description)}
+          {renderField("Event Type", request.event_type)}
+          {renderField("Preferred Timeframe", request.preferred_time)}
+          {renderField("Expected Attendance",`${request.expected_attendance || "0"} people`)}
+          {renderField("Preferred Days", request.preferred_days)}
+          {renderField("Start Date", request.start_date)}
+          {renderField("End Date", request.end_date)}
+          {renderField("Additional Dates", request.additional_dates)}
+        </Row>
+      </Card>
+
+      <Card css={cardStyle}>
+        <h3 css={sectionTitleStyle}>Location Preferences</h3>
+        <Row>
+          {renderField("Preferred Location (Primary)", primaryLocation)}
+          {renderField("Preferred Location (Secondary)", secondaryLocation)}
+          {renderField("Preferred Space", preferredSpace)}
+        </Row>
+      </Card>
+
+      <Card css={cardStyle}>
+        <h3 css={sectionTitleStyle}>Renter Details</h3>
+        <Row>
+          {renderField("Renter's Name", `${request.renter_first_name || ""} ${request.renter_last_name || ""}`)}
+          {renderField("Renter's Email", request.renter_email)}
+          {renderField("Street Address", request.renter_street_address)}
+          {renderField("City", request.renter_city)}
+          {renderField("State", request.renter_state)}
+          {renderField("ZIP Code", request.renter_zip)}
+          {renderField("Phone", request.renter_phone)}
+          {renderField("Rented Previously", request.rented_previously ? "Yes" : "No")}
           {/* Add more fields as needed */}
         </Row>
       </Card>

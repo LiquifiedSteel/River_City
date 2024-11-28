@@ -180,7 +180,6 @@ function AdminDashboard() {
       ["Preferred Location (Secondary)", secondaryLocation],
       ["Preferred Space", preferredSpace],
       ["Priority", request.priority],
-      ["Event Description", request.event_description],
       ["Expected Attendance", request.expected_attendance],
       ["Preferred Days", request.preferred_days],
       ["Start Date", request.start_date],
