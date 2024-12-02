@@ -119,81 +119,107 @@ const AdminFormEditor = () => {
 
   useEffect(() => {
     document.title = "Editing Request"; // Set page title
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  
     const fetchRequest = async () => {
       try {
-        // Fetch request details by ID
         const response = await axios.get(`/api/application/${requestID}`);
-        setFormValues(response.data[0]);
+        console.log("Fetched data:", response.data);
+        const data = response.data[0];
+    
+        let parsedPreferredSpace = [];
+        try {
+          if (Array.isArray(data.preferred_space)) {
+            parsedPreferredSpace = data.preferred_space; // Already an array
+          } else if (typeof data.preferred_space === "string") {
+            parsedPreferredSpace = data.preferred_space
+              .replace(/^{|}$/g, "") // Remove curly braces {}
+              .split(",") // Split by commas
+              .map((item) => item.trim().replace(/(^"|"$)/g, "")); // Trim and remove quotes
+          }
+        } catch (err) {
+          console.error("Error parsing preferred_space:", err);
+          parsedPreferredSpace = [];
+        }
+    
+        setFormValues({ ...data, preferred_space: parsedPreferredSpace });
       } catch (error) {
         console.error("Error fetching request:", error);
       }
+    
       try {
-        // Fetch location options
         const response = await axios.get(`/api/application/locations`);
         setLocations(response.data);
       } catch (error) {
         console.error("Error fetching locations:", error);
       }
     };
-
+    
+  
     fetchRequest();
   }, [requestID]);
-
-  // General handler for text, dropdown, and checkbox inputs
+  
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+  
+    // Skip fields managed by handleCheckboxChange
+    if (name === "preferred_space") return;
+  
     setFormValues((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  // Handler for checkboxes representing multiple values (e.g., preferred spaces)
+  
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
-    console.log(name, value, checked)
-    setFormValues({
-      ...formValues,
-      [name]: checked
-        ? [...(formValues[name] || []), value] // Add to list if checked
-        : formValues[name].filter((v) => v !== value), // Remove from list if unchecked
+  
+    setFormValues((prev) => {
+      const currentValues = prev[name] || [];
+      const updatedValues = checked
+        ? [...currentValues, value] // Add new value if checked
+        : currentValues.filter((v) => v !== value); // Remove value if unchecked
+  
+      return { ...prev, [name]: updatedValues };
     });
   };
-
-  // Handler for file uploads
+  
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     setFormValues((prev) => ({ ...prev, team_pdf: file.name }));
   };
-
-  // Save updated form data
+  
   const handleSave = () => {
     const saveUpdate = async () => {
       try {
-        await axios.put(`/api/application/${requestID}`, formValues);
+        // Convert preferred_space to a string for backend storage
+        const updatedValues = {
+          ...formValues,
+          preferred_space: JSON.stringify(formValues.preferred_space || []), // Convert array to string
+        };
+  
+        await axios.put(`/api/application/${requestID}`, updatedValues);
         history.push("/admin-dashboard"); // Redirect to dashboard
       } catch (error) {
         console.error("Error updating request:", error);
       }
     };
-
+  
     saveUpdate();
   };
-
-  // Handlers for updating primary and secondary location values
+  
   const handleLocation1 = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues((prev) => ({ ...prev, [name]: value }));
     setLocation1(Number(value));
   };
-
+  
   const handleLocation2 = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues((prev) => ({ ...prev, [name]: value }));
     setLocation2(Number(value));
   };
+  
 
   return (
     <div css={containerStyle}>
