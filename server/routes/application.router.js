@@ -1,62 +1,74 @@
 const express = require("express");
-const pool = require("../modules/pool");
+const pool = require("../modules/pool"); // Import the database pool to handle SQL queries.
 const {
   rejectUnauthenticated,
-} = require("../modules/authentication-middleware");
-const router = express.Router();
-const axios = require("axios");
+} = require("../modules/authentication-middleware"); // Middleware to reject unauthenticated users.
+const router = express.Router(); // Create a new Express router to define routes.
+const axios = require("axios"); // Axios for making HTTP requests (used for reCAPTCHA verification).
 
 /**
- * GET route template
+ * GET route to fetch all requests from the database.
+ * This route requires the user to be authenticated, using the rejectUnauthenticated middleware.
  */
 router.get("/", rejectUnauthenticated, (req, res) => {
-  // GET route code here
+  // SQL query to select all requests, ordered by ID in descending order.
   const queryText = 'SELECT * From "Requests" ORDER BY "id" DESC';
   pool
-    .query(queryText)
+    .query(queryText) // Executes the SQL query to fetch requests.
     .then((result) => {
-      res.send(result.rows);
+      res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
       console.error("Error fetching requests:", err);
-      res.sendStatus(500);
-    });
-});
-
-router.get("/locations", rejectUnauthenticated, (req, res) => {
-  // GET route code here
-  const queryText = 'SELECT * From "Locations" ORDER BY "id" ASC';
-  pool
-    .query(queryText)
-    .then((result) => {
-      res.send(result.rows);
-    })
-    .catch((err) => {
-      console.error("Error fetching locations:", err);
-      res.sendStatus(500);
-    });
-});
-
-router.get("/:requestID", rejectUnauthenticated, (req, res) => {
-  // GET route code here
-  const queryText = 'SELECT * From "Requests" WHERE id=$1;';
-  pool
-    .query(queryText, [req.params.requestID])
-    .then((result) => {
-      res.send(result.rows);
-    })
-    .catch((err) => {
-      console.error("Error fetching requests:", err);
-      res.sendStatus(500);
+      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
     });
 });
 
 /**
- * POST route template
+ * GET route to fetch all locations from the database.
+ * Requires authentication via the rejectUnauthenticated middleware.
+ */
+router.get("/locations", rejectUnauthenticated, (req, res) => {
+  // SQL query to select all locations, ordered by ID in ascending order.
+  const queryText = 'SELECT * From "Locations" ORDER BY "id" ASC';
+  pool
+    .query(queryText) // Executes the SQL query to fetch locations.
+    .then((result) => {
+      res.send(result.rows); // On success, send the rows of the result to the client.
+    })
+    .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
+      console.error("Error fetching locations:", err);
+      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+    });
+});
+
+/**
+ * GET route to fetch a specific request by its ID.
+ * Requires authentication via the rejectUnauthenticated middleware.
+ */
+router.get("/:requestID", rejectUnauthenticated, (req, res) => {
+  // SQL query to select a request by its ID.
+  const queryText = 'SELECT * From "Requests" WHERE id=$1;';
+  pool
+    .query(queryText, [req.params.requestID]) // Executes the SQL query with the request ID parameter.
+    .then((result) => {
+      res.send(result.rows); // On success, send the result rows (request) to the client.
+    })
+    .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
+      console.error("Error fetching requests:", err);
+      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+    });
+});
+
+/**
+ * POST route to create a new request.
+ * Requires authentication via the rejectUnauthenticated middleware.
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
-  //  POST route code here
-  console.log("new request sent", req.body);
+  // Destructure and extract values from the request body.
   const {
     team_org_event,
     title_w_team_org_event,
@@ -90,6 +102,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     renter_email,
   } = req.body;
 
+  // SQL query to insert a new request into the "Requests" table.
   const queryText = `
     INSERT INTO "Requests" (
       "team_org_event", 
@@ -161,22 +174,24 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       renter_email,
     ])
     .then((result) => {
-      console.log("Created a new request", result.rows[0]);
-      res.sendStatus(201);
+      res.sendStatus(201); // Respond with HTTP status 201 (Created).
     })
     .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
       console.error("Error creating request", err);
-      res.status(500);
+      res.status(500); // Respond with HTTP status 500 (Internal Server Error).
     });
 });
 
 /**
- * PUT route template
+ * PUT route to update an existing request by its ID.
+ * Requires authentication via the rejectUnauthenticated middleware.
  */
 router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
-  //  PUT route code here
-  console.log("new request sent", req.params);
+  // Extract the applicationId from the request parameters.
   const applicationId = req.params.applicationId;
+
+  // Destructure and extract values from the request body (similar to POST route).
   const {
     team_org_event,
     title_w_team_org_event,
@@ -210,6 +225,7 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
     renter_email,
   } = req.body;
 
+  // SQL query to update an existing request in the "Requests" table using the provided applicationId.
   const queryText = `
      UPDATE "Requests" SET
       "team_org_event"=$1, 
@@ -279,32 +295,43 @@ router.put("/:applicationId", rejectUnauthenticated, (req, res) => {
       applicationId,
     ])
     .then((result) => {
-      console.log("Updated a request", applicationId);
-      res.sendStatus(200);
+      res.sendStatus(200); // Respond with HTTP status 200 (OK).
     })
     .catch((err) => {
+      // Log error if the update fails and send a 500 status code indicating server error.
       console.error("Error updating request: ", err);
-      res.status(500);
+      res.status(500); // Respond with HTTP status 500 (Internal Server Error).
     });
 });
-//Delete Route Template
+
+/**
+ * DELETE route to remove a request by its ID.
+ * Requires authentication via the rejectUnauthenticated middleware.
+ */
 router.delete("/:applicationId", rejectUnauthenticated, (req, res) => {
-  console.log("req.params", req.params);
+  // SQL query to delete the request from the "Requests" table using the provided applicationId.
   const queryText = `DELETE FROM "Requests" WHERE id=$1`;
   pool
-    .query(queryText, [req.params.applicationId])
+    .query(queryText, [req.params.applicationId]) // Execute the delete query.
     .then(() => {
-      res.sendStatus(200);
+      res.sendStatus(200); // On success, send HTTP status 200 (OK).
     })
     .catch((err) => {
+      // Log error if the deletion fails and send a 500 status code indicating server error.
       console.error(err);
       res.sendStatus(500);
     });
 });
 
+/**
+ * POST route to verify reCAPTCHA token.
+ * This route is used to validate that the user is a real person (anti-bot measure).
+ */
 router.post("/verify-recaptcha", async (req, res) => {
+  // Extract reCAPTCHA token from the request body.
   const { recaptchaToken } = req.body;
 
+  // If the token is missing, send a 400 status indicating bad request.
   if (!recaptchaToken) {
     return res
       .status(400)
@@ -312,7 +339,10 @@ router.post("/verify-recaptcha", async (req, res) => {
   }
 
   try {
+    // Get the secret key for reCAPTCHA from environment variables.
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+
+    // Make a POST request to Google's reCAPTCHA API to validate the token.
     const response = await axios.post(
       `https://www.google.com/recaptcha/api/siteverify`,
       null,
@@ -322,16 +352,20 @@ router.post("/verify-recaptcha", async (req, res) => {
     );
 
     if (response.data.success) {
+      // If the reCAPTCHA verification is successful, return a success message.
       res.json({ success: true, message: "reCAPTCHA verified successfully!" });
     } else {
+      // If the reCAPTCHA verification fails, return an error message.
       res
         .status(400)
         .json({ success: false, message: "reCAPTCHA verification failed." });
     }
   } catch (error) {
+    // Log any error from the reCAPTCHA verification and send a 500 status code.
     console.error("Error verifying reCAPTCHA:", error.message);
     res.status(500).json({ success: false, message: "Internal Server Error." });
   }
 });
 
+// Export the router to use in the main app.
 module.exports = router;
