@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express"); // Import the Express framework to handle routing and HTTP requests.
 const pool = require("../modules/pool"); // Import the database pool to handle SQL queries.
 const {
   rejectUnauthenticated,
