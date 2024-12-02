@@ -131,12 +131,3 @@ Export filtered data to Excel or PDF.
 - Secure admin tools for managing submissions.
 
 **For a detailed scope, refer to the Scope Document.**
-
-## Contact
-
-*For questions or issues, reach out to the project maintainers:*
-
-- *Alex R.*
-- *Papa Dienou F.*
-- *Jacob M.*
-
