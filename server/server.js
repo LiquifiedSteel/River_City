@@ -9,7 +9,7 @@ const sessionMiddleware = require("./modules/session-middleware");
 const passport = require("./strategies/user.strategy");
 
 // Route Includes
-const applicationRouter = require("./routes/application.router");
+const transactionsRouter = require("./routes/transactions.router");
 const userRouter = require("./routes/user.router");
 const excelRouter = require("./routes/excel");
 
@@ -26,7 +26,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use("/api/application", applicationRouter);
+app.use("/api/transactions", transactionsRouter);
 app.use("/api/user", userRouter);
 app.use("/api/excel", excelRouter);
 
