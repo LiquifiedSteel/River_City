@@ -12,7 +12,7 @@ const axios = require("axios"); // Axios for making HTTP requests (used for reCA
  */
 router.get("/", rejectUnauthenticated, (req, res) => {
   // SQL query to select all transactions, ordered by ID in descending order.
-  const queryText = 'SELECT * From "Transactions" ORDER BY "id" DESC';
+  const queryText = 'SELECT * From "Transactions" ORDER BY "id" DESC;';
   pool
     .query(queryText) // Executes the SQL query to fetch transactions.
     .then((result) => {
@@ -26,54 +26,118 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 });
 
 /**
- * GET route to fetch all locations from the database.
+ * GET route to fetch transactions from a specific envelope from the database.
  * Requires authentication via the rejectUnauthenticated middleware.
  */
-router.get("/locations", rejectUnauthenticated, (req, res) => {
-  // SQL query to select all locations, ordered by ID in ascending order.
-  const queryText = 'SELECT * From "Locations" ORDER BY "id" ASC';
+router.get("/envelope/:envelope", rejectUnauthenticated, (req, res) => {
+
+  const envelope = req.params.envelope;
+  // SQL query to select all transactions, ordered by ID in ascending order.
+  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
   pool
-    .query(queryText) // Executes the SQL query to fetch locations.
+    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
     .then((result) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
       // Log error if the query fails and send a 500 status code indicating server error.
-      console.error("Error fetching locations:", err);
+      console.error("Error fetching specified transactions:", err);
       res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
     });
 });
 
-/**
- * GET route to fetch a specific request by its ID.
- * Requires authentication via the rejectUnauthenticated middleware.
- */
-router.get("/:requestID", rejectUnauthenticated, (req, res) => {
-  // SQL query to select a request by its ID.
-  const queryText = 'SELECT * From "Requests" WHERE id=$1;';
+router.get("/reviewed/", rejectUnauthenticated, (req, res) => {
+
+  const envelope = req.params.envelope;
+  // SQL query to select all transactions, ordered by ID in ascending order.
+  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
   pool
-    .query(queryText, [req.params.requestID]) // Executes the SQL query with the request ID parameter.
+    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
     .then((result) => {
-      res.send(result.rows); // On success, send the result rows (request) to the client.
+      res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
       // Log error if the query fails and send a 500 status code indicating server error.
-      console.error("Error fetching requests:", err);
+      console.error("Error fetching specified transactions:", err);
       res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
     });
 });
 
+router.get("/reviewed/:envelope", rejectUnauthenticated, (req, res) => {
+
+  const envelope = req.params.envelope;
+  // SQL query to select all transactions, ordered by ID in ascending order.
+  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  pool
+    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
+    .then((result) => {
+      res.send(result.rows); // On success, send the rows of the result to the client.
+    })
+    .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
+      console.error("Error fetching specified transactions:", err);
+      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+    });
+});
+
+router.get("/pocket/", rejectUnauthenticated, (req, res) => {
+
+  const envelope = req.params.envelope;
+  // SQL query to select all transactions, ordered by ID in ascending order.
+  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  pool
+    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
+    .then((result) => {
+      res.send(result.rows); // On success, send the rows of the result to the client.
+    })
+    .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
+      console.error("Error fetching specified transactions:", err);
+      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+    });
+});
+
+router.get("/pocket/:envelope", rejectUnauthenticated, (req, res) => {
+
+  const envelope = req.params.envelope;
+  // SQL query to select all transactions, ordered by ID in ascending order.
+  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  pool
+    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
+    .then((result) => {
+      res.send(result.rows); // On success, send the rows of the result to the client.
+    })
+    .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
+      console.error("Error fetching specified transactions:", err);
+      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+    });
+});
+
+router.post("/", rejectUnauthenticated, (req, res) => {
+  const transaction = {...req.body};
+  console.log(transaction);
+  const queryText = `INSERT INTO "Transactions" ("envelope", "name", "location", "timeDate", "ammount", "recieptLink")
+                     VALUES ($1, $2, $3, $4, $5, $6);`;
+  pool
+    .query(queryText, [transaction.envelope, transaction.name, transaction.location, transaction.timeDate, transaction.ammount, transaction.recieptLink])
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
+      console.error("Error creating transaction: ", err);
+      res.sendStatus(500);
+    })
+})
 
 
 /**
- * DELETE route to remove a request by its ID.
+ * DELETE route to remove a transaction by its ID.
  * Requires authentication via the rejectUnauthenticated middleware.
  */
-router.delete("/:applicationId", rejectUnauthenticated, (req, res) => {
-  // SQL query to delete the request from the "Requests" table using the provided applicationId.
-  const queryText = `DELETE FROM "Requests" WHERE id=$1`;
+router.delete("/:transactionId", rejectUnauthenticated, (req, res) => {
+  // SQL query to delete the transaction from the "transactions" table using the provided transactionId.
+  const queryText = `DELETE FROM "Transactions" WHERE id=$1;`;
   pool
-    .query(queryText, [req.params.applicationId]) // Execute the delete query.
+    .query(queryText, [req.params.transactionId]) // Execute the delete query.
     .then(() => {
       res.sendStatus(200); // On success, send HTTP status 200 (OK).
     })
@@ -83,6 +147,22 @@ router.delete("/:applicationId", rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
+  const transaction = req.params.id;
+
+  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1;`;
+
+  pool
+    .query(queryText, (transaction))
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.error("Error marking transaction as reviewed:", err);
+      res.sendStatus(500);
+    })
+})
+
+
 
 /**
  * POST route to verify reCAPTCHA token.
