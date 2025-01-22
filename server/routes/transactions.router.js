@@ -48,11 +48,10 @@ router.get("/envelope/:envelope", rejectUnauthenticated, (req, res) => {
 
 router.get("/reviewed/", rejectUnauthenticated, (req, res) => {
 
-  const envelope = req.params.envelope;
   // SQL query to select all transactions, ordered by ID in ascending order.
-  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  const queryText = 'SELECT * From "Transactions" WHERE "reviewed"=TRUE ORDER BY "id" DESC;';
   pool
-    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
+    .query(queryText) // Executes the SQL query to fetch transactions.
     .then((result) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
@@ -67,7 +66,7 @@ router.get("/reviewed/:envelope", rejectUnauthenticated, (req, res) => {
 
   const envelope = req.params.envelope;
   // SQL query to select all transactions, ordered by ID in ascending order.
-  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  const queryText = 'SELECT * From "Transactions" WHERE ("reviewed"=TRUE AND "envelope"=$1) ORDER BY "id" DESC;';
   pool
     .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
     .then((result) => {
@@ -82,11 +81,10 @@ router.get("/reviewed/:envelope", rejectUnauthenticated, (req, res) => {
 
 router.get("/pocket/", rejectUnauthenticated, (req, res) => {
 
-  const envelope = req.params.envelope;
   // SQL query to select all transactions, ordered by ID in ascending order.
-  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  const queryText = 'SELECT * From "Transactions" WHERE "out_of_pocket"=TRUE ORDER BY "id" DESC;';
   pool
-    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
+    .query(queryText) // Executes the SQL query to fetch transactions.
     .then((result) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
@@ -101,7 +99,7 @@ router.get("/pocket/:envelope", rejectUnauthenticated, (req, res) => {
 
   const envelope = req.params.envelope;
   // SQL query to select all transactions, ordered by ID in ascending order.
-  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  const queryText = 'SELECT * From "Transactions" WHERE ("out_of_pocket"=TRUE AND "envelope"=$1) ORDER BY "id" DESC;';
   pool
     .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
     .then((result) => {
@@ -116,12 +114,26 @@ router.get("/pocket/:envelope", rejectUnauthenticated, (req, res) => {
 
 router.post("/", rejectUnauthenticated, (req, res) => {
   const transaction = {...req.body};
-  console.log(transaction);
-  const queryText = `INSERT INTO "Transactions" ("envelope", "name", "location", "timeDate", "ammount", "recieptLink")
-                     VALUES ($1, $2, $3, $4, $5, $6);`;
+  const queryText = `INSERT INTO "Transactions" ("envelope", "name", "location", "timeDate", "ammount", "recieptLink", "out_of_pocket")
+                     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`;
   pool
-    .query(queryText, [transaction.envelope, transaction.name, transaction.location, transaction.timeDate, transaction.ammount, transaction.recieptLink])
-    .then(() => res.sendStatus(201))
+    .query(queryText, [transaction.envelope, transaction.name, transaction.location, transaction.timeDate, transaction.ammount, transaction.recieptLink, transaction.outOfPocket])
+    .then((response) => {
+      let transId = response.rows[0];
+      if(transaction.outOfPocket) {
+        const queryText = `INSERT INTO "Checks" ("name", "ammount", "recieptLink", "id")
+                     VALUES ($1, $2, $3, $4);`;
+        pool
+          .query(queryText, [transaction.name, transaction.ammount, transaction.recieptLink, transId.id])
+          .then(() => {res.sendStatus(201)})
+          .catch((err) => {
+            console.error("Error creating Check: ", err);
+            res.sendStatus(500);
+          })
+      } else {
+        res.sendStatus(201);
+      }
+    })
     .catch((err) => {
       console.error("Error creating transaction: ", err);
       res.sendStatus(500);
@@ -154,7 +166,7 @@ router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
   const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1;`;
 
   pool
-    .query(queryText, (transaction))
+    .query(queryText, [transaction])
     .then(() => res.sendStatus(200))
     .catch((err) => {
       console.error("Error marking transaction as reviewed:", err);
