@@ -11,6 +11,7 @@ const passport = require("./strategies/user.strategy");
 // Route Includes
 const transactionsRouter = require("./routes/transactions.router");
 const checksRouter = require("./routes/checks.router");
+const envelopesRouter = require("./routes/envelopes.router");
 const userRouter = require("./routes/user.router");
 const excelRouter = require("./routes/excel");
 
@@ -27,6 +28,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
+app.use("/api/envelopes", envelopesRouter);
 app.use("/api/checks", checksRouter);
 app.use("/api/transactions", transactionsRouter);
 app.use("/api/user", userRouter);
