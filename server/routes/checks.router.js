@@ -12,7 +12,7 @@ const router = express.Router(); // Create a new Express router to define routes
  */
 router.get("/", rejectUnauthenticated, (req, res) => {
     // SQL query to select all checks, ordered by ID in descending order.
-    const queryText = 'SELECT * From "checks" ORDER BY "id" DESC;';
+    const queryText = 'SELECT * From "Checks" ORDER BY "id" DESC;';
     pool
       .query(queryText) // Executes the SQL query to fetch checks.
       .then((result) => {
