@@ -6,22 +6,18 @@ const {
 const router = express.Router(); // Create a new Express router to define routes.
 
 router.post("/add/", rejectUnauthenticated, (req, res) => {
+    console.log(req.body)
     const info = {...req.body};
-    const queryText = `CREATE TABLE $1 (
-                       "id" SERIAL PRIMARY KEY,
-                       "envelope" VARCHAR(50) NOT NULL,
-                       "name" VARCHAR(30) NOT NULL,
-                       "location" VARCHAR(200) NOT NULL,
-                       "timeDate" VARCHAR(100) NOT NULL,
-                       "ammount" DECIMAL(8) NOT NULL,
-                       "recieptLink" VARCHAR(300) NOT NULL,
-                       "reviewed" BOOLEAN DEFAULT FALSE,
-                       "out_of_pocket" BOOLEAN DEFAULT FALSE,
-                       "date" DATE DEFAULT NOW());`
+    
+    const queryText = `INSERT INTO "Envelopes" ("envelope", "total")
+                      VALUES ($1, $2);`;
     pool
-      .query(queryText, [info.envName])
-      .then(() => res.sendStatus(201))
-      .catch((err) => console.error("Failed to create new Envelope: ", err))
+      .query(queryText, [info.envName, info.total])
+      .then(() => {res.sendStatus(201)})
+      .catch((err) => {
+        console.error("Error creating Envelope: ", err);
+        res.sendStatus(500);
+      })
 })
 
 

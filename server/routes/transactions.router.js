@@ -162,12 +162,32 @@ router.delete("/:transactionId", rejectUnauthenticated, (req, res) => {
 
 router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
   const transaction = req.params.id;
-
-  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1;`;
+  let newTotal = 0;
+  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1 RETURNING "envelope", "ammount";`;
 
   pool
     .query(queryText, [transaction])
-    .then(() => res.sendStatus(200))
+    .then((response) => {
+      const queryText = `SELECT "total" FROM "Envelopes" WHERE "envelope"=$1;`;
+      newTotal =  Number(response.rows[0].ammount);
+
+      pool
+        .query(queryText, [response.rows[0].envelope])
+        .then((response) => {
+          const queryText = `UPDATE "Envelopes" SET "total"=$1;`;
+          newTotal = response.rows[0].total - newTotal;
+
+          pool
+            .query(queryText, [newTotal])
+            .then(() => {res.send(`${newTotal}`).status(201)})
+            .catch((err) => {
+              console.error("Error updating envelope tracker: ", err);
+              res.sendStatus(500);
+          })})
+        .catch((err) => {
+        console.error("Error updating envelope tracker: ", err);
+        res.sendStatus(500);
+        })})
     .catch((err) => {
       console.error("Error marking transaction as reviewed:", err);
       res.sendStatus(500);
