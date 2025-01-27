@@ -5,6 +5,18 @@ const {
 } = require("../modules/authentication-middleware"); // Middleware to reject unauthenticated users.
 const router = express.Router(); // Create a new Express router to define routes.
 
+router.get("/", rejectUnauthenticated, (req,res) => {
+  const queryText = `SELECT * FROM "Envelopes" GROUP BY "envelope";`;
+
+  pool
+    .query(queryText)
+    .then((response) => res.send(response.rows).status(200))
+    .catch((err) => {
+      console.error("Failed to collect Envelopes: ", err);
+      res.sendStatus(500);
+    })
+})
+
 router.post("/add/", rejectUnauthenticated, (req, res) => {
     console.log(req.body)
     const info = {...req.body};
