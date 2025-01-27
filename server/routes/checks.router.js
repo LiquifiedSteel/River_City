@@ -33,7 +33,17 @@ router.put("/paid/:id", rejectUnauthenticated, (req, res) => {
   
     pool
       .query(queryText, [check])
-      .then(() => res.sendStatus(200))
+      .then(() => {
+        const queryText = `UPDATE "Transactions" SET "paid"=TRUE WHERE "id"=$1;`
+
+        pool
+          .query(queryText, [check])
+          .then(() => res.sendStatus(200))
+          .catch((err) => {
+            console.error("Error marking transaction OOP as paid: ", err);
+            res.sendStatus(500);
+          })
+      })
       .catch((err) => {
         console.error("Error marking check as paid:", err);
         res.sendStatus(500);
