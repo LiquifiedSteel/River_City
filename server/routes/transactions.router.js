@@ -168,17 +168,17 @@ router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
   pool
     .query(queryText, [transaction])
     .then((response) => {
-      const queryText = `SELECT "total" FROM "Envelopes" WHERE "envelope"=$1;`;
+      const queryText = `SELECT * FROM "Envelopes" WHERE "envelope"=$1;`;
       newTotal =  Number(response.rows[0].ammount);
 
       pool
         .query(queryText, [response.rows[0].envelope])
         .then((response) => {
-          const queryText = `UPDATE "Envelopes" SET "total"=$1;`;
+          const queryText = `UPDATE "Envelopes" SET "total"=$1 WHERE "envelope"=$2;`;
           newTotal = response.rows[0].total - newTotal;
 
           pool
-            .query(queryText, [newTotal])
+            .query(queryText, [newTotal, response.rows[0].envelope])
             .then(() => {res.send(`${newTotal}`).status(201)})
             .catch((err) => {
               console.error("Error updating envelope tracker: ", err);
