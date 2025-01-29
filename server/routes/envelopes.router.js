@@ -18,13 +18,12 @@ router.get("/", rejectUnauthenticated, (req,res) => {
 })
 
 router.post("/add/", rejectUnauthenticated, (req, res) => {
-    console.log(req.body)
     const info = {...req.body};
     
-    const queryText = `INSERT INTO "Envelopes" ("envelope", "total")
-                      VALUES ($1, $2);`;
+    const queryText = `INSERT INTO "Envelopes" ("envelope") VALUES ($1);`;
+
     pool
-      .query(queryText, [info.envName, info.total])
+      .query(queryText, [info.envName])
       .then(() => {res.sendStatus(201)})
       .catch((err) => {
         console.error("Error creating Envelope: ", err);

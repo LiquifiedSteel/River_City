@@ -114,17 +114,17 @@ router.get("/pocket/:envelope", rejectUnauthenticated, (req, res) => {
 
 router.post("/", rejectUnauthenticated, (req, res) => {
   const transaction = {...req.body};
-  const queryText = `INSERT INTO "Transactions" ("envelope", "name", "location", "timeDate", "ammount", "recieptLink", "out_of_pocket")
+  const queryText = `INSERT INTO "Transactions" ("envelope", "name", "location", "timeDate", "amount", "recieptLink", "out_of_pocket")
                      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`;
   pool
-    .query(queryText, [transaction.envelope, transaction.name, transaction.location, transaction.timeDate, transaction.ammount, transaction.recieptLink, transaction.outOfPocket])
+    .query(queryText, [transaction.envelope, transaction.name, transaction.location, transaction.timeDate, transaction.amount, transaction.recieptLink, transaction.outOfPocket])
     .then((response) => {
       let transId = response.rows[0];
       if(transaction.outOfPocket) {
-        const queryText = `INSERT INTO "Checks" ("name", "ammount", "recieptLink", "id")
+        const queryText = `INSERT INTO "Checks" ("name", "amount", "recieptLink", "id")
                      VALUES ($1, $2, $3, $4);`;
         pool
-          .query(queryText, [transaction.name, transaction.ammount, transaction.recieptLink, transId.id])
+          .query(queryText, [transaction.name, transaction.amount, transaction.recieptLink, transId.id])
           .then(() => {res.sendStatus(201)})
           .catch((err) => {
             console.error("Error creating Check: ", err);
@@ -163,13 +163,13 @@ router.delete("/:transactionId", rejectUnauthenticated, (req, res) => {
 router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
   const transaction = req.params.id;
   let newTotal = 0;
-  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1 RETURNING "envelope", "ammount";`;
+  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1 RETURNING "envelope", "amount";`;
 
   pool
     .query(queryText, [transaction])
     .then((response) => {
       const queryText = `SELECT * FROM "Envelopes" WHERE "envelope"=$1;`;
-      newTotal =  Number(response.rows[0].ammount);
+      newTotal = Number(response.rows[0].amount);
 
       pool
         .query(queryText, [response.rows[0].envelope])
@@ -194,7 +194,51 @@ router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
     })
 })
 
+router.put("/reviewedAll", rejectUnauthenticated, async (req, res) => {
+  const changes = [...req.body];
+  const queryText1 = `SELECT * FROM "Envelopes" WHERE "envelope"=$1 FOR UPDATE;`; // Lock row
+  const queryText2 = `UPDATE "Envelopes" SET "total"=$1 WHERE "envelope"=$2;`;
+  const queryText3 = `UPDATE "Transactions" SET "reviewed"=TRUE;`;
+  
+  const client = await pool.connect(); // Get a client for transaction
 
+  try {
+    // Start transaction
+    await client.query("BEGIN");
+
+    // Process each change in the `changes` array
+    for (const change of changes) {
+      // Step 1: Fetch the current envelope row with a lock
+      const response = await client.query(queryText1, [change.envelope]);
+      if (response.rows.length === 0) {
+        throw new Error(`Envelope not found: ${change.envelope}`);
+      }
+
+      // Step 2: Calculate the new total
+      const currentTotal = Number(response.rows[0].total);
+      const newTotal = currentTotal - Number(change.amount);
+
+      // Step 3: Update the envelope's total
+      await client.query(queryText2, [newTotal, change.envelope]);
+    }
+
+    // Step 4: Mark all transactions as reviewed
+    await client.query(queryText3);
+
+    // Commit the transaction
+    await client.query("COMMIT");
+
+    res.sendStatus(200); // Send success response
+  } catch (error) {
+    // Roll back the transaction on any error
+    await client.query("ROLLBACK");
+    console.error("Error in reviewedAll route:", error.message);
+    res.sendStatus(500);
+  } finally {
+    // Release the client back to the pool
+    client.release();
+  }
+});
 
 /**
  * POST route to verify reCAPTCHA token.

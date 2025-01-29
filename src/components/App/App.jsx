@@ -14,6 +14,7 @@ import RegisterPage from "../RegisterPage/RegisterPage";
 import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
 import FormPartTwo from "../Form/FormPartTwo";
 import AdminProtectedRoute from "../AdminProtectedRoute/AdminProtectedRoute";
+import AddEnvelope from "../AddEnvelope/AddEnvelope";
 
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -83,6 +84,10 @@ function App() {
           
           <ProtectedRoute exact path="/form-part-two">
             <FormPartTwo />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/new-envelope">
+            <AddEnvelope />
           </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
