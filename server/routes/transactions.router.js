@@ -83,7 +83,7 @@ router.get("/:envelope", rejectUnauthenticated, (req, res) => {
 
   const envelope = req.params.envelope;
   // SQL query to select all transactions, ordered by ID in ascending order.
-  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "timeDate" DESC;';
   pool
     .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
     .then((result) => {
