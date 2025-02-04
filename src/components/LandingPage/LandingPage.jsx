@@ -5,8 +5,10 @@ import './LandingPage.css';
 import { useDispatch } from 'react-redux';
 import AddEnvelope from '../AddEnvelope/AddEnvelope';
 import { useSelector } from 'react-redux';
+import { Table } from 'react-bootstrap';
 
 function LandingPage() {
+  const user = useSelector((store) => store.user);
   const history = useHistory();
   const [envelopes, setEnvelopes] = useState([]);
   const [adminTable, setAdminTable] = useState([]);
@@ -93,17 +95,24 @@ function LandingPage() {
   return (
     <div className="container">
       <div className="grid">
-        <div className="grid-col_7 grid">
+        {user.isAdmin ? <div className="grid-col_7 grid">
           {creatingEnvelope ? <AddEnvelope /> : <button className='grid-col_6' onClick={() => dispatch({type: "SWITCH"})}>+ Add New Envelope</button>}
           {envelopes.map((envelope) => (
-            <div key={envelope.envelope + "."} className='envelope grid-col_6'>
+            <div key={envelope.envelope + "."} className='envelope grid-col_6 text-center' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
               <h2>{envelope.envelope}</h2>
               <h3>${envelope.total}</h3>
             </div>
           ))}
-        </div>
-        <div className='grid-col_5 grid'>
-          <table className="grid-col_6">
+        </div> : <div className="grid-col_12 grid">
+          {envelopes.map((envelope) => (
+            <div key={envelope.envelope + "."} className='envelope grid-col_4 text-center' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+              <h2>{envelope.envelope}</h2>
+              <h3>${envelope.total}</h3>
+            </div>
+          ))}
+        </div>}
+        {user.isAdmin && <div className='grid-col_5 grid'>
+          <Table className="grid-col_6 text-center">
             <thead>
               <tr>
                 <th>Unreviewed</th>
@@ -133,8 +142,8 @@ function LandingPage() {
               </>
               )}
             </tbody>
-          </table>
-          <table className="grid-col_6">
+          </Table>
+          <Table className="grid-col_6 text-center">
             <thead>
               <tr>
                 <th>Unpaid</th>
@@ -155,8 +164,8 @@ function LandingPage() {
                 </tr>
               )}
             </tbody>
-          </table>
-        </div>
+          </Table>
+        </div>}
       </div>
     </div>
   );
