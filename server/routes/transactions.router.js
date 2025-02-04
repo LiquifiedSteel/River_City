@@ -79,6 +79,23 @@ router.get("/reviewed/:envelope", rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get("/:envelope", rejectUnauthenticated, (req, res) => {
+
+  const envelope = req.params.envelope;
+  // SQL query to select all transactions, ordered by ID in ascending order.
+  const queryText = 'SELECT * From "Transactions" WHERE "envelope"=$1 ORDER BY "id" DESC;';
+  pool
+    .query(queryText, [envelope]) // Executes the SQL query to fetch transactions.
+    .then((result) => {
+      res.send(result.rows); // On success, send the rows of the result to the client.
+    })
+    .catch((err) => {
+      // Log error if the query fails and send a 500 status code indicating server error.
+      console.error("Error fetching specified transactions:", err);
+      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+    });
+});
+
 router.get("/pocket/", rejectUnauthenticated, (req, res) => {
 
   // SQL query to select all transactions, ordered by ID in ascending order.
@@ -114,13 +131,13 @@ router.get("/pocket/:envelope", rejectUnauthenticated, (req, res) => {
 
 router.post("/", rejectUnauthenticated, (req, res) => {
   const transaction = {...req.body};
-  const queryText = `INSERT INTO "Transactions" ("envelope", "name", "location", "timeDate", "amount", "recieptLink", "out_of_pocket")
-                     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`;
+  const queryText = `INSERT INTO "Transactions" ("envelope", "name", "location", "timeDate", "amount", "recieptLink", "out_of_pocket", "tag")
+                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;`;
   pool
-    .query(queryText, [transaction.envelope, transaction.name, transaction.location, transaction.timeDate, transaction.amount, transaction.recieptLink, transaction.outOfPocket])
+    .query(queryText, [transaction.envelope, transaction.name, transaction.location, transaction.timeDate, transaction.amount, transaction.recieptLink, transaction.outOfPocket, transaction.tag])
     .then((response) => {
       let transId = response.rows[0];
-      if(transaction.outOfPocket) {
+      if(transaction.outOfPocket === "TRUE" || transaction.outOfPocket) {
         const queryText = `INSERT INTO "Checks" ("name", "amount", "recieptLink", "id")
                      VALUES ($1, $2, $3, $4);`;
         pool
