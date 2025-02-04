@@ -14,7 +14,8 @@ import RegisterPage from "../RegisterPage/RegisterPage";
 import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
 import FormPartTwo from "../Form/FormPartTwo";
 import AdminProtectedRoute from "../AdminProtectedRoute/AdminProtectedRoute";
-import AddEnvelope from "../AddEnvelope/AddEnvelope";
+import NewTransaction from "../NewTransaction/NewTransaction.jsx";
+import Envelopes from "../Envelopes/Envelopes";
 
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -86,8 +87,12 @@ function App() {
             <FormPartTwo />
           </ProtectedRoute>
 
-          <ProtectedRoute exact path="/new-envelope">
-            <AddEnvelope />
+          <ProtectedRoute path="/envelope">
+            <Envelopes />
+          </ProtectedRoute>
+
+          <ProtectedRoute path="/new-transaction">
+            <NewTransaction />
           </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
