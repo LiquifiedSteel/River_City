@@ -128,7 +128,6 @@ function LandingPage() {
             </thead>
             <tbody>
               {adminTable.filter((transaction) => transaction.reviewed === false).map((transaction) => 
-              <>
                 <tr key={transaction.id}>
                   <td>{transaction.name + ": " + transaction.amount}</td>
                   <td>
@@ -139,7 +138,6 @@ function LandingPage() {
                     </button>
                   </td>
                 </tr>
-              </>
               )}
             </tbody>
           </Table>
