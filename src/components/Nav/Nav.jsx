@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import LogOutButton from "../LogOutButton/LogOutButton";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector } from "react-redux";
 import { css } from "@emotion/react";
+import axios from "axios";
 
 const navBarStyle = css`
-  background-color: #205831;
+  background-color: #D3D3D3;
   color: #ffffff;
-  position: sticky;
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -28,7 +28,7 @@ const navTitleStyle = css`
   color: #ffffff;
 
   &:hover {
-    color: #d1e8d3;
+    opacity: 70%;
   }
 
   @media (max-width: 576px) {
@@ -103,6 +103,40 @@ const listItemStyle = css`
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((store) => store.user);
+  const [budget, setBudget] = useState([]);
+  const [remaining, setRemaining] = useState(0);
+  const location = useLocation(); // React Router's hook to access the current URL
+  const envelope = new URLSearchParams(location.search).get("envelope"); // Extracts the "envelope" query parameter from the URL
+
+  useEffect(() => {
+    // Async function to fetch budget things
+    const fetchBudget = async () => {
+      let remain = 0;
+      let preBudget = 0;
+      try {
+        // Fetch budget items data
+        const response = await axios.get(`/api/envelopes/navBudget`);
+        setBudget(response.data);
+        preBudget = response.data[1].amount;
+        remain = Number(response.data[1].amount);
+      } catch (error) {
+        console.error("Error fetching Envelopes:", error);
+      }
+
+      try {
+        // Fetch budget items data
+        const response = await axios.get(`/api/transactions/reviewed`);
+        let remove = 0;
+        for (let item of response.data) {
+          remove += Number(item.amount);
+        } 
+        setRemaining(remain - remove);
+      } catch (error) {
+        console.error("Error fetching Envelopes:", error);
+      }
+    };
+    fetchBudget(); // Invoke the fetch function
+}, [])
 
   const toggleNavbar = () => {
     setIsOpen((prev) => !prev);
@@ -112,9 +146,15 @@ const Nav = () => {
     <nav css={navBarStyle}>
       <div className="d-flex align-items-center justify-content-between">
         {/* Brand/Title */}
-        <Link to="/home" css={navTitleStyle}>
-          West Fargo Public Schools
-        </Link>
+        {user.isAdmin ? 
+          <Link to="/admin" css={navTitleStyle}>
+            <img src="rcc-logo.png" />
+          </Link> 
+          : 
+          <Link to="/home" css={navTitleStyle}>
+            <img src="rcc-logo.png" />
+          </Link>
+        }
 
         {/* Toggler Button for Mobile */}
         <button
@@ -146,39 +186,13 @@ const Nav = () => {
             }
           `}
         >
-          {/* If no user is logged in, show these links */}
-          {!user.id && (
-            <li css={listItemStyle}>
-              <Link to="/login" css={linkStyle}>
-                Login / Register
-              </Link>
-            </li>
-          )}
-
-          {/* If a user is logged in, show these links */}
-          {user.id && (
-            <>
-              <li css={listItemStyle}>
-                <LogOutButton />
-              </li>
-            </>
-          )}
-
-          {/* Admin-specific Link */}
-          {user.isAdmin && (
-            <li css={listItemStyle}>
-              <Link to="/admin-dashboard" css={linkStyle}>
-                Admin Dashboard
-              </Link>
-            </li>
-          )}
-
-          {/* Rental Application Link */}
-          <li css={listItemStyle}>
-            <Link to="/form-part-one" css={linkStyle}>
-              Monday - Friday Rental Application
-            </Link>
-          </li>
+          {envelope && <h2>{envelope}</h2>}
+          {user.id && budget[0] && <>
+            <div>
+              <h3>Total Budget for {new Date().getFullYear()}: ${budget[1].amount}</h3>
+              <h3>Remaining Budget for {new Date().getFullYear()}: ${remaining.toFixed(2)}</h3>
+            </div>
+          </>}
         </ul>
       </div>
     </nav>
