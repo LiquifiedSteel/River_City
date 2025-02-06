@@ -31,6 +31,16 @@ router.post("/add/", rejectUnauthenticated, (req, res) => {
       })
 })
 
+router.get("/navBudget", rejectUnauthenticated, (req, res) => {
+  const queryText = `SELECT * FROM "Budget";`;
+  pool
+    .query(queryText)
+    .then((response) => res.send(response.rows).status(200))
+    .catch((err) => {
+      console.error("Failed to collect Budget Items: ", err);
+      res.sendStatus(500);
+    })
+})
 
 
 // Export the router to use in the main app.
