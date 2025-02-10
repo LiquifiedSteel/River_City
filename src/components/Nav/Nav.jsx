@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
 import axios from "axios";
 
@@ -102,40 +102,17 @@ const listItemStyle = css`
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const remaining = useSelector((store) => store.remaining)
   const user = useSelector((store) => store.user);
-  const [budget, setBudget] = useState([]);
-  const [remaining, setRemaining] = useState(0);
+  const budget = useSelector((store) => store.budget);
   const location = useLocation(); // React Router's hook to access the current URL
   const envelope = new URLSearchParams(location.search).get("envelope"); // Extracts the "envelope" query parameter from the URL
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Async function to fetch budget things
-    const fetchBudget = async () => {
-      let remain = 0;
-      let preBudget = 0;
-      try {
-        // Fetch budget items data
-        const response = await axios.get(`/api/envelopes/navBudget`);
-        setBudget(response.data);
-        preBudget = response.data[1].amount;
-        remain = Number(response.data[1].amount);
-      } catch (error) {
-        console.error("Error fetching Envelopes:", error);
-      }
-
-      try {
-        // Fetch budget items data
-        const response = await axios.get(`/api/transactions/reviewed`);
-        let remove = 0;
-        for (let item of response.data) {
-          remove += Number(item.amount);
-        } 
-        setRemaining(remain - remove);
-      } catch (error) {
-        console.error("Error fetching Envelopes:", error);
-      }
-    };
-    fetchBudget(); // Invoke the fetch function
+    dispatch({type: "GRAB_BUDGET"});
+    dispatch({type: "CALCULATE_REMAINING"});
 }, [])
 
   const toggleNavbar = () => {
@@ -189,8 +166,8 @@ const Nav = () => {
           {envelope && <h2>{envelope}</h2>}
           {user.id && budget[0] && <>
             <div>
-              <h3>Total Budget for {new Date().getFullYear()}: ${budget[1].amount}</h3>
-              <h3>Remaining Budget for {new Date().getFullYear()}: ${remaining.toFixed(2)}</h3>
+              <h3>Total Budget for {new Date().getFullYear()}: ${budget[0].amount}</h3>
+              <h3>Remaining Budget for {new Date().getFullYear()}: ${ (budget[0].amount - remaining).toFixed(2)}</h3>
             </div>
           </>}
         </ul>
