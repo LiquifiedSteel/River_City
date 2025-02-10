@@ -21,8 +21,8 @@ function AdminProtectedRoute({ component, children, ...props }) {
         // If the user is an Admin, show the protected component
         <ProtectedComponent />
         :
-        // Otherwise, redirect to form-part-one
-        <Redirect exact to="/form-part-one" />
+        // Otherwise, redirect to home
+        <Redirect exact to="/home" />
       }
     </Route>
 
