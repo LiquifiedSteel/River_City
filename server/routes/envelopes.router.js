@@ -32,12 +32,25 @@ router.post("/add/", rejectUnauthenticated, (req, res) => {
 })
 
 router.get("/navBudget", rejectUnauthenticated, (req, res) => {
-  const queryText = `SELECT * FROM "Budget";`;
+  const queryText = `SELECT * FROM "Budget" ORDER BY "id" ASC;`;
   pool
     .query(queryText)
     .then((response) => res.send(response.rows).status(200))
     .catch((err) => {
       console.error("Failed to collect Budget Items: ", err);
+      res.sendStatus(500);
+    })
+})
+
+router.put("/budget/:amount", rejectUnauthenticated, (req, res) => {;
+  const update = req.params.amount
+  const queryText = `UPDATE "Budget" SET "amount"=$1 WHERE "type"='Budget';`;
+
+  pool
+    .query(queryText, [update])
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.error("Failed to update annual Budget: ", err);
       res.sendStatus(500);
     })
 })
