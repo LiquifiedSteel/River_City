@@ -7,7 +7,6 @@ function AdminBudget() {
     const budget = useSelector((store) => store.budget);
     const [budEdit, setBudEdit] = useState(false);
     const [newBudget, setNewBudget] = useState(0);
-    const history = useHistory();
     const dispatch = useDispatch();
     console.log(budget);
     // Async function to fetch budget things
