@@ -515,7 +515,7 @@ router.get("/export", async (req, res) => {
     res.send(buffer);
   } catch (error) {
     console.error("Error exporting data to Excel:", error);
-    res.status(500).send("Failed to export data to Excel");
+    res.status(400).send("Failed to export data to Excel");
   }
 
 

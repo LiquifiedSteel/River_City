@@ -19,9 +19,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
         res.send(result.rows); // On success, send the rows of the result to the client.
       })
       .catch((err) => {
-        // Log error if the query fails and send a 500 status code indicating server error.
+        // Log error if the query fails and send a 400 status code indicating server error.
         console.error("Error fetching checks:", err);
-        res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+        res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
       });
   });
 
@@ -41,12 +41,12 @@ router.put("/paid/:id", rejectUnauthenticated, (req, res) => {
           .then(() => res.sendStatus(200))
           .catch((err) => {
             console.error("Error marking transaction OOP as paid: ", err);
-            res.sendStatus(500);
+            res.sendStatus(400);
           })
       })
       .catch((err) => {
         console.error("Error marking check as paid:", err);
-        res.sendStatus(500);
+        res.sendStatus(400);
       })
 })
 

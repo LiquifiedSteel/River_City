@@ -13,7 +13,7 @@ router.get("/", rejectUnauthenticated, (req,res) => {
     .then((response) => res.send(response.rows).status(200))
     .catch((err) => {
       console.error("Failed to collect Envelopes: ", err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     })
 })
 
@@ -27,7 +27,7 @@ router.post("/add/", rejectUnauthenticated, (req, res) => {
       .then(() => {res.sendStatus(201)})
       .catch((err) => {
         console.error("Error creating Envelope: ", err);
-        res.sendStatus(500);
+        res.sendStatus(400);
       })
 })
 
@@ -38,7 +38,7 @@ router.get("/navBudget", rejectUnauthenticated, (req, res) => {
     .then((response) => res.send(response.rows).status(200))
     .catch((err) => {
       console.error("Failed to collect Budget Items: ", err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     })
 })
 
@@ -51,7 +51,7 @@ router.put("/budget/:amount", rejectUnauthenticated, (req, res) => {;
     .then(() => res.sendStatus(200))
     .catch((err) => {
       console.error("Failed to update annual Budget: ", err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     })
 })
 

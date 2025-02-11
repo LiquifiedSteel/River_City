@@ -19,9 +19,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
-      // Log error if the query fails and send a 500 status code indicating server error.
+      // Log error if the query fails and send a 400 status code indicating server error.
       console.error("Error fetching transactions:", err);
-      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+      res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
     });
 });
 
@@ -40,9 +40,9 @@ router.get("/envelope/:envelope", rejectUnauthenticated, (req, res) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
-      // Log error if the query fails and send a 500 status code indicating server error.
+      // Log error if the query fails and send a 400 status code indicating server error.
       console.error("Error fetching specified transactions:", err);
-      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+      res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
     });
 });
 
@@ -56,9 +56,9 @@ router.get("/reviewed/", rejectUnauthenticated, (req, res) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
-      // Log error if the query fails and send a 500 status code indicating server error.
+      // Log error if the query fails and send a 400 status code indicating server error.
       console.error("Error fetching specified transactions:", err);
-      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+      res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
     });
 });
 
@@ -73,9 +73,9 @@ router.get("/reviewed/:envelope", rejectUnauthenticated, (req, res) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
-      // Log error if the query fails and send a 500 status code indicating server error.
+      // Log error if the query fails and send a 400 status code indicating server error.
       console.error("Error fetching specified transactions:", err);
-      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+      res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
     });
 });
 
@@ -90,9 +90,9 @@ router.get("/:envelope", rejectUnauthenticated, (req, res) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
-      // Log error if the query fails and send a 500 status code indicating server error.
+      // Log error if the query fails and send a 400 status code indicating server error.
       console.error("Error fetching specified transactions:", err);
-      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+      res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
     });
 });
 
@@ -106,9 +106,9 @@ router.get("/pocket/", rejectUnauthenticated, (req, res) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
-      // Log error if the query fails and send a 500 status code indicating server error.
+      // Log error if the query fails and send a 400 status code indicating server error.
       console.error("Error fetching specified transactions:", err);
-      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+      res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
     });
 });
 
@@ -123,9 +123,9 @@ router.get("/pocket/:envelope", rejectUnauthenticated, (req, res) => {
       res.send(result.rows); // On success, send the rows of the result to the client.
     })
     .catch((err) => {
-      // Log error if the query fails and send a 500 status code indicating server error.
+      // Log error if the query fails and send a 400 status code indicating server error.
       console.error("Error fetching specified transactions:", err);
-      res.sendStatus(500); // Respond with HTTP status 500 (Internal Server Error).
+      res.sendStatus(400); // Respond with HTTP status 400 (Internal Server Error).
     });
 });
 
@@ -145,7 +145,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
           .then(() => {res.sendStatus(201)})
           .catch((err) => {
             console.error("Error creating Check: ", err);
-            res.sendStatus(500);
+            res.sendStatus(400);
           })
       } else {
         res.sendStatus(201);
@@ -153,7 +153,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     })
     .catch((err) => {
       console.error("Error creating transaction: ", err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     })
 })
 
@@ -171,9 +171,9 @@ router.delete("/:transactionId", rejectUnauthenticated, (req, res) => {
       res.sendStatus(200); // On success, send HTTP status 200 (OK).
     })
     .catch((err) => {
-      // Log error if the deletion fails and send a 500 status code indicating server error.
+      // Log error if the deletion fails and send a 400 status code indicating server error.
       console.error(err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     });
 });
 
@@ -199,15 +199,15 @@ router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
             .then(() => {res.send(`${newTotal}`).status(201)})
             .catch((err) => {
               console.error("Error updating envelope tracker: ", err);
-              res.sendStatus(500);
+              res.sendStatus(400);
           })})
         .catch((err) => {
         console.error("Error updating envelope tracker: ", err);
-        res.sendStatus(500);
+        res.sendStatus(400);
         })})
     .catch((err) => {
       console.error("Error marking transaction as reviewed:", err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     })
 })
 
@@ -250,7 +250,7 @@ router.put("/reviewedAll", rejectUnauthenticated, async (req, res) => {
     // Roll back the transaction on any error
     await client.query("ROLLBACK");
     console.error("Error in reviewedAll route:", error.message);
-    res.sendStatus(500);
+    res.sendStatus(400);
   } finally {
     // Release the client back to the pool
     client.release();
@@ -295,9 +295,9 @@ router.post("/verify-recaptcha", async (req, res) => {
         .json({ success: false, message: "reCAPTCHA verification failed." });
     }
   } catch (error) {
-    // Log any error from the reCAPTCHA verification and send a 500 status code.
+    // Log any error from the reCAPTCHA verification and send a 400 status code.
     console.error("Error verifying reCAPTCHA:", error.message);
-    res.status(500).json({ success: false, message: "Internal Server Error." });
+    res.status(400).json({ success: false, message: "Internal Server Error." });
   }
 });
 
