@@ -15,6 +15,18 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
+router.get("/users", rejectUnauthenticated, (req, res) => {
+  const queryText = `SELECT * FROM "user" ORDER BY "username" ASC;`;
+
+  pool
+    .query(queryText)
+    .then((response) => res.send(response.rows).status(200))
+    .catch((err) => {
+      console.error("Error grabbing all users:", err);
+      res.sendStatus(400);
+    })
+});
+
 /**
  * POST Route: Register a new user
  * This route accepts user registration details (username, password, and email),
@@ -35,9 +47,9 @@ router.post("/register", (req, res, next) => {
     .query(queryText, [username, password, email])
     .then(() => res.sendStatus(201)) // On success, respond with HTTP status 201 (Created).
     .catch((err) => {
-      // Log the error if registration fails and send an HTTP 500 (Internal Server Error).
+      // Log the error if registration fails and send an HTTP 400 (Internal Server Error).
       console.log("User registration failed: ", err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     });
 });
 
@@ -117,6 +129,20 @@ router.put("/newEmail/:email", (req, res) => {
       res.sendStatus(400);
     });
 });
+
+router.put("/admin/:id", rejectUnauthenticated, (req, res) => {
+  const id = req.params.id;
+  const queryText = `UPDATE "user" SET "isAdmin"=NOT"isAdmin" WHERE id=$1;`;
+
+  pool  
+    .query(queryText, [id])
+    .then(()=>res.sendStatus(200))
+    .catch((err) => {
+      // Log the error if the email update fails, and respond with HTTP status 400 (Bad Request).
+      console.error("Error changing Admin status: ", err);
+      res.sendStatus(400);
+    });
+})
 
 /**
  * DELETE Route: Permanently delete a user's account
