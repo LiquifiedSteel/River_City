@@ -56,7 +56,7 @@ function LandingPage() {
     reviewTransaction(); // Invoke the review function
   }
 
-  const reviewAll = (items) => {
+  const reviewAll = async (items) => {
     let money = [];
     for(let item of items) {
       if(item.reviewed === false) {
@@ -67,17 +67,14 @@ function LandingPage() {
         }
       }
     }
-    const reviewTransaction = async () => {
-      try {
-        // Fetch applications data
-        await axios.put(`/api/transactions/reviewedAll`, money);
-        window.location.reload();
-      } catch (error) {
-        console.error("Error reviewing all transactions:", error);
-      }
-    };
-    reviewTransaction(); // Invoke the review function
-  }
+    try {
+      // Fetch applications data
+      await axios.put(`/api/transactions/reviewedAll`, money);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error reviewing all transactions:", error);
+    }
+  };
 
   const pay = (id) => {
     const payCheck = async () => {
@@ -100,7 +97,19 @@ function LandingPage() {
           {envelopes.map((envelope) => (
             <div key={envelope.envelope + "."} className='envelope grid-col_6 text-center' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
               <h2>{envelope.envelope}</h2>
-              <h3>${envelope.total}</h3>
+              <h3>Initial: ${envelope.total}</h3>
+              <h3>
+                Remaining: ${(() => {
+                  let spent = 0;
+                  let remaining = Number(envelope.total);
+                  for (let item of adminTable) {
+                    if (item.reviewed && item.envelope===envelope.envelope) {
+                      spent += Number(item.amount);
+                    }
+                  }
+                  return (remaining - spent).toFixed(2); // Optional to show 2 decimal places
+                })()}
+              </h3>
             </div>
           ))}
         </div> : <div className="grid-col_12 grid">

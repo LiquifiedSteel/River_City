@@ -179,32 +179,11 @@ router.delete("/:transactionId", rejectUnauthenticated, (req, res) => {
 
 router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
   const transaction = req.params.id;
-  let newTotal = 0;
-  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1 RETURNING "envelope", "amount";`;
+  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE WHERE "id"=$1;`;
 
   pool
     .query(queryText, [transaction])
-    .then((response) => {
-      const queryText = `SELECT * FROM "Envelopes" WHERE "envelope"=$1;`;
-      newTotal = Number(response.rows[0].amount);
-
-      pool
-        .query(queryText, [response.rows[0].envelope])
-        .then((response) => {
-          const queryText = `UPDATE "Envelopes" SET "total"=$1 WHERE "envelope"=$2;`;
-          newTotal = response.rows[0].total - newTotal;
-
-          pool
-            .query(queryText, [newTotal, response.rows[0].envelope])
-            .then(() => {res.send(`${newTotal}`).status(201)})
-            .catch((err) => {
-              console.error("Error updating envelope tracker: ", err);
-              res.sendStatus(400);
-          })})
-        .catch((err) => {
-        console.error("Error updating envelope tracker: ", err);
-        res.sendStatus(400);
-        })})
+    .then(() => {res.sendStatus(200)})
     .catch((err) => {
       console.error("Error marking transaction as reviewed:", err);
       res.sendStatus(400);
@@ -212,49 +191,15 @@ router.put("/reviewed/:id", rejectUnauthenticated, (req, res) => {
 })
 
 router.put("/reviewedAll", rejectUnauthenticated, async (req, res) => {
-  const changes = [...req.body];
-  const queryText1 = `SELECT * FROM "Envelopes" WHERE "envelope"=$1 FOR UPDATE;`; // Lock row
-  const queryText2 = `UPDATE "Envelopes" SET "total"=$1 WHERE "envelope"=$2;`;
-  const queryText3 = `UPDATE "Transactions" SET "reviewed"=TRUE;`;
-  
-  const client = await pool.connect(); // Get a client for transaction
+  const queryText = `UPDATE "Transactions" SET "reviewed"=TRUE;`;
 
-  try {
-    // Start transaction
-    await client.query("BEGIN");
-
-    // Process each change in the `changes` array
-    for (const change of changes) {
-      // Step 1: Fetch the current envelope row with a lock
-      const response = await client.query(queryText1, [change.envelope]);
-      if (response.rows.length === 0) {
-        throw new Error(`Envelope not found: ${change.envelope}`);
-      }
-
-      // Step 2: Calculate the new total
-      const currentTotal = Number(response.rows[0].total);
-      const newTotal = currentTotal - Number(change.amount);
-
-      // Step 3: Update the envelope's total
-      await client.query(queryText2, [newTotal, change.envelope]);
-    }
-
-    // Step 4: Mark all transactions as reviewed
-    await client.query(queryText3);
-
-    // Commit the transaction
-    await client.query("COMMIT");
-
-    res.sendStatus(200); // Send success response
-  } catch (error) {
-    // Roll back the transaction on any error
-    await client.query("ROLLBACK");
-    console.error("Error in reviewedAll route:", error.message);
-    res.sendStatus(400);
-  } finally {
-    // Release the client back to the pool
-    client.release();
-  }
+  pool
+    .query(queryText)
+    .then(() => {res.sendStatus(200)})
+    .catch((err) => {
+      console.error("Error marking all transactions as reviewed:", err);
+      res.sendStatus(400);
+    })
 });
 
 /**
