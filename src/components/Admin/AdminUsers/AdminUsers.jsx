@@ -24,7 +24,7 @@ function AdminUsers() {
           const response = await axios.get("/api/user/users");
           setUsers(response.data);
         } catch (error) {
-          console.error("Error fetching Envelopes:", error);
+          console.error("Error fetching users:", error);
         }
     };
 
