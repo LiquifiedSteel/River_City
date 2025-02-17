@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -12,10 +12,14 @@ import LandingPage from "../LandingPage/LandingPage";
 import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
-import FormPartTwo from "../Form/FormPartTwo";
 import AdminProtectedRoute from "../AdminProtectedRoute/AdminProtectedRoute";
 import NewTransaction from "../NewTransaction/NewTransaction.jsx";
 import Envelopes from "../Envelopes/Envelopes";
+import AdminBudget from "../Admin/AdminBudget/AdminBudget.jsx";
+import AdminUsers from "../Admin/AdminUsers/AdminUsers.jsx";
+import AdminChecks from "../Admin/AdminChecks/AdminCheck.jsx";
+import AdminEnvelopes from "../Admin/AdminEnvelopes/AdminEnvelopes.jsx";
+import AdminTransactions from "../Admin/AdminTransactions/AdminTransactions.jsx";
 
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -62,30 +66,60 @@ function App() {
           <Route exact path="/home">
             {user.id ? (
               // If the user is already logged in,
-              // redirect them to the /form-part-one page
+              // redirect them to the /landing page
               <LandingPage />
             ) : (
-              // Otherwise, show the Landing page
+              // Otherwise, show the Login page
               <LoginPage />
             )}
           </Route>
 
           <AdminProtectedRoute
-              // shows AdminDashboard
-              exact
-              path="/admin-dashboard"
-            >
-              <AdminDashboard />
+            // shows Admin
+            path="/admin"
+          >
+            <AdminDashboard />
+          </AdminProtectedRoute>
+
+          <AdminProtectedRoute 
+            path="/admin-users"
+          >
+            <AdminDashboard />
+            <AdminUsers />
+          </AdminProtectedRoute>
+
+          <AdminProtectedRoute 
+            path="/admin-budget"
+          >
+            <AdminDashboard />
+            <AdminBudget />
+          </AdminProtectedRoute>
+
+          <AdminProtectedRoute 
+            path="/admin-checks"
+          >
+            <AdminDashboard />
+            <AdminChecks />
+          </AdminProtectedRoute>
+
+          <AdminProtectedRoute 
+            path="/admin-envelopes"
+          >
+            <AdminDashboard />
+            <AdminEnvelopes />
+          </AdminProtectedRoute>
+
+          <AdminProtectedRoute 
+            path="/admin-transactions"
+          >
+            <AdminDashboard />
+            <AdminTransactions />
           </AdminProtectedRoute>
 
           {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:5173/home will show the landing page if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:5173/home */}
-          
-          <ProtectedRoute exact path="/form-part-two">
-            <FormPartTwo />
-          </ProtectedRoute>
 
           <ProtectedRoute path="/envelope">
             <Envelopes />
