@@ -148,13 +148,14 @@ router.put("/admin/:id", rejectUnauthenticated, (req, res) => {
  * DELETE Route: Permanently delete a user's account
  * This route deletes the user's information from the "user" table in the database based on their username.
  */
-router.delete("/deleteUser", (req, res) => {
+router.delete("/deleteUser/:id", rejectUnauthenticated, (req, res) => {
+  const id = req.params.id
   // SQL query to permanently delete the user's account from the database.
-  const queryText = `DELETE FROM "user" WHERE "username"=$1;`;
+  const queryText = `DELETE FROM "user" WHERE "id"=$1;`;
 
   // Execute the SQL query to delete the user's record.
   pool
-    .query(queryText, [req.user.username])
+    .query(queryText, [id])
     .then(() => {
       // On success, send HTTP status 200 (OK) indicating the user was successfully deleted.
       res.sendStatus(200);
