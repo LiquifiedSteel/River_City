@@ -71,6 +71,24 @@ router.put("/budget/:amount", rejectUnauthenticated, (req, res) => {;
       })
 })
 
+router.delete("/deleteEnv/:id", rejectUnauthenticated, (req, res) => {
+  const id = req.params.id
+  // SQL query to permanently delete the user's account from the database.
+  const queryText = `DELETE FROM "Envelopes" WHERE "id"=$1;`;
+
+  // Execute the SQL query to delete the user's record.
+  pool
+    .query(queryText, [id])
+    .then(() => {
+      // On success, send HTTP status 200 (OK) indicating the user was successfully deleted.
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      // Log the error if the deletion fails, and respond with HTTP status 400 (Bad Request).
+      console.error("Error deleting account: ", err);
+      res.sendStatus(400);
+    });
+});
 
 // Export the router to use in the main app.
 module.exports = router;

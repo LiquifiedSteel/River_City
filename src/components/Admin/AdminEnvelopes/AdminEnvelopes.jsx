@@ -53,6 +53,16 @@ function AdminEnvelopes() {
         }
     }
 
+    const deleteEnvelope = async (id) => {
+        try {
+            await axios.delete(`/api/envelopes/deleteEnv/${id}`);
+            const response = await axios.get("/api/envelopes/");
+            setEnvelopes(response.data);
+        } catch (error){
+            console.error("Error deleting envlope:", error);
+        }
+    }
+
     return (
         <div>
             <h3>Unallocated Budget: ${budget}</h3>
@@ -62,6 +72,7 @@ function AdminEnvelopes() {
                         <th>Envelope</th>
                         <th>Amount</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,6 +81,7 @@ function AdminEnvelopes() {
                             <td>{envelope.envelope}</td>
                             <td>{envelope.total}</td>
                             <td><button onClick={() => triggerEdit(envelope)}>Edit</button></td>
+                            <td><button onClick={() => deleteEnvelope(envelope.id)}>Delete</button></td>
                         </tr>
                     )} else {
                     return(
