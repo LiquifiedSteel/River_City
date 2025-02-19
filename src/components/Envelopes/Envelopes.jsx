@@ -67,9 +67,10 @@ function Envelopes() {
 
             <div className="grid-col_12 grid">
                 <button className="grid-col_2" onClick={() => history.push(`/new-transaction?envelope=${envelope}`)}>New Transaction +</button>
-                {user.isAdmin && <button className="grid-col_2" onClick={() => {setPending(!pending)
-                                                                                   setSearchYear(0);
-                                                                               }}>Pending Transactions</button>}
+                {user.isAdmin && <button className="grid-col_2" onClick={() => {
+                    setPending(!pending)
+                    setSearchYear(0);
+                }}>Pending Transactions</button>}
                 {!pending && <>
                     <label>Select Year</label>
                     <select onChange={() => setSearchYear(event.target.value)}>
