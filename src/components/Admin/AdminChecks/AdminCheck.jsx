@@ -71,23 +71,29 @@ function AdminChecks() {
 
     return (
         <div>
-            <div>
-            <button className="grid-col_2" onClick={() => {
-                setStatus(!status);
-                setSearchYear(0);
-            }}>{!status ? "Show Unpaid" : "Show All"}</button>
+            <div className="grid">
+                <div className="grid-col_3">
+                    <button onClick={() => {
+                        setStatus(!status);
+                        setSearchYear(0);
+                    }}>{!status ? "Show Unpaid" : "Show All"}</button>
+                </div>
+                
+                <div className="grid-col_3">
+                    <label>Select Year</label>
+                    <select onChange={() => setSearchYear(event.target.value)}>
+                        <option value={0}>None</option>
+                        {years && years.map((year) => <option key={year} value={year}>{year}</option>)}
+                    </select>
+                </div>
 
-            <label>Select Year</label>
-            <select onChange={() => setSearchYear(event.target.value)}>
-                <option value={0}>None</option>
-                {years && years.map((year) => <option key={year} value={year}>{year}</option>)}
-            </select>
-
-            <label>Select Month</label>
-            <select onChange={() => setSearchMonth(event.target.value)}>
-                <option value={-1}>None</option>
-                {months && months.map((month) => <option key={month} value={month}>{monthNames[month]}</option>)}
-            </select>
+                <div className="grid-col_3">
+                    <label>Select Month</label>
+                    <select onChange={() => setSearchMonth(event.target.value)}>
+                        <option value={-1}>None</option>
+                        {months && months.map((month) => <option key={month} value={month}>{monthNames[month]}</option>)}
+                    </select>
+                </div>
             </div>
 
             <Table>
