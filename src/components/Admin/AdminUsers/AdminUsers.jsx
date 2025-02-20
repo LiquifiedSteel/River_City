@@ -42,12 +42,14 @@ function AdminUsers() {
     };
 
     const deleteUser = async (id) => {
-        try {
-            await axios.delete(`/api/user/deleteUser/${id}`);
-            const response = await axios.get("/api/user/users");
-            setUsers(response.data);
-        } catch (error){
-            console.error("Error deleting user:", error);
+        if(confirm("Are you sure you want to make this user an Admin?")) {
+            try {
+                await axios.delete(`/api/user/deleteUser/${id}`);
+                const response = await axios.get("/api/user/users");
+                setUsers(response.data);
+            } catch (error){
+                console.error("Error deleting user:", error);
+            }
         }
     }
 

@@ -3,18 +3,20 @@ import { Table } from "react-bootstrap";
 import axios from "axios";
 
 import ExportExcelButton from "../../ExcelExport/ExcelExport";
+import { useDispatch, useSelector } from "react-redux";
 
 function AdminTransactions() {
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
-    const [transactions, setTransactions] = useState([]);
+    const transactions = useSelector((store) => store.transactions);
     const [status, setStatus] = useState(false);
     const [searchYear, setSearchYear] = useState(0);
     const [years, setYears] = useState([]);
     const [searchMonth, setSearchMonth] = useState(0);
     const [months, setMonths] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         fetchTransactions();
@@ -23,8 +25,8 @@ function AdminTransactions() {
     const fetchTransactions = async () => {
         try {
             // Fetch applications data
+            dispatch({type: 'GRAB_TRANSACTIONS'});
             const response = await axios.get("/api/transactions/");
-            setTransactions(response.data);
             let collectYears = [];
             for(const transaction of response.data) {
                 let newDate = new Date(transaction.timeDate).getFullYear();
@@ -53,22 +55,12 @@ function AdminTransactions() {
     const formatDate = (transactionDate) => {
         const dateString = transactionDate;
         const date = new Date(dateString);
-
         const formattedDate = date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
         });
         return (formattedDate);
-    }
-
-    const markReviewed = async (id) => {
-        try{
-            await axios.put(`/api/transactions/reviewed/${id}`);
-            fetchTransactions();
-        } catch (error) {
-            console.error("Error Updating Transactions:", error);
-        }
     }
 
     return (
@@ -126,7 +118,7 @@ function AdminTransactions() {
                             <td>{formatDate(transaction.timeDate)}</td>
                             <td>{transaction.amount}</td>
                             <td>{transaction.paid ? "Paid" : "Unpaid"}</td>
-                            <td>{!transaction.reviewed && <button onClick={() => markReviewed(transaction.id)}>Review</button>}</td>
+                            <td>{!transaction.reviewed && <button onClick={() => dispatch({type: 'REVIEW_TRANSACTION', payload: {id: transaction.id}})}>Review</button>}</td>
                         </tr>
                     ))}
                 </tbody>

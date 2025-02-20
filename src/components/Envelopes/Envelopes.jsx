@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useLocation } from "react-router-dom"; // useLocation for getting URL query parameters
 import axios from "axios";
@@ -8,8 +8,9 @@ import axios from "axios";
 function Envelopes() {
     const user = useSelector((store) => store.user);
     const history = useHistory();
+    const dispatch = useDispatch();
     const [pending, setPending] = useState(false);
-    const [transactions, setTransactions] = useState([]);
+    const transactions = useSelector((store) => store.transactions)
     const [searchYear, setSearchYear] = useState(0);
     const [years, setYears] = useState([]);
     const location = useLocation(); // React Router's hook to access the current URL
@@ -18,13 +19,12 @@ function Envelopes() {
     useEffect(() => {
         document.title = `${envelope}`; // Set the document title
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    
+        dispatch({type: 'GRAB_TRANSACTIONS_ENV', payload:{envelope}});
         // Async function to fetch transactions
         const fetchTransactions = async () => {
           try {
             // Fetch transactions data
             const response = await axios.get(`/api/transactions/${envelope}`);
-            setTransactions(response.data);
             let collectYears = [];
             for(const transaction of response.data) {
                 let newDate = new Date(transaction.timeDate).getFullYear();
@@ -44,19 +44,8 @@ function Envelopes() {
     }, [])
 
     const review = (id) => {
-        const reviewTransaction = async () => {
-          try {
-            // Fetch transactions data
-            await axios.put(`/api/transactions/reviewed/${id}`);
-            // Fetch transactions data
-            const response = await axios.get(`/api/transactions/${envelope}`);
-            setTransactions(response.data);
-            setSearchYear(0);
-          } catch (error) {
-            console.error("Error reviewing transaction:", error);
-          }
-        };
-        reviewTransaction(); // Invoke the review function
+        setSearchYear(0);
+        dispatch({type:'REVIEW_TRANSACTION_ENV', payload: {id, envelope}});
       }
 
     return (

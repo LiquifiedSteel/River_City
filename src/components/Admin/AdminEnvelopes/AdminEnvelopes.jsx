@@ -54,12 +54,14 @@ function AdminEnvelopes() {
     }
 
     const deleteEnvelope = async (id) => {
-        try {
-            await axios.delete(`/api/envelopes/deleteEnv/${id}`);
-            const response = await axios.get("/api/envelopes/");
-            setEnvelopes(response.data);
-        } catch (error){
-            console.error("Error deleting envlope:", error);
+        if(confirm("Are you sure you want to delete this envelope?")) {
+            try {
+                await axios.delete(`/api/envelopes/deleteEnv/${id}`);
+                const response = await axios.get("/api/envelopes/");
+                setEnvelopes(response.data);
+            } catch (error){
+                console.error("Error deleting envlope:", error);
+            }
         }
     }
 
@@ -89,6 +91,7 @@ function AdminEnvelopes() {
                             <td><input type="text" value={newName} onChange={() => setNewName(event.target.value)} /></td>
                             <td><input type="number" value={newAmount} onChange={() => setNewAmount(event.target.value)} /></td>
                             <td><button onClick={() => submitChange(envelope.total)}>Submit</button></td>
+                            <td><button onClick={() => setEdit(-1)}>Cancel</button></td>
                         </tr>
                     )}})}
                 </tbody>

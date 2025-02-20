@@ -23,9 +23,7 @@ function AddEnvelope() {
 
             {/* Button to submit the new envelope name */}
             <button onClick={() => {
-                dispatch({type: "ADD_ENVELOPE", payload: {envName: name}});
-                window.location.reload();
-                }}>Submit</button>
+                dispatch({type: "ADD_ENVELOPE", payload: {envName: name}})}}>Submit</button>
         </div>
     )
 };

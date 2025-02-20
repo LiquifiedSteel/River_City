@@ -124,7 +124,7 @@ const Nav = () => {
       <div className="d-flex align-items-center justify-content-between">
         {/* Brand/Title */}
         {user.isAdmin ? 
-          <Link to="/admin" css={navTitleStyle}>
+          <Link to="/admin-users" css={navTitleStyle}>
             <img src="rcc-logo.png" />
           </Link> 
           : 

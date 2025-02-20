@@ -1,7 +1,7 @@
-const envelope = (state = false, action) => {
+const envelope = (state = [], action) => {
     switch (action.type) {
-        case 'SWITCH':
-          return !state;
+        case 'FETCH_ENVELOPES':
+          return action.payload;
         default:
           return state;
       }

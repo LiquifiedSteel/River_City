@@ -74,13 +74,6 @@ function App() {
             )}
           </Route>
 
-          <AdminProtectedRoute
-            // shows Admin
-            path="/admin"
-          >
-            <AdminDashboard />
-          </AdminProtectedRoute>
-
           <AdminProtectedRoute 
             path="/admin-users"
           >
