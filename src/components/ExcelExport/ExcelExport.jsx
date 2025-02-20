@@ -28,8 +28,8 @@ const buttonStyle = css`
 const ExportExcelButton = () => {
   const handleExport = async () => {
     try {
-      const response = await axios.get("/api/excel/export", {
-        responseType: "blob", 
+      const response = await axios.post("/api/excel/export", null, {
+        responseType: "blob",
       });
 
       // ====== Create a Blob URL and download the file ======
