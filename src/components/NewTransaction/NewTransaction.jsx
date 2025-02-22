@@ -57,29 +57,22 @@ const NewTransaction = () => {
     setOutOfPocket(checked);
   };
 
-  const handleSubmit = () => {
-    if (!reciept) {
-      alert("You must upload the reciept with the transaction.");
-    } else {
-      const createTransaction = async () => {
-        try {
-          // Fetch applications data
-          await axios.post("/api/transactions", {
-            envelope,
-            name,
-            recieptLink: reciept,
-            location: transactionLocation,
-            timeDate: date,
-            amount,
-            outOfPocket,
-            tag,
-          });
-          history.push(`/envelope?envelope=${envelope}`);
-        } catch (error) {
-          console.error("Error creating transaction:", error);
-        }
-      };
-      createTransaction(); // Invoke the fetch function
+  const handleSubmit = async() => {
+    try {
+      // Fetch applications data
+      await axios.post("/api/transactions", {
+        envelope,
+        name,
+        recieptLink: reciept,
+        location: transactionLocation,
+        timeDate: date,
+        amount,
+        outOfPocket,
+        tag,
+      });
+      history.push(`/envelope?envelope=${envelope}`);
+    } catch (error) {
+      console.error("Error creating transaction:", error);
     }
   }
 

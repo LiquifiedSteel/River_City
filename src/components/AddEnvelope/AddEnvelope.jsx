@@ -22,8 +22,7 @@ function AddEnvelope() {
             <button onClick={() => dispatch({type: "SWITCH"})}>Back</button>
 
             {/* Button to submit the new envelope name */}
-            <button onClick={() => {
-                dispatch({type: "ADD_ENVELOPE", payload: {envName: name}})}}>Submit</button>
+            <button onClick={() => {dispatch({type: "ADD_ENVELOPE", payload: {envName: name}})}}>Submit</button>
         </div>
     )
 };

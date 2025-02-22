@@ -1,12 +1,17 @@
 import React, { useEffect, useState} from "react";
 import { Table } from "react-bootstrap";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import RegisterForm from "../../RegisterForm/RegisterForm";
 
 function AdminUsers() {
-    const [users, setUsers] = useState([]);
+    const users = useSelector(store => store.userList);
+    const toggle = useSelector(store => store.envSwitch);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchUsers(); // Invoke the fetch function
+        dispatch({type: 'GRAB_USER_LIST'});
+        toggle && dispatch({type: 'SWITCH'});
     }, [])
 
     const toggleAdmin = async (user) => {
@@ -14,7 +19,7 @@ function AdminUsers() {
             if(confirm("Are you sure you want to make this user an Admin?")) {
                 try {
                     await axios.put(`/api/user/admin/${user.id}`);
-                    fetchUsers();
+                    dispatch({type: 'FETCH_USER_LIST'});
                 } catch (err) {
                     console.error("Error changing user's admin status:" , err)
                 }
@@ -23,7 +28,7 @@ function AdminUsers() {
             if(confirm("Are you sure you want to remove Admin from this user?")) {
                 try {
                     await axios.put(`/api/user/admin/${user.id}`);
-                    fetchUsers();
+                    dispatch({type: 'FETCH_USER_LIST'});
                 } catch (err) {
                     console.error("Error changing user's admin status:" , err)
                 }
@@ -31,18 +36,8 @@ function AdminUsers() {
         }
     }
 
-    const fetchUsers = async () => {
-        try {
-            // Fetch applications data
-            const response = await axios.get("/api/user/users");
-            setUsers(response.data);
-        } catch (error) {
-            console.error("Error fetching users:", error);
-        }
-    };
-
     const deleteUser = async (id) => {
-        if(confirm("Are you sure you want to make this user an Admin?")) {
+        if(confirm("Are you sure you want to delete this user?")) {
             try {
                 await axios.delete(`/api/user/deleteUser/${id}`);
                 const response = await axios.get("/api/user/users");
@@ -55,6 +50,7 @@ function AdminUsers() {
 
     return (
         <div>
+            {toggle ? <><RegisterForm /> <button onClick={() => dispatch({type: 'SWITCH'})}>Cancel</button> </>: <button onClick={() => dispatch({type: 'SWITCH'})}>+ New User</button>}
             <Table>
                 <thead>
                     <tr>

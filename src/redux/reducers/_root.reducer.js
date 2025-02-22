@@ -6,6 +6,7 @@ import budget from "./budget.reducer";
 import remaining from "./remaining.reducer";
 import transactions from "./transactions.reducer";
 import envelope from "./envelope.reducer";
+import userList from "./userList.reducer";
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   remaining,
   transactions,
   envelope,
+  userList,
 });
 
 export default rootReducer;

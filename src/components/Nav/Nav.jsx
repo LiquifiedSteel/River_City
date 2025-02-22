@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
 import axios from "axios";
+import LogOutButton from "../LogOutButton/LogOutButton";
 
 const navBarStyle = css`
   background-color: #D3D3D3;
@@ -96,7 +97,7 @@ const listItemStyle = css`
   list-style: none;
 
   @media (min-width: 1024px) {
-    margin: 0;
+    margin: 30px;
   }
 `;
 
@@ -108,7 +109,9 @@ const Nav = () => {
   const location = useLocation(); // React Router's hook to access the current URL
   const envelope = new URLSearchParams(location.search).get("envelope"); // Extracts the "envelope" query parameter from the URL
   const dispatch = useDispatch();
+  const history = useHistory();
 
+  console.log(history);
   useEffect(() => {
     // Async function to fetch budget things
     dispatch({type: "GRAB_BUDGET"});
@@ -123,15 +126,8 @@ const Nav = () => {
     <nav css={navBarStyle}>
       <div className="d-flex align-items-center justify-content-between">
         {/* Brand/Title */}
-        {user.isAdmin ? 
-          <Link to="/admin-users" css={navTitleStyle}>
-            <img src="rcc-logo.png" />
-          </Link> 
-          : 
-          <Link to="/home" css={navTitleStyle}>
-            <img src="rcc-logo.png" />
-          </Link>
-        }
+        <img src="rcc-logo.png" />
+        {envelope && <h2>{envelope}</h2>}
 
         {/* Toggler Button for Mobile */}
         <button
@@ -163,7 +159,17 @@ const Nav = () => {
             }
           `}
         >
-          {envelope && <h2>{envelope}</h2>}
+          {user.isAdmin && <>{history.location.pathname !== '/home' ? 
+            <button onClick={() => history.push("/home")}>Home</button>
+            : 
+            <button onClick={() => history.push("/admin-users")}>Admin</button>
+          }</>}
+          {/* If a user is logged in, show these links */}
+          {user.id && (
+            <li css={listItemStyle}>
+              <LogOutButton />
+            </li>
+          )}
           {user.id && budget[0] && <>
             <div>
               <h3>Total Budget for {new Date().getFullYear()}: ${budget[0].amount}</h3>

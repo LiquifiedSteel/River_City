@@ -21,6 +21,7 @@ function LandingPage() {
 
     dispatch({type: 'GRAB_ENVELOPES'});
     dispatch({type: 'GRAB_TRANSACTIONS'});
+    creatingEnvelope && dispatch({type: 'SWITCH'});
   }, []); // Empty dependency array ensures this runs once on mount
 
   const pay = (id) => {

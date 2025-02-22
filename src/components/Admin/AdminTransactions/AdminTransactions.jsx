@@ -97,29 +97,31 @@ function AdminTransactions() {
             <Table>
                 <thead>
                     <tr>
-                    <th>Tag</th>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Date</th>
-                            <th>Amount Spent</th>
-                            <th>Out of Pocket</th>
-                            <th>Review</th>
+                        <th>Tag</th>
+                        <th>Envelope</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Amount Spent</th>
+                        <th>Out of Pocket</th>
+                        <th>Review</th>
                     </tr>
                 </thead>
                 <tbody>
                     {transactions.filter((transaction) => { 
-                            let year = new Date(transaction.timeDate).getFullYear();
-                            let month = new Date(transaction.timeDate).getMonth();
-                            return ((Number(searchYear) === 0 || Number(year) === Number(searchYear)) && (Number(searchMonth) === -1 || Number(month) === Number(searchMonth)) && (!status || (status && transaction.paid===false)))}).map((transaction) => (
-                        <tr key={transaction.id}>
-                            <td>{transaction.tag}</td>
-                            <td>{transaction.name}</td>
-                            <td>{transaction.location}</td>
-                            <td>{formatDate(transaction.timeDate)}</td>
-                            <td>{transaction.amount}</td>
-                            <td>{transaction.paid ? "Paid" : "Unpaid"}</td>
-                            <td>{!transaction.reviewed && <button onClick={() => dispatch({type: 'REVIEW_TRANSACTION', payload: {id: transaction.id}})}>Review</button>}</td>
-                        </tr>
+                        let year = new Date(transaction.timeDate).getFullYear();
+                        let month = new Date(transaction.timeDate).getMonth();
+                        return ((Number(searchYear) === 0 || Number(year) === Number(searchYear)) && (Number(searchMonth) === -1 || Number(month) === Number(searchMonth)) && (!status || (status && transaction.paid===false)))}).map((transaction) => (
+                            <tr key={transaction.id}>
+                                <td>{transaction.tag}</td>
+                                <td>{transaction.envelope}</td>
+                                <td>{transaction.name}</td>
+                                <td>{transaction.location}</td>
+                                <td>{formatDate(transaction.timeDate)}</td>
+                                <td><a href={transaction.recieptLink}>{transaction.amount}</a></td>
+                                <td>{transaction.paid ? "Paid" : "Unpaid"}</td>
+                                <td>{!transaction.reviewed && <button onClick={() => dispatch({type: 'REVIEW_TRANSACTION', payload: {id: transaction.id}})}>Review</button>}</td>
+                            </tr>
                     ))}
                 </tbody>
             </Table>

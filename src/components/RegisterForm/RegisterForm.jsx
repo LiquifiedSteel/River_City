@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { css } from "@emotion/react";
+import axios from "axios";
 
 const formStyle = css`
   max-width: 400px;
@@ -81,20 +82,24 @@ function RegisterForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const toggle = useSelector(store => store.envSwitch);
   const errors = useSelector((store) => store.errors);
   const dispatch = useDispatch();
 
   const registerUser = (event) => {
     event.preventDefault();
-
-    dispatch({
-      type: "REGISTER",
-      payload: {
-        username,
-        password,
-        email,
-      },
-    });
+    dispatch({type: 'SWITCH'});
+    if(toggle) {
+      dispatch({type: 'ADD_USER', payload: { username, password, email }});   
+    } else {
+      dispatch({
+        type: "REGISTER",
+        payload: {
+          username,
+          password,
+          email,
+        }});
+    }
   };
 
   return (

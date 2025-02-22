@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 function AdminEnvelopes() {
+    const [name, setName] = useState(""); // State to manage the envelope name input field
+    const dispatch = useDispatch(); // Redux dispatch function to send actions to the store
     const [envelopes, setEnvelopes] = useState([]);
     const [edit, setEdit] = useState(-1);
     const [newName, setNewName] = useState("");
@@ -39,8 +42,7 @@ function AdminEnvelopes() {
         try {
             let allocate = Number(budget);
             allocate += Number(amount);
-            allocate -= Number(newAmount); 
-            console.log(Number(allocate));
+            allocate -= Number(newAmount);
             if(allocate >= 0) {
                 await axios.put(`/api/envelopes/edit/`, {envelope: newName, total: newAmount, id: edit});
                 fetchEnvelopes();
@@ -59,6 +61,7 @@ function AdminEnvelopes() {
                 await axios.delete(`/api/envelopes/deleteEnv/${id}`);
                 const response = await axios.get("/api/envelopes/");
                 setEnvelopes(response.data);
+                fetchEnvelopes();
             } catch (error){
                 console.error("Error deleting envlope:", error);
             }
@@ -67,6 +70,20 @@ function AdminEnvelopes() {
 
     return (
         <div>
+             <div className="newEnvCard grid-col_6 grid">
+                <h3>Add Envelope</h3>
+                {/* Input field to capture the envelope name */}
+                <div className='grid-col_12'>
+                    <input className='grid-col_12' type="text" placeholder="Envelope Name" value={name} onChange={(event) => setName(event.target.value)} />
+                </div>
+
+                {/* Button to submit the new envelope name */}
+                <button onClick={() => {
+                    dispatch({type: "ADD_ENVELOPE", payload: {envName: name}});
+                    fetchEnvelopes();
+                    setName('');
+                    }}>Submit</button>
+            </div>
             <h3>Unallocated Budget: ${budget}</h3>
             <Table>
                 <thead>

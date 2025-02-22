@@ -3,6 +3,7 @@ import React, {useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import RegisterForm from "../RegisterForm/RegisterForm";
 import { css } from "@emotion/react";
+import { useSelector, useDispatch } from "react-redux";
 
 const pageStyle = css`
   display: flex;
@@ -38,9 +39,12 @@ const buttonStyle = css`
 
 const RegisterPage = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const toggle = useSelector(store => store.envSwitch);
 
   useEffect(() => {
     document.title = "Register";
+    toggle && dispatch({type: 'SWITCH'});
   }, []);
 
   return (
