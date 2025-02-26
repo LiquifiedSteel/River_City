@@ -40,3 +40,16 @@
 .navLink:hover {
   background-color: #008183;
 }
+
+.adminButton {
+  border: #f2f2f2 solid 4px;
+  color: white;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 2.5vh;
+  padding: .2vh .7vw;
+}
+
+.hide {
+  display: none;
+}

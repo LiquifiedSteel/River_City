@@ -1,0 +1,16 @@
+.envHead {
+    margin-top: 2vh !important;
+}
+
+.envButton {
+    border: 2px solid black;
+    border-radius: 6px;
+    background-color: rgb(237, 236, 236);
+    box-shadow: 3px 2px 3px 1px rgba(70, 67, 67, 0.7);
+    margin-right: 4px;
+    padding: .375rem;
+}
+
+#shadow {
+    box-shadow: 3px 4px 5px 3px rgba(70, 67, 67, 0.7) !important;
+}

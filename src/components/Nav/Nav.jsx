@@ -1,11 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
-import axios from "axios";
 import LogOutButton from "../LogOutButton/LogOutButton";
+import "./Nav.css";
 
 const navBarStyle = css`
   background-color: #D3D3D3;
@@ -19,40 +18,6 @@ const navBarStyle = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-`;
-
-const navTitleStyle = css`
-  font-size: 1.8rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: #ffffff;
-
-  &:hover {
-    opacity: 70%;
-  }
-
-  @media (max-width: 576px) {
-    font-size: 1.4rem;
-  }
-`;
-
-const linkStyle = css`
-  text-decoration: none;
-  color: #ffffff;
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-
-  &:hover {
-    background-color: #1a4a29;
-    color: #d1e8d3;
-  }
-
-  @media (max-width: 576px) {
-    font-size: 0.9rem;
-    padding: 6px 10px;
   }
 `;
 
@@ -111,7 +76,6 @@ const Nav = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  console.log(history);
   useEffect(() => {
     // Async function to fetch budget things
     dispatch({type: "GRAB_BUDGET"});
@@ -127,7 +91,7 @@ const Nav = () => {
       <div className="d-flex align-items-center justify-content-between">
         {/* Brand/Title */}
         <img src="rcc-logo.png" />
-        {envelope && <h2>{envelope}</h2>}
+        {envelope && <p className="hide">{envelope}</p>}
 
         {/* Toggler Button for Mobile */}
         <button
@@ -159,22 +123,22 @@ const Nav = () => {
             }
           `}
         >
-          {user.isAdmin && <>{history.location.pathname !== '/home' ? 
-            <button onClick={() => history.push("/home")}>Home</button>
+          {user.isAdmin && <li css={listItemStyle}>{history.location.pathname !== '/home' ? 
+            <button className="adminButton" onClick={() => history.push("/home")}>Home</button>
             : 
-            <button onClick={() => history.push("/admin-users")}>Admin</button>
-          }</>}
+            <button className="adminButton" onClick={() => history.push("/admin-users")}>Admin</button>
+          }</li>}
           {/* If a user is logged in, show these links */}
           {user.id && (
             <li css={listItemStyle}>
-              <LogOutButton />
+              <LogOutButton className="adminButton"/>
             </li>
           )}
           {user.id && budget[0] && <>
-            <div>
+            <li css={listItemStyle}>
               <h3>Total Budget for {new Date().getFullYear()}: ${budget[0].amount}</h3>
               <h3>Remaining Budget for {new Date().getFullYear()}: ${ (budget[0].amount - remaining).toFixed(2)}</h3>
-            </div>
+            </li>
           </>}
         </ul>
       </div>

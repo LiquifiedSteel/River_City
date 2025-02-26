@@ -12,7 +12,7 @@ function AddEnvelope() {
     const dispatch = useDispatch(); // Redux dispatch function to send actions to the store
 
     return (
-        <div className="newEnvCard grid-col_6 grid">
+        <div className="envelope grid">
             {/* Input field to capture the envelope name */}
             <div className='grid-col_12'>
                 <input className='grid-col_12' type="text" placeholder="Envelope Name" value={name} onChange={(event) => setName(event.target.value)} />
