@@ -35,38 +35,15 @@ router.put("/edit/", rejectUnauthenticated, (req,res) => {
     const envelope = req.body.envelope;
     const amount = req.body.total;
     const id = req.body.id;
+    const previous = req.body.previous;
 
-    const queryText = `UPDATE "Envelopes" SET "envelope"=$1, "total"=$2 WHERE "id"=$3;`;
+    const queryText = `UPDATE "Envelopes" SET "envelope"=$1, "total"=$2, "prevTotal"=$3 WHERE "id"=$4;`;
 
     pool
-      .query(queryText, [envelope, amount, id])
+      .query(queryText, [envelope, amount, previous, id])
       .then(()=>res.sendStatus(200))
       .catch((err) => {
         console.error("Failed to update envelope: ", err);
-        res.sendStatus(400);
-      })
-})
-
-router.get("/navBudget", rejectUnauthenticated, (req, res) => {
-    const queryText = `SELECT * FROM "Budget" ORDER BY "id" ASC;`;
-    pool
-      .query(queryText)
-      .then((response) => res.send(response.rows).status(200))
-      .catch((err) => {
-        console.error("Failed to collect Budget Items: ", err);
-        res.sendStatus(400);
-      })
-})
-
-router.put("/budget/:amount", rejectUnauthenticated, (req, res) => {;
-    const update = req.params.amount
-    const queryText = `UPDATE "Budget" SET "amount"=$1 WHERE "type"='Budget';`;
-
-    pool
-      .query(queryText, [update])
-      .then(() => res.sendStatus(200))
-      .catch((err) => {
-        console.error("Failed to update annual Budget: ", err);
         res.sendStatus(400);
       })
 })

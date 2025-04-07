@@ -1,4 +1,4 @@
-const budget = (state = [{type: "Budget", amount: 0}, {type: "Tithing", amount: 0}], action) => {
+const budget = (state = [{year: 0, amount: 0}], action) => {
     switch (action.type) {
         case 'FETCH_BUDGET':
             return [...state];

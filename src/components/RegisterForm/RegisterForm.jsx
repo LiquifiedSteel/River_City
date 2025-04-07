@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { css } from "@emotion/react";
-import axios from "axios";
 
 const formStyle = css`
   max-width: 400px;
@@ -17,7 +16,7 @@ const formStyle = css`
 const headingStyle = css`
   text-align: center;
   font-size: 1.5rem;
-  color: #205831;
+  color: gray;
   margin-bottom: 20px;
 `;
 
@@ -49,7 +48,7 @@ const inputStyle = css`
 
 const buttonStyle = css`
   width: 100%;
-  background-color: #205831;
+  background-color: gray;
   color: white;
   font-weight: bold;
   border: none;
@@ -59,7 +58,7 @@ const buttonStyle = css`
   transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: #174a28;
+    background-color: rgb(80, 80, 80);
     transform: translateY(-2px);
   }
 

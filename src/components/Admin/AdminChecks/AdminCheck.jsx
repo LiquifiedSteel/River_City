@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "react-bootstrap";
+import { Container, Form, FormLabel, Table, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 function AdminChecks() {
@@ -15,6 +15,9 @@ function AdminChecks() {
     const [months, setMonths] = useState([]);
 
     useEffect(() => {
+        document.title = "Admin - Checks"; // Set the document title
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         fetchChecks();
     }, [])
 
@@ -70,33 +73,35 @@ function AdminChecks() {
     }
 
     return (
-        <div>
-            <div className="grid">
-                <div className="grid-col_3">
-                    <button onClick={() => {
-                        setStatus(!status);
-                        setSearchYear(0);
-                    }}>{!status ? "Show Unpaid" : "Show All"}</button>
-                </div>
+        <Container fluid>
+            <Row className="grid">
+                <Col md={{ span: 2, offset: 1}} className="grid-col_3">
+                    <center>
+                        <button className="adminTableButton checkSwitch" onClick={() => {
+                            setStatus(!status);
+                            setSearchYear(0);
+                        }}>{!status ? "Show Unpaid" : "Show All"}</button>
+                    </center>
+                </Col>
                 
-                <div className="grid-col_3">
-                    <label>Select Year</label>
-                    <select onChange={() => setSearchYear(event.target.value)}>
+                <Col md={{ span: 3, offset: 1}} className="grid-col_3">
+                    <FormLabel>Select Year</FormLabel>
+                    <Form.Select onChange={() => setSearchYear(event.target.value)}>
                         <option value={0}>None</option>
                         {years && years.map((year) => <option key={year} value={year}>{year}</option>)}
-                    </select>
-                </div>
+                    </Form.Select>
+                </Col>
 
-                <div className="grid-col_3">
-                    <label>Select Month</label>
-                    <select onChange={() => setSearchMonth(event.target.value)}>
+                <Col md={{ span: 3, offset: 1}} className="grid-col_3">
+                    <FormLabel>Select Month</FormLabel>
+                    <Form.Select onChange={() => setSearchMonth(event.target.value)}>
                         <option value={-1}>None</option>
                         {months && months.map((month) => <option key={month} value={month}>{monthNames[month]}</option>)}
-                    </select>
-                </div>
-            </div>
+                    </Form.Select>
+                </Col>
+            </Row>
 
-            <Table>
+            <Table hover striped>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -116,12 +121,12 @@ function AdminChecks() {
                             <td>{check.amount}</td>
                             <td>{formatDate(check.date)}</td>
                             <td>{check.paid ? "Paid" : "Unpaid"}</td>
-                            <td>{!check.paid && <button onClick={() => markPaid(check.id)}>Pay</button>}</td>
+                            <td>{!check.paid && <button className="adminTableButton" onClick={() => markPaid(check.id)}>Pay</button>}</td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-        </div>
+        </Container>
     )
 
 }

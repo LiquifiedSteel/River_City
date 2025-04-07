@@ -8,7 +8,7 @@ function* budgetRootSaga() {
   
 function* updateBudget(action) {
     try {
-        yield axios.put(`/api/envelopes/budget/${action.payload}`);
+        yield axios.put(`/api/budget/`, action.payload);
         yield put({type: 'GRAB_BUDGET'});
     } catch (error) {
         console.error('Budget PUT request failed', error);
@@ -17,7 +17,7 @@ function* updateBudget(action) {
 
 function* grabBudget() {
     try {
-        const response = yield axios.get(`/api/envelopes/navBudget`);
+        const response = yield axios.get(`/api/budget/`);
         yield put({ type: 'FETCH_NEW_BUDGET', payload: response.data});
     } catch (error) {
         console.error('Budget GET request failed', error);

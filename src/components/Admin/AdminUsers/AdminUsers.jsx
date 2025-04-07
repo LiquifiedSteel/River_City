@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import { Table } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import RegisterForm from "../../RegisterForm/RegisterForm";
@@ -10,6 +10,9 @@ function AdminUsers() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        document.title = "Admin - Users"; // Set the document title
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         dispatch({type: 'GRAB_USER_LIST'});
         toggle && dispatch({type: 'SWITCH'});
     }, [])
@@ -49,9 +52,9 @@ function AdminUsers() {
     }
 
     return (
-        <div>
-            {toggle ? <><RegisterForm /> <button onClick={() => dispatch({type: 'SWITCH'})}>Cancel</button> </>: <button onClick={() => dispatch({type: 'SWITCH'})}>+ New User</button>}
-            <Table>
+        <Container fluid>
+            {toggle ? <><RegisterForm /> <center><button className="adminTableButton adminUserCancel" onClick={() => dispatch({type: 'SWITCH'})}>Cancel</button></center> </>: <button className="adminTableButton" onClick={() => dispatch({type: 'SWITCH'})}>+ New User</button>}
+            <Table hover striped>
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -67,13 +70,13 @@ function AdminUsers() {
                             <td>{user.username}</td>
                             <td>{user.email}</td>
                             <td>{String(user.isAdmin)}</td>
-                            <td><button onClick={() => toggleAdmin(user)}>Toggle Admin</button></td>
-                            {!user.isAdmin && <td><button onClick={() => deleteUser(user.id)}>Delete User</button></td>}
+                            <td><button className="adminTableButton" onClick={() => toggleAdmin(user)}>Toggle Admin</button></td>
+                            {!user.isAdmin ? <td><button className="adminTableButton" onClick={() => deleteUser(user.id)}>Delete User</button></td> : <td></td>}
                         </tr>
                     ))}
                 </tbody>
             </Table>
-        </div>
+        </Container>
     )
 
 }

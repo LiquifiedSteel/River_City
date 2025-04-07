@@ -56,7 +56,7 @@ function Envelopes() {
                 <center><Col><h1 className="envHead">{envelope}</h1></Col></center>
             </Row>
 
-            <Row className="grid-col_12 grid">
+            <Row>
                 <Col md={{ offset: 2}}><button className="envButton" onClick={() => history.push(`/home`)}>Back</button></Col>
                 <Col><button className="envButton" onClick={() => history.push(`/new-transaction?envelope=${envelope}`)}>New Transaction +</button></Col>
                 {user.isAdmin && <Col><button className="envButton" onClick={() => {

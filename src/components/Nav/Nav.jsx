@@ -40,7 +40,6 @@ const togglerButtonStyle = css`
 const collapsedLinksContainer = css`
   display: none;
   flex-direction: column;
-  background-color: #205831;
   padding: 10px;
 
   &.open {

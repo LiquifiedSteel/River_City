@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "react-bootstrap";
+import { Col, Container, Form, Row, Table } from "react-bootstrap";
 import axios from "axios";
 
 import ExportExcelButton from "../../ExcelExport/ExcelExport";
@@ -19,6 +19,9 @@ function AdminTransactions() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        document.title = "Admin - Transactions"; // Set the document title
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         fetchTransactions();
     }, [])
 
@@ -64,37 +67,37 @@ function AdminTransactions() {
     }
 
     return (
-        <div>
-            <div className="grid">
-                <div className="grid-col_3">
-                    <button onClick={() => {
+        <Container fluid>
+            <Row className="grid">
+                <Col md={{ span: 2, offset: 1}} className="grid-col_3">
+                    <button className="adminTableButton checkSwitch" onClick={() => {
                         setStatus(!status);
                         setSearchYear(0);
                     }}>{!status ? "Show Unpaid" : "Show All"}</button>
-                </div>
+                </Col>
                 
-                <div className="grid-col_3">
+                <Col md={{ span: 2, offset: 1 }} className="grid-col_3">
                     <label>Select Year</label>
-                    <select onChange={() => setSearchYear(event.target.value)}>
+                    <Form.Select onChange={() => setSearchYear(event.target.value)}>
                         <option value={0}>None</option>
                         {years && years.map((year) => <option key={year} value={year}>{year}</option>)}
-                    </select>
-                </div>
+                    </Form.Select>
+                </Col>
 
-                <div className="grid-col_3">
+                <Col md={{ span: 2 }} className="grid-col_3">
                     <label>Select Month</label>
-                    <select onChange={() => setSearchMonth(event.target.value)}>
+                    <Form.Select onChange={() => setSearchMonth(event.target.value)}>
                         <option value={-1}>None</option>
                         {months && months.map((month) => <option key={month} value={month}>{monthNames[month]}</option>)}
-                    </select>
-                </div>
+                    </Form.Select>
+                </Col>
 
-                <div>
+                <Col md={{ span: 2, offset: 1 }} className="checkSwitch">
                     <ExportExcelButton />
-                </div>
-            </div>
+                </Col>
+            </Row>
 
-            <Table>
+            <Table hover striped>
                 <thead>
                     <tr>
                         <th>Tag</th>
@@ -119,13 +122,13 @@ function AdminTransactions() {
                                 <td>{transaction.location}</td>
                                 <td>{formatDate(transaction.timeDate)}</td>
                                 <td><a href={transaction.recieptLink}>{transaction.amount}</a></td>
-                                <td>{transaction.paid ? "Paid" : "Unpaid"}</td>
-                                <td>{!transaction.reviewed && <button onClick={() => dispatch({type: 'REVIEW_TRANSACTION', payload: {id: transaction.id}})}>Review</button>}</td>
+                                <td>{transaction.out_of_pocket ? "Yes" : "No"}</td>
+                                <td>{!transaction.reviewed && <button className="adminTableButton" onClick={() => dispatch({type: 'REVIEW_TRANSACTION', payload: {id: transaction.id}})}>Review</button>}</td>
                             </tr>
                     ))}
                 </tbody>
             </Table>
-        </div>
+        </Container>
     )
 
 }
