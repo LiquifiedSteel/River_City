@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import RegisterForm from "../../RegisterForm/RegisterForm";
 
 function AdminUsers() {
+    const currentUser = useSelector(store => store.user);
     const users = useSelector(store => store.userList);
     const toggle = useSelector(store => store.envSwitch);
     const dispatch = useDispatch();
@@ -70,7 +71,7 @@ function AdminUsers() {
                             <td>{user.username}</td>
                             <td>{user.email}</td>
                             <td>{String(user.isAdmin)}</td>
-                            <td><button className="adminTableButton" onClick={() => toggleAdmin(user)}>Toggle Admin</button></td>
+                            <td>{user.username!==currentUser.username && <button className="adminTableButton" onClick={() => toggleAdmin(user)}>Toggle Admin</button>}</td>
                             {!user.isAdmin ? <td><button className="adminTableButton" onClick={() => deleteUser(user.id)}>Delete User</button></td> : <td></td>}
                         </tr>
                     ))}

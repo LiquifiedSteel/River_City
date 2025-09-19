@@ -1,158 +1,110 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+/**
+ * LoginPage.jsx
+ *
+ * Purpose:
+ *   Top-level page that renders the LoginForm and provides a
+ *   secondary action to navigate to the registration flow.
+ *
+ * Responsibilities:
+ *   - Set the document title on mount.
+ *   - Center the content vertically and horizontally.
+ *   - Offer a clearly styled "Register" button that does not
+ *     compete with the primary "Log in" action inside LoginForm.
+ *
+ * UX/Accessibility:
+ *   - Consistent focus rings for keyboard users.
+ *   - Layout spacing that aligns with the app’s card aesthetics.
+ *
+ * Styling:
+ *   - Uses Emotion CSS-in-JS to keep styles colocated.
+ *   - Neutral page background (#f7f9fc) to contrast the login card.
+ */
+
+import React, { useEffect } from "react";
+import LoginForm from "../LoginForm/LoginForm";
+import { useHistory } from "react-router-dom";
 import { css } from "@emotion/react";
 
-const formStyle = css`
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e0e0e0;
+/* -----------------------------
+   Page container
+------------------------------ */
+const pageStyle = css`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;                 /* space between form and button */
+  align-items: center;
+  justify-content: center;
+  background: #f7f9fc;       /* neutral page background */
+  padding: 1.25rem;
 `;
 
-const headingStyle = css`
-  text-align: center;
-  font-size: 1.5rem;
-  color: gray;
-  margin-bottom: 20px;
-`;
-
-const inputContainer = css`
-  margin-bottom: 15px;
-`;
-
-const labelStyle = css`
-  display: block;
-  font-weight: bold;
-  color: #34495e;
-  margin-bottom: 5px;
-`;
-
-const inputStyle = css`
+/* -----------------------------
+   Secondary action button
+   (kept secondary so it doesn’t compete with “Log in”)
+------------------------------ */
+const btnBase = css`
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccd1d9;
-  border-radius: 4px;
-  font-size: 1rem;
-  color: #2c3e50;
+  max-width: 420px;          /* aligns visually with LoginForm width */
+  padding: 0.7rem 0.9rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    transform 0.02s ease-in-out, filter 0.15s ease;
 
-  &:focus {
-    border-color: #3498db;
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
     outline: none;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.4);
+    box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.25);
   }
 `;
 
 const buttonStyle = css`
-  width: 100%;
-  background-color: gray;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  ${btnBase};
+  background: #f6f6f6;
+  border: 1px solid #cfcfcf;
+  color: #1f2937;
+  margin-top: 0.25rem;
 
   &:hover {
-    background-color: rgb(80, 80, 80);
-    transform: translateY(-2px);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(32, 88, 49, 0.4);
+    filter: brightness(0.98);
   }
 `;
 
-const errorStyle = css`
-  background-color: #e74c3c;
-  color: white;
-  padding: 10px;
-  border-radius: 4px;
-  text-align: center;
-  margin-bottom: 15px;
-`;
+/**
+ * LoginPage
+ *
+ * Renders the login form and a secondary “Register” action.
+ */
+const LoginPage = () => {
+  const history = useHistory();
 
-function RegisterForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const toggle = useSelector(store => store.envSwitch);
-  const errors = useSelector((store) => store.errors);
-  const dispatch = useDispatch();
+  // Set document title on mount for clarity and SEO
+  useEffect(() => {
+    document.title = "Log-In";
+  }, []);
 
-  const registerUser = (event) => {
-    event.preventDefault();
-    dispatch({type: 'SWITCH'});
-    if(toggle) {
-      dispatch({type: 'ADD_USER', payload: { username, password, email }});   
-    } else {
-      dispatch({
-        type: "REGISTER",
-        payload: {
-          username,
-          password,
-          email,
-        }});
-    }
+  // Navigate to the registration route
+  const goToRegistration = () => {
+    history.push("/registration");
   };
 
   return (
-    <form css={formStyle} onSubmit={registerUser}>
-      <h2 css={headingStyle}>Register</h2>
-      {errors.registrationMessage && (
-        <div css={errorStyle} role="alert">
-          {errors.registrationMessage}
-        </div>
-      )}
-      <div css={inputContainer}>
-        <label css={labelStyle} htmlFor="username">
-          Username:
-        </label>
-        <input
-          type="text"
-          name="username"
-          value={username}
-          required
-          onChange={(event) => setUsername(event.target.value)}
-          css={inputStyle}
-        />
-      </div>
-      <div css={inputContainer}>
-        <label css={labelStyle} htmlFor="password">
-          Password:
-        </label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          required
-          onChange={(event) => setPassword(event.target.value)}
-          css={inputStyle}
-        />
-      </div>
-      <div css={inputContainer}>
-        <label css={labelStyle} htmlFor="email">
-          Email:
-        </label>
-        <input
-          type="email"
-          name="email"
-          value={email}
-          required
-          onChange={(event) => setEmail(event.target.value)}
-          css={inputStyle}
-        />
-      </div>
-      <button type="submit" css={buttonStyle}>
+    <div css={pageStyle}>
+      {/* Primary authentication form (contains its own primary/secondary actions) */}
+      <LoginForm />
+
+      {/* Secondary action for users who need an account */}
+      <button type="button" css={buttonStyle} onClick={goToRegistration}>
         Register
       </button>
-    </form>
+    </div>
   );
-}
+};
 
-export default RegisterForm;
+export default LoginPage;

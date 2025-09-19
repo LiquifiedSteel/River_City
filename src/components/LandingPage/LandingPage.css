@@ -114,7 +114,7 @@ Grid
 .envelope {
   border: black solid 1px;
   margin-top: 2vh !important;
-  width: 100%;
+  width: 90%;
   height: auto;
   min-height: 100%;
   padding: 10px;
@@ -125,6 +125,11 @@ Grid
   justify-content: center;
   align-items: center;
   flex-flow: column;
+}
+
+.envelope-nonAdmin.envelope-nonAdmin {
+  width: 85%;
+  max-width: 85%;
 }
 
 .envelope:hover {
@@ -161,4 +166,112 @@ button {
 
 .addPointer:hover {
   cursor: pointer;
+}
+
+/* ===========================
+   Admin section (inside: <div class="grid grid-col_5">)
+   =========================== */
+
+/* Lay out the two tables neatly and add spacing */
+.grid.grid-col_5 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;              /* visual space between the two tables */
+  margin-top: 0.5rem;
+}
+
+/* Each table cell (you already apply .grid-col_6 to the <Table/>) */
+.grid.grid-col_5 .grid-col_6 {
+  flex-basis: 50%;
+  max-width: 50%;
+  box-sizing: border-box;
+}
+
+/* Card styling for the react-bootstrap table */
+.grid.grid-col_5 .table {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  overflow: hidden; /* keep rounded corners when body scrolls */
+  table-layout: fixed; /* predictable column widths */
+  margin-top: 0 !important; /* override global table margin in this area */
+}
+
+/* Tighter header padding in admin area (overrides your global th rule) */
+.grid.grid-col_5 th {
+  padding: 0.9rem 1rem !important;
+}
+
+/* Sticky header + scrollable body for long lists */
+.grid.grid-col_5 .table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f7f9fc;
+  color: #333;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+/* Make tbody scroll without the header moving */
+.grid.grid-col_5 .table tbody {
+  display: block;
+  max-height: 380px;     /* adjust as you like */
+  overflow-y: auto;
+  width: 100%;
+}
+.grid.grid-col_5 .table thead tr,
+.grid.grid-col_5 .table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.grid.grid-col_5 .table tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  word-break: break-word;
+}
+.grid.grid-col_5 .table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Row hover feedback */
+.grid.grid-col_5 .table tbody tr:hover td {
+  background: #fafbfe;
+}
+
+/* Make the action buttons visible and clickable in admin tables,
+   overriding your global transparent button reset */
+.grid.grid-col_5 button {
+  background: #f4f6fb;
+  border: 1px solid #d7def3;
+  border-radius: 8px;
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+  transition: transform 0.02s ease, filter 0.15s ease, border-color 0.15s ease;
+}
+.grid.grid-col_5 button:hover {
+  filter: brightness(0.98);
+}
+.grid.grid-col_5 button:active {
+  transform: translateY(1px);
+}
+
+/* Keep the icon target easy to hit */
+.grid.grid-col_5 .addPointer {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive: stack the two tables on smaller screens */
+@media (max-width: 991.98px) {
+  .grid.grid-col_5 .grid-col_6 {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
 }

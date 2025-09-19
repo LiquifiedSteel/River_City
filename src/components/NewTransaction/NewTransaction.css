@@ -1,0 +1,133 @@
+/* ---------- Layout ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  grid-auto-flow: row dense;
+  gap: 1rem;
+}
+
+/* Support both underscore and dash variants from your markup */
+.grid-col_4,
+.grid-col-4 {
+  grid-column: span 1;
+}
+
+/* File picker row: span 1 on desktop so we keep a 3x3;
+   expand to full width on smaller screens for readability */
+.grid-col-12 {
+  grid-column: span 1;
+}
+
+/* ---------- Card-ish wrapper ---------- */
+.shadow {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+/* ---------- Form elements ---------- */
+.grid .text-center {
+  /* optional: remove if you don't want everything centered */
+  text-align: center;
+}
+
+.grid label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.grid input[type="text"],
+.grid input[type="number"],
+.grid input[type="date"],
+.grid input[type="email"],
+.grid select,
+.grid textarea {
+  width: 100%;
+  box-sizing: border-box;
+  appearance: none;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.2;
+  background: #fff;
+}
+
+.grid input[type="text"]:focus,
+.grid input[type="number"]:focus,
+.grid input[type="date"]:focus,
+.grid input[type="email"]:focus,
+.grid select:focus,
+.grid textarea:focus {
+  outline: none;
+  border-color: #5b8def;
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.2);
+}
+
+/* Checkbox + label alignment */
+.grid input[type="checkbox"] {
+  transform: translateY(1px);
+}
+.grid input[type="checkbox"] + label {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* ---------- Buttons ---------- */
+.grid > button {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+  background: #f6f6f6;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.02s ease-in-out;
+}
+
+.grid > button[type="submit"] {
+  background: #2f6fed;
+  color: #fff;
+  border-color: #2f6fed;
+}
+
+.grid > button:hover {
+  filter: brightness(0.98);
+}
+
+.grid > button:active {
+  transform: translateY(1px);
+}
+
+/* ---------- Typography spacing ---------- */
+h2.text-center {
+  margin-bottom: 1rem;
+}
+
+.userTextColor {
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid-col-12 {
+    grid-column: span 2; /* full width on tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .grid-col-12 {
+    grid-column: span 1; /* single column on phones */
+  }
+}

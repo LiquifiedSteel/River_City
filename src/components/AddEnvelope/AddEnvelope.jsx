@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
+import './AddEnvelope.css';
 
 /**
  * AddEnvelope Component
@@ -12,17 +13,36 @@ function AddEnvelope() {
     const dispatch = useDispatch(); // Redux dispatch function to send actions to the store
 
     return (
-        <div className="envelope grid">
+        <div className="envelope">
+          <div className="add-envelope">
             {/* Input field to capture the envelope name */}
-            <div className='grid-col_12'>
-                <input className='grid-col_12' type="text" placeholder="Envelope Name" value={name} onChange={(event) => setName(event.target.value)} />
+            <div className="add-envelope__field">
+                <input
+                  type="text"
+                  placeholder="Envelope Name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                />
             </div>
 
-            {/* Button to navigate back (likely switches views) */}
-            <button onClick={() => dispatch({type: "SWITCH"})}>Back</button>
+            <div className="add-envelope__actions">
+              {/* Button to navigate back (likely switches views) */}
+              <button
+                type="button"
+                onClick={() => dispatch({type: "SWITCH"})}
+              >
+                Back
+              </button>
 
-            {/* Button to submit the new envelope name */}
-            <button onClick={() => {dispatch({type: "ADD_ENVELOPE", payload: {envName: name}})}}>Submit</button>
+              {/* Button to submit the new envelope name */}
+              <button
+                type="button"
+                onClick={() => {dispatch({type: "ADD_ENVELOPE", payload: {envName: name}})}}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
         </div>
     )
 };
