@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios"; // Import axios for making HTTP requests
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 import { useDispatch } from 'react-redux';
 import AddEnvelope from '../AddEnvelope/AddEnvelope';
@@ -12,9 +12,8 @@ function LandingPage() {
   const envelopes = useSelector(store => store.envelope);
   const transactions = useSelector(store => store.transactions);
   const creatingEnvelope = useSelector(store => store.envSwitch);
-  console.log(envelopes)
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "River City Envelopes"; // Set the document title
@@ -22,7 +21,7 @@ function LandingPage() {
 
     dispatch({type: 'GRAB_ENVELOPES'});
     dispatch({type: 'GRAB_TRANSACTIONS'});
-    creatingEnvelope && dispatch({type: 'SWITCH'});
+    dispatch({type: 'RESET'});
   }, []); // Empty dependency array ensures this runs once on mount
 
   const pay = (id) => {
@@ -43,9 +42,8 @@ function LandingPage() {
       <Row>
         {user.isAdmin ? <Col lg={7}>
           <Row className="gy-4" key={7654}>
-            {creatingEnvelope ? <Col xs={6}><AddEnvelope /></Col> : <Col xs={6}><button className='envelope' onClick={() => dispatch({type: "SWITCH"})}>+ Add New Envelope</button></Col>}
+            {creatingEnvelope.envelope ? <Col xs={6}><AddEnvelope /></Col> : <Col xs={6}><button className='envelope' onClick={() => dispatch({type: "SWITCH_ENVELOPE"})}>+ Add New Envelope</button></Col>}
             {envelopes.map((envelope) => {
-              console.log(envelope)
               let spent = 0;
               let remaining = Number(envelope.total);
               for (let item of transactions) {
@@ -56,7 +54,7 @@ function LandingPage() {
               if (((remaining - spent) / Number(envelope.total)) >= .75) {
                 return (
                   <Col key={envelope.id} xs={6}>
-                    <div className='envelope text-center e75' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                    <div className='envelope text-center e75' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>
@@ -67,7 +65,7 @@ function LandingPage() {
               } else if (((remaining - spent) / Number(envelope.total)) >= .50) {
                 return (
                   <Col key={envelope.id} xs={6}>
-                    <div className='envelope text-center e50' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                    <div className='envelope text-center e50' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>
@@ -78,7 +76,7 @@ function LandingPage() {
               } else if (((remaining - spent) / Number(envelope.total)) >= .25) {
                 return (
                   <Col key={envelope.id} xs={6}>
-                    <div className='envelope text-center e25' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                    <div className='envelope text-center e25' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>
@@ -89,7 +87,7 @@ function LandingPage() {
               } else if (((remaining - spent) / Number(envelope.total)) > 0) {
                 return (
                   <Col key={envelope.id} xs={6}>
-                    <div className='envelope text-center e0' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                    <div className='envelope text-center e0' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>
@@ -100,7 +98,7 @@ function LandingPage() {
               } else if (((remaining - spent) / Number(envelope.total)) === 0) {
                 return (
                   <Col key={envelope.id} xs={6}>
-                    <div className='envelope text-center ez' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                    <div className='envelope text-center ez' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>
@@ -111,7 +109,7 @@ function LandingPage() {
               } else if (((remaining - spent) / Number(envelope.total)) < 0) {
                 return (
                   <Col key={envelope.id} xs={6}>
-                    <div className='envelope text-center en' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                    <div className='envelope text-center en' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>
@@ -122,7 +120,7 @@ function LandingPage() {
               } else {
                 return (
                   <Col key={envelope.id} xs={6}>
-                    <div className='envelope text-center ez' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                    <div className='envelope text-center ez' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>
@@ -145,7 +143,7 @@ function LandingPage() {
               }
               if (((remaining - spent) / Number(envelope.total)) >= .75) {
                 return (
-                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e75' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e75' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                     <h2>{envelope.envelope}</h2>
                     <h3>${envelope.total}</h3>
                     <h3>
@@ -154,7 +152,7 @@ function LandingPage() {
                   </Col>)
               } else if (((remaining - spent) / Number(envelope.total)) >= .50) {
                 return (
-                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e50' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e50' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                     <h2>{envelope.envelope}</h2>
                     <h3>${envelope.total}</h3>
                     <h3>
@@ -163,7 +161,7 @@ function LandingPage() {
                   </Col>)
               } else if (((remaining - spent) / Number(envelope.total)) >= .25) {
                 return (
-                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e25' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e25' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                     <h2>{envelope.envelope}</h2>
                     <h3>${envelope.total}</h3>
                     <h3>
@@ -172,7 +170,7 @@ function LandingPage() {
                   </Col>)
               } else if (((remaining - spent) / Number(envelope.total)) > 0) {
                 return (
-                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e0' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center e0' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                     <h2>{envelope.envelope}</h2>
                     <h3>${envelope.total}</h3>
                     <h3>
@@ -181,7 +179,7 @@ function LandingPage() {
                   </Col>)
               } else if (((remaining - spent) / Number(envelope.total)) === 0) {
                 return (
-                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center ez' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center ez' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                     <h2>{envelope.envelope}</h2>
                     <h3>${envelope.total}</h3>
                     <h3>
@@ -190,7 +188,7 @@ function LandingPage() {
                   </Col>)
               } else if (((remaining - spent) / Number(envelope.total)) < 0) {
                 return (
-                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center en' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center en' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                     <h2>{envelope.envelope}</h2>
                     <h3>${envelope.total}</h3>
                     <h3>
@@ -199,7 +197,7 @@ function LandingPage() {
                   </Col>)
               } else {
                 return (
-                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center ez' onClick={() => history.push(`/envelope?envelope=${envelope.envelope}`)}>
+                  <Col key={envelope.id} className='envelope envelope-nonAdmin text-center ez' onClick={() => navigate(`/envelope?envelope=${envelope.envelope}`)}>
                       <h2>{envelope.envelope}</h2>
                       <h3>${envelope.total}</h3>
                       <h3>

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, {useEffect} from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RegisterForm from "../RegisterForm/RegisterForm";
 import { css } from "@emotion/react";
 import { useSelector, useDispatch } from "react-redux";
@@ -38,13 +38,11 @@ const buttonStyle = css`
 `;
 
 const RegisterPage = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const toggle = useSelector(store => store.envSwitch);
 
   useEffect(() => {
     document.title = "Register";
-    toggle && dispatch({type: 'SWITCH'});
   }, []);
 
   return (
@@ -54,7 +52,7 @@ const RegisterPage = () => {
         type="button"
         css={buttonStyle}
         onClick={() => {
-          history.push("/login");
+          navigate("/login");
         }}
       >
         Login

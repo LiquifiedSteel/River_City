@@ -1,32 +1,34 @@
+/**
+ * AdminProtectedRoute.jsx (React Router v6)
+ *
+ * Purpose:
+ *   Client-side guard that only allows admins to view protected content.
+ *
+ * Notes:
+ *   - This is only a UI-level restriction. Real security must be enforced
+ *     on the server (e.g., check req.user.isAdmin).
+ *   - Designed for use with v6 where routes pass components via `element`.
+ *
+ * Usage:
+ *   <Route
+ *     path="/admin-users"
+ *     element={
+ *       <AdminProtectedRoute>
+ *         <AdminUsers />
+ *       </AdminProtectedRoute>
+ *     }
+ *   />
+ */
+
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
-
-function AdminProtectedRoute({ component, children, ...props }) {
+function AdminProtectedRoute({ children, redirectTo = '/home' }) {
   const user = useSelector((store) => store.user);
 
-  // Component may be passed in as a "component" prop,
-  // or as a child component.
-  const ProtectedComponent = component || (() => children);
-
-  // We return a Route component that gets added to our list of routes
-  return (
-    <Route
-      // all props like 'exact' and 'path' that were passed in
-      // are now passed along to the 'Route' Component
-      {...props}
-    >
-      {user.isAdmin ?
-        // If the user is an Admin, show the protected component
-        <ProtectedComponent />
-        :
-        // Otherwise, redirect to home
-        <Redirect exact to="/home" />
-      }
-    </Route>
-
-  );
+  // Only allow admins to access children; otherwise redirect.
+  return user?.isAdmin ? children : <Navigate to={redirectTo} replace />;
 }
 
 export default AdminProtectedRoute;

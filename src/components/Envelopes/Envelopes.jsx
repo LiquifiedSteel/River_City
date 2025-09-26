@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useLocation } from "react-router-dom"; // useLocation for getting URL query parameters
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Col, Container, Row, Table, Form, FormLabel } from 'react-bootstrap';
 import './Envelopes.css';
 
 function Envelopes() {
     const user = useSelector((store) => store.user);
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [pending, setPending] = useState(false);
     const transactions = useSelector((store) => store.transactions)
@@ -57,8 +56,8 @@ function Envelopes() {
             </Row>
 
             <Row>
-                <Col md={{ offset: 2}}><button className="envButton" onClick={() => history.push(`/home`)}>Back</button></Col>
-                <Col><button className="envButton" onClick={() => history.push(`/new-transaction?envelope=${envelope}`)}>New Transaction +</button></Col>
+                <Col md={{ offset: 2}}><button className="envButton" onClick={() => navigate(`/home`)}>Back</button></Col>
+                <Col><button className="envButton" onClick={() => navigate(`/new-transaction?envelope=${envelope}`)}>New Transaction +</button></Col>
                 {user.isAdmin && <Col><button className="envButton" onClick={() => {
                     setPending(!pending)
                     setSearchYear(0);

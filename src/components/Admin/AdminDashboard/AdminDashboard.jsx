@@ -1,13 +1,22 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from "react"; // Import React and necessary hooks
-import { Container, Row, Col } from "react-bootstrap"; // Import Bootstrap components
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min"; // Import useHistory for navigation
-import { css } from "@emotion/react"; // Import css from emotion for styling
-import Tooltip from "react-bootstrap/Tooltip"; // Import Tooltip from Bootstrap
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"; // Import OverlayTrigger for tooltips
+/**
+ * AdminDashboard.jsx
+ *
+ * Purpose:
+ *   Dashboard nav for admin sections with simple active-state styling.
+ *
+ * Notes:
+ *   - Uses React Router v6 hooks. `useNavigate()` handles navigation,
+ *     `useLocation()` provides the current pathname.
+ *   - Avoids unused imports and unnecessary effects for a lean component.
+ */
+
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { useNavigate, useLocation } from "react-router-dom";
+import { css } from "@emotion/react";
 import "./AdminDashboard.css";
 
-// Define Emotion CSS styles for various elements
 const headerStyle = css`
   text-align: center;
   margin: 20px 0;
@@ -15,46 +24,38 @@ const headerStyle = css`
   font-size: 2rem;
 `;
 
-// Main AdminDashboard component
 function AdminDashboard() {
-  // Hook to handle navigation
-  const history = useHistory();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  // useEffect to fetch data on component mount
-  useEffect(() => {
-    
-  }, []); // Empty dependency array ensures this runs once on mount
+  const items = [
+    { to: "/admin-users", label: "Users" },
+    { to: "/admin-budget", label: "Budget" },
+    { to: "/admin-checks", label: "Checks" },
+    { to: "/admin-envelopes", label: "Envelopes" },
+    { to: "/admin-transactions", label: "Transactions" },
+  ];
+
+  const renderBtn = ({ to, label }, idx) => {
+    const isActive = pathname === to;
+    return (
+      <Col key={to} md={idx === 0 ? { offset: 1 } : undefined}>
+        <button
+          type="button"
+          className={`envButton${isActive ? " adminDash" : ""}`}
+          onClick={() => navigate(to)}
+        >
+          {label}
+        </button>
+      </Col>
+    );
+  };
 
   return (
-    <>
-      <Container>
-        {/* Header */}
-        <h1 css={headerStyle}>Admin Dashboard</h1>
-
-        <Row>
-          {history.location.pathname==="/admin-users" ?
-          <Col md={{ offset: 1}}><button className="envButton adminDash" onClick={() => history.push("/admin-users")}>Users</button></Col> :
-          <Col md={{ offset: 1}}><button className="envButton" onClick={() => history.push("/admin-users")}>Users</button></Col>}
-
-          {history.location.pathname==="/admin-budget" ?
-          <Col><button className="envButton adminDash" onClick={() => history.push("/admin-budget")}>Budget</button></Col> :
-          <Col><button className="envButton" onClick={() => history.push("/admin-budget")}>Budget</button></Col>}
-
-          {history.location.pathname==="/admin-checks" ?
-          <Col><button className="envButton adminDash" onClick={() => history.push("/admin-checks")}>Checks</button></Col> :
-          <Col><button className="envButton" onClick={() => history.push("/admin-checks")}>Checks</button></Col>}
-
-          {history.location.pathname==="/admin-envelopes" ?
-          <Col><button className="envButton adminDash" onClick={() => history.push("/admin-envelopes")}>Envelopes</button></Col> :
-          <Col><button className="envButton" onClick={() => history.push("/admin-envelopes")}>Envelopes</button></Col>}
-
-          {history.location.pathname==="/admin-transactions" ?
-          <Col><button className="envButton adminDash" onClick={() => history.push("/admin-transactions")}>Transactions</button></Col> :
-          <Col><button className="envButton" onClick={() => history.push("/admin-transactions")}>Transactions</button></Col>}
-        </Row>
-        
-      </Container>
-    </>
+    <Container>
+      <h1 css={headerStyle}>Admin Dashboard</h1>
+      <Row>{items.map(renderBtn)}</Row>
+    </Container>
   );
 }
 

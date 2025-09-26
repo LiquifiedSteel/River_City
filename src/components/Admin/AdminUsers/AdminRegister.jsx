@@ -120,7 +120,7 @@ const buttonStyle = css`
   }
 `;
 
-function RegisterForm() {
+function AdminRegister() {
   // Local input state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -154,7 +154,7 @@ function RegisterForm() {
       dispatch({ type: "RESET" }); // flips true -> false
     } else {
       dispatch({
-        type: "REGISTER",
+        type: "ADMIN_NEW_USER",
         payload: { username, password, email },
       });
     }
@@ -232,4 +232,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export default AdminRegister;

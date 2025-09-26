@@ -18,7 +18,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useScript } from "../../hooks/useScript";
 import "./NewTransaction.css";
@@ -29,7 +29,7 @@ const NewTransaction = () => {
 
   // Routing and query parameters
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const envelope = new URLSearchParams(location.search).get("envelope");
 
   // Form state
@@ -88,7 +88,7 @@ const NewTransaction = () => {
         outOfPocket,
         tag,
       });
-      history.push(`/envelope?envelope=${envelope}`);
+      navigate(`/envelope?envelope=${envelope}`);
     } catch (error) {
       console.error("Error creating transaction:", error);
     }
@@ -182,7 +182,7 @@ const NewTransaction = () => {
           )}
         </div>
 
-        <button type="button" onClick={() => history.push(`/envelope?envelope=${envelope}`)}>
+        <button type="button" onClick={() => navigate(`/envelope?envelope=${envelope}`)}>
           Back
         </button>
         <button type="submit">Submit</button>

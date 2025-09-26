@@ -29,7 +29,7 @@ function AddEnvelope() {
               {/* Button to navigate back (likely switches views) */}
               <button
                 type="button"
-                onClick={() => dispatch({type: "SWITCH"})}
+                onClick={() => dispatch({type: "RESET"})}
               >
                 Back
               </button>

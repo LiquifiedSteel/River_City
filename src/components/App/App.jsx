@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,14 +12,14 @@ import Nav from "../Nav/Nav";
 import Footer from "../Footer/Footer";
 
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-
-import LandingPage from "../LandingPage/LandingPage";
-import LoginPage from "../LoginPage/LoginPage";
-import RegisterPage from "../RegisterPage/RegisterPage";
-import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard";
 import AdminProtectedRoute from "../AdminProtectedRoute/AdminProtectedRoute";
+
+import LandingPage from "../LandingPage/LandingPage.jsx";
+import LoginPage from "../LoginPage/LoginPage.jsx";
+import RegisterPage from "../RegisterPage/RegisterPage.jsx";
+import AdminDashboard from "../Admin/AdminDashboard/AdminDashboard.jsx";
 import NewTransaction from "../NewTransaction/NewTransaction.jsx";
-import Envelopes from "../Envelopes/Envelopes";
+import Envelopes from "../Envelopes/Envelopes.jsx";
 import AdminBudget from "../Admin/AdminBudget/AdminBudget.jsx";
 import AdminUsers from "../Admin/AdminUsers/AdminUsers.jsx";
 import AdminChecks from "../Admin/AdminChecks/AdminCheck.jsx";
@@ -22,11 +27,10 @@ import AdminEnvelopes from "../Admin/AdminEnvelopes/AdminEnvelopes.jsx";
 import AdminTransactions from "../Admin/AdminTransactions/AdminTransactions.jsx";
 
 import "./App.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const dispatch = useDispatch();
-
   const user = useSelector((store) => store.user);
 
   useEffect(() => {
@@ -37,96 +41,98 @@ function App() {
     <Router>
       <div>
         <Nav />
-        <Switch>
-          {/* Visiting localhost:5173 will redirect to localhost:5173/home */}
-          <Redirect exact from="/" to="/home" />
+        <Routes>
+          {/* Redirect root to /home */}
+          <Route path="/" element={<Navigate to="/home" replace />} />
 
-          <Route exact path="/login">
-            {user.id ? (
-              // If the user is already logged in,
-              // redirect to the /home page
-              <Redirect to="/home" />
-            ) : (
-              // Otherwise, show the login page
-              <LoginPage />
-            )}
-          </Route>
+          {/* Login */}
+          <Route
+            path="/login"
+            element={user.id ? <Navigate to="/home" replace /> : <LoginPage />}
+          />
 
-          <Route exact path="/registration">
-            {user.id ? (
-              // If the user is already logged in,
-              // redirect them to the /home page
-              <Redirect to="/home" />
-            ) : (
-              // Otherwise, show the registration page
-              <RegisterPage />
-            )}
-          </Route>
+          {/* Registration */}
+          <Route
+            path="/registration"
+            element={
+              user.id ? <Navigate to="/home" replace /> : <RegisterPage />
+            }
+          />
 
-          <Route exact path="/home">
-            {user.id ? (
-              // If the user is already logged in,
-              // redirect them to the /landing page
-              <LandingPage />
-            ) : (
-              // Otherwise, show the Login page
-              <LoginPage />
-            )}
-          </Route>
+          {/* Home/Landing */}
+          <Route
+            path="/home"
+            element={user.id ? <LandingPage /> : <LoginPage />}
+          />
 
-          <AdminProtectedRoute 
+          {/* Admin Routes */}
+          <Route
             path="/admin-users"
-          >
-            <AdminDashboard />
-            <AdminUsers />
-          </AdminProtectedRoute>
-
-          <AdminProtectedRoute 
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+                <AdminUsers />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
             path="/admin-budget"
-          >
-            <AdminDashboard />
-            <AdminBudget />
-          </AdminProtectedRoute>
-
-          <AdminProtectedRoute 
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+                <AdminBudget />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
             path="/admin-checks"
-          >
-            <AdminDashboard />
-            <AdminChecks />
-          </AdminProtectedRoute>
-
-          <AdminProtectedRoute 
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+                <AdminChecks />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
             path="/admin-envelopes"
-          >
-            <AdminDashboard />
-            <AdminEnvelopes />
-          </AdminProtectedRoute>
-
-          <AdminProtectedRoute 
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+                <AdminEnvelopes />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
             path="/admin-transactions"
-          >
-            <AdminDashboard />
-            <AdminTransactions />
-          </AdminProtectedRoute>
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+                <AdminTransactions />
+              </AdminProtectedRoute>
+            }
+          />
 
-          {/* For protected routes, the view could show one of several things on the same route.
-            Visiting localhost:5173/home will show the landing page if the user is logged in.
-            If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
-            Even though it seems like they are different pages, the user is always on localhost:5173/home */}
+          {/* Protected User Routes */}
+          <Route
+            path="/envelope"
+            element={
+              <ProtectedRoute>
+                <Envelopes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/new-transaction"
+            element={
+              <ProtectedRoute>
+                <NewTransaction />
+              </ProtectedRoute>
+            }
+          />
 
-          <ProtectedRoute path="/envelope">
-            <Envelopes />
-          </ProtectedRoute>
-
-          <ProtectedRoute path="/new-transaction">
-            <NewTransaction />
-          </ProtectedRoute>
-
-          {/* If none of the other routes matched, we will show a 404. */}
-          <Route>
-            <h1>404</h1>
-          </Route>
-        </Switch>
+          {/* 404 Page */}
+          <Route path="*" element={<h1>404</h1>} />
+        </Routes>
         <Footer />
       </div>
     </Router>
