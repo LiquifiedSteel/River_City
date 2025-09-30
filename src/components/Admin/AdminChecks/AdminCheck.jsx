@@ -79,7 +79,6 @@ function AdminChecks() {
                     <center>
                         <button className="adminTableButton checkSwitch" onClick={() => {
                             setStatus(!status);
-                            setSearchYear(0);
                         }}>{!status ? "Show Unpaid" : "Show All"}</button>
                     </center>
                 </Col>
@@ -112,10 +111,11 @@ function AdminChecks() {
                     </tr>
                 </thead>
                 <tbody>
-                    {checks.filter((check) => { 
+                    {checks.filter((check) => {
                             let year = new Date(check.date).getFullYear();
                             let month = new Date(check.date).getMonth();
-                            return ((Number(searchYear) === 0 || Number(year) === Number(searchYear)) && (Number(searchMonth) === -1 || Number(month) === Number(searchMonth)) && (!status || (status && check.paid===false)))}).map((check) => (
+                            console.log(searchMonth, searchYear);
+                            return ((Number(searchYear) === 0 || (Number(year) === Number(searchYear))) && ((Number(searchMonth) === -1) || (Number(month) === Number(searchMonth))) && (!status || (status && check.paid===false)))}).map((check) => (
                         <tr key={check.id}>
                             <td>{check.name}</td>
                             <td>{check.amount}</td>
