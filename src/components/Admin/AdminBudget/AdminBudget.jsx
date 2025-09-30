@@ -12,7 +12,8 @@ function AdminBudget() {
     const budget = useSelector((store) => store.budget); // Access budget data from the Redux store
     const transactions = useSelector(store => store.transactions);
     const envelopes = useSelector(store => store.envelope);
-    const [budEdit, setBudEdit] = useState(false); // Local state to handle whether the edit mode is active
+    const [budEdit1, setBudEdit1] = useState(false); // Local state to handle whether the edit mode is active
+    const [budEdit2, setBudEdit2] = useState(false); // Local state to handle whether the edit mode is active
     const [newBudget, setNewBudget] = useState(0); // Local state to hold the new budget amount input by the user
     const [prevYear, setPrevYear] = useState(0);
     const [currYear, setCurrYear] = useState(0);
@@ -86,36 +87,59 @@ function AdminBudget() {
         if(newBudget < 0) {
             alert("Negative numbers are not valid.");
         } else {
-            setBudEdit(false);
+            setBudEdit1(false);
+            dispatch({type: "UPDATE_BUDGET", payload: {amount: newBudget, year: budget[1].year}});
+            setNewBudget(0);
+        }
+    };
+
+    const submitNewBudget2 = () => {
+        if(newBudget < 0) {
+            alert("Negative numbers are not valid.");
+        } else {
+            setBudEdit2(false);
             dispatch({type: "UPDATE_BUDGET", payload: {amount: newBudget, year: budget[0].year}});
             setNewBudget(0);
         }
-    }
+    };
 
     return (
         <Container fluid>
             {/* Display the current budget type and amount */}
             <Row>
-                <Col md={{offset: 2}}>
-                    <p>Budget for {budget && budget[0].year}: ${budget && budget[0].amount}</p>
+                <Col md={{offset: 1}}>
+                    <p>Budget for {budget && currYear}: ${budget && budget[0].amount}</p>
                 </Col>
 
                 <Col>
                     {/* Button to enable budget editing */}
-                    {!budEdit && <button className="adminTableButton" onClick={() => setBudEdit(true)}>Edit Budget Amount</button>}
+                    {!budEdit2 && <button className="adminTableButton" onClick={() => setBudEdit2(true)}>Edit Current Year's Budget Amount</button>}
 
                     {/* Budget editing form with input and action buttons */}
-                    {budEdit &&
+                    {budEdit2 &&
                     <>
                         <input type="number" placeholder="New Budget Amount" value={newBudget} onChange={(event) => setNewBudget(event.target.value)} />
-                        <button className="adminTableButton" onClick={() => submitNewBudget()}>Submit</button>
-                        <button className="adminTableButton" onClick={() => { setBudEdit(false); setNewBudget(0); }}>Cancel</button>
+                        <button className="adminTableButton" onClick={() => submitNewBudget2()}>Submit</button>
+                        <button className="adminTableButton" onClick={() => { setBudEdit2(false); setNewBudget(0); }}>Cancel</button>
                     </>}
                 </Col>
 
-                {/* <Col>
-                    <button className="adminTableButton">+ Add Row</button>
-                </Col> */}
+                <Col md={{offset: 1}}>
+                    <p>Budget for {budget && prevYear}: ${budget && budget[1].amount}</p>
+                </Col>
+
+                <Col>
+                    {/* Button to enable budget editing */}
+                    {!budEdit1 && <button className="adminTableButton" onClick={() => setBudEdit1(true)}>Edit Previous Year's Budget Amount</button>}
+
+                    {/* Budget editing form with input and action buttons */}
+                    {budEdit1 &&
+                    <>
+                        <input type="number" placeholder="New Budget Amount" value={newBudget} onChange={(event) => setNewBudget(event.target.value)} />
+                        <button className="adminTableButton" onClick={() => submitNewBudget()}>Submit</button>
+                        <button className="adminTableButton" onClick={() => { setBudEdit1(false); setNewBudget(0); }}>Cancel</button>
+                    </>}
+                </Col>
             </Row>
 
             <Table>
