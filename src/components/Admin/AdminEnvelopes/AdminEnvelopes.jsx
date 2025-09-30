@@ -75,7 +75,7 @@ function AdminEnvelopes() {
 
     return (
         <Container fluid>
-             <div className="newEnvCard grid-col_3 grid">
+             <div className="newEnvCard grid-col_6 grid">
                 <h3>Add Envelope</h3>
                 {/* Input field to capture the envelope name */}
                 <div className='grid-col_12 cardElements'>
