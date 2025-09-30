@@ -5,7 +5,7 @@
 
 CREATE TABLE IF NOT EXISTS public."Budget"
 (
-    year integer NOT NULL,
+    year VARCHAR(10) NOT NULL,
     amount numeric(9,2),
     CONSTRAINT "Budget_pkey" PRIMARY KEY (year)
 );
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS public."Checks"
     date date DEFAULT now(),
     paid boolean DEFAULT false,
     CONSTRAINT "Checks_pkey" PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE IF NOT EXISTS public."Envelopes"
 (
@@ -29,17 +29,7 @@ CREATE TABLE IF NOT EXISTS public."Envelopes"
     "prevTotal" numeric(8,2) DEFAULT 0.00,
     CONSTRAINT "Envelopes_pkey" PRIMARY KEY (id),
     CONSTRAINT "Envelopes_envelope_key" UNIQUE (envelope)
-)
-
-CREATE TABLE IF NOT EXISTS public."Envelopes"
-(
-    id integer NOT NULL DEFAULT nextval('"Envelopes_id_seq"'::regclass),
-    envelope character varying(50) COLLATE pg_catalog."default",
-    total numeric(8,2) DEFAULT 0.00,
-    "prevTotal" numeric(8,2) DEFAULT 0.00,
-    CONSTRAINT "Envelopes_pkey" PRIMARY KEY (id),
-    CONSTRAINT "Envelopes_envelope_key" UNIQUE (envelope)
-)
+);
 
 CREATE TABLE IF NOT EXISTS public."user"
 (
@@ -51,4 +41,9 @@ CREATE TABLE IF NOT EXISTS public."user"
     deleted boolean DEFAULT false,
     CONSTRAINT user_pkey PRIMARY KEY (id),
     CONSTRAINT user_username_key UNIQUE (username)
-)
+);
+
+INSERT INTO "Budget" ("year", "amount")
+VALUES
+  ('Previous', 0),
+  ('Current', 0);
