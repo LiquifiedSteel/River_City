@@ -45,5 +45,5 @@ CREATE TABLE IF NOT EXISTS public."user"
 
 INSERT INTO "Budget" ("year", "amount")
 VALUES
-  ('Previous', 0),
-  ('Current', 0);
+  ('Current', 0),
+  ('Previous', 0);
