@@ -8,10 +8,16 @@ function* envelopeRootSaga() {
   
 function* addEnvelope(action) {
     try {
-        yield axios.post('/api/envelopes/add', action.payload);
+        if(action.payload.envName === "") {
+            alert("Not a valid envlope name, must have at least 1 character.");
+        } else {
+            if(confirm("Are you sure you want to add an envelope?")){
+                yield axios.post('/api/envelopes/add', action.payload);
 
-        yield put({type: 'GRAB_ENVELOPES'});
-        yield put({type: 'SWITCH'});
+                yield put({type: 'GRAB_ENVELOPES'});
+                yield put({type: 'SWITCH'});
+            }
+        }
     } catch (error) {
         console.error('Envelope POST request failed', error);
     }
