@@ -84,22 +84,26 @@ function AdminBudget() {
      * Resets the edit state and input field after submission.
      */
     const submitNewBudget = () => {
-        if(newBudget < 0) {
-            alert("Negative numbers are not valid.");
-        } else {
-            setBudEdit1(false);
-            dispatch({type: "UPDATE_BUDGET", payload: {amount: newBudget, year: budget[1].year}});
-            setNewBudget(0);
+        if(confirm("Are you sure you want to change the previous year's budget?")) {
+            if(newBudget < 0) {
+                alert("Negative numbers are not valid.");
+            } else {
+                setBudEdit1(false);
+                dispatch({type: "UPDATE_BUDGET", payload: {amount: newBudget, year: budget[1].year}});
+                setNewBudget(0);
+            }
         }
     };
 
     const submitNewBudget2 = () => {
-        if(newBudget < 0) {
-            alert("Negative numbers are not valid.");
-        } else {
-            setBudEdit2(false);
-            dispatch({type: "UPDATE_BUDGET", payload: {amount: newBudget, year: budget[0].year}});
-            setNewBudget(0);
+        if(confirm("Are you sure you want to change the current year's budget?")) {
+            if(newBudget < 0) {
+                alert("Negative numbers are not valid.");
+            } else {
+                setBudEdit2(false);
+                dispatch({type: "UPDATE_BUDGET", payload: {amount: newBudget, year: budget[0].year}});
+                setNewBudget(0);
+            }
         }
     };
 
